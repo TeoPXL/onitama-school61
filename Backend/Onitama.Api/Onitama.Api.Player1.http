@@ -1,0 +1,117 @@
+@Onitama.Api_HostAddress = https://localhost:5001
+@UserEmail = user@example.com
+@UserPassword = string
+@BearerToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJlNjM3NGQ5Yy0zYWRiLTQ2OGItMzg5Ni0wOGRjMmQzNDNmMDMiLCJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwianRpIjoiOGFlYWVkZTYtNzI2My00Njc4LWEwODktYjRkNzVmOTI4Mjk1IiwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIiwiZXhwIjoxNzA5NzM5NTYwLCJpc3MiOiJIb2dlc2Nob29sIFB4bCIsImF1ZCI6Ik9uaXRhbWEuQXBpIn0.RQPabvda3PibuYgz4tfbTzAiVzU1r5qYKynkmSglA_I
+
+GET {{Onitama.Api_HostAddress}}/ping
+
+################
+#Authentication#
+################
+
+POST {{Onitama.Api_HostAddress}}/api/authentication/register
+Content-Type: application/json
+
+{
+  "email": "{{UserEmail}}",
+  "password": "{{UserPassword}}",
+  "wariorName": "Examplor"
+}
+
+###
+
+POST {{Onitama.Api_HostAddress}}/api/authentication/token
+Content-Type: application/json
+
+{
+  "email": "{{UserEmail}}",
+  "password": "{{UserPassword}}"
+}
+
+#######
+#Table#
+#######
+
+@TableId = c517f7ad-770b-4a3c-a2a3-1fb52685da3b
+
+GET {{Onitama.Api_HostAddress}}/api/tables/with-available-seats
+Authorization: Bearer {{BearerToken}}
+###
+
+POST {{Onitama.Api_HostAddress}}/api/tables
+Content-Type: application/json
+Authorization: Bearer {{BearerToken}}
+
+{
+  "numberOfPlayers": 2,
+  "playerMatSize": 5,
+  "moveCardSet": 0
+}
+
+###
+
+POST {{Onitama.Api_HostAddress}}/api/tables/{{TableId}}/join
+Content-Type: application/json
+Authorization: Bearer {{BearerToken}}
+
+{
+}
+###
+
+POST {{Onitama.Api_HostAddress}}/api/tables/{{TableId}}/fill-with-ai
+Content-Type: application/json
+Authorization: Bearer {{BearerToken}}
+
+{
+}
+###
+
+POST {{Onitama.Api_HostAddress}}/api/tables/{{TableId}}/start-game
+Content-Type: application/json
+Authorization: Bearer {{BearerToken}}
+
+{
+}
+
+######
+#Game#
+######
+
+@GameId = 7f69700a-0a80-41c4-a08a-eac3fc305f05
+@PawnId = adc36322-d3b4-4d34-87f9-e2dbad13746a
+@MoveCardName = Crab
+
+GET {{Onitama.Api_HostAddress}}/api/games/{{GameId}}
+Authorization: Bearer {{BearerToken}}
+
+###
+
+POST {{Onitama.Api_HostAddress}}/api/games/{{GameId}}/move-pawn
+Content-Type: application/json
+Authorization: Bearer {{BearerToken}}
+
+{
+  "pawnId": "{{PawnId}}",
+  "moveCardName": "{{MoveCardName}}",
+  "to": {
+    "row": 1,
+    "column": 1
+  }
+}
+
+###
+
+GET {{Onitama.Api_HostAddress}}/api/games/{{GameId}}/possible-moves-of/{pawnId}/for-card/string
+Authorization: Bearer {{BearerToken}}
+
+###
+
+POST {{Onitama.Api_HostAddress}}/api/games/{{GameId}}/skip-movement
+Content-Type: application/json
+Authorization: Bearer {{BearerToken}}
+
+{
+  "moveCardName": "{{MoveCardName}}"
+}
+
+###
