@@ -73,6 +73,30 @@
                 throw_error('Please fill in your password.');
                 return;
             }
+
+            const response = fetch("https://localhost:5051/api/Authentication/token", {
+                method: 'POST',
+                headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({email: email, password: password})
+            }).then(response => {
+                if(!response.ok){
+                    return response.json().then(errorData => {
+                        throw_error(errorData.message);
+                    });
+                }
+                return response.json();
+            }).then(data => {
+                localStorage.setItem('user', JSON.stringify(data.user));
+                localStorage.setItem('token', data.token);
+            }).then(() => {
+                window.location.href = "index.html";
+            }).catch(error => {
+                console.log(error);
+            });
+
         });
 
         errorButton.addEventListener('click', () => {
