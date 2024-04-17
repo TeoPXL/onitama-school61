@@ -20,7 +20,8 @@ internal class TableManager : ITableManager
 
     public ITable AddNewTableForUser(User user, TablePreferences preferences)
     {
-        throw new NotImplementedException();
+        var table = new TableFactory().CreateNewForUser(user, preferences);
+        return table;
     }
 
     public void JoinTable(Guid tableId, User user)

@@ -27,7 +27,7 @@ public interface ITable
     /// <summary>
     /// The players who are currently seated at the table.
     /// </summary>
-    public IReadOnlyList<IPlayer> SeatedPlayers { get; }
+    public IList<IPlayer> SeatedPlayers { get; }
 
     /// <summary>
     /// Indicates whether there is an available seat at the table.
