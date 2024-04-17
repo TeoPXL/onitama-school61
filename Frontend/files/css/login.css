@@ -64,10 +64,13 @@ label {
     color: var(--color-main);
 }
 .error-message {
+    max-width: 500px;
+    margin: auto;
     margin-top: 25px;
     background: #c60025;
     padding: 10px;
     border-radius: 1em;
+    transition: 0.1s;
 }
 .error-title {
     font-size: 150%;
@@ -75,4 +78,22 @@ label {
 }
 .error-subtitle {
     font-size: 120%;
+}
+.error-button {
+    background: #00000080;
+    width: max-content;
+    padding: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 2em;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.error-button:hover {
+    filter: brightness(0.5);
+}
+.invisible {
+    opacity: 0;
+    pointer-events: none;
 }
