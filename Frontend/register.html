@@ -30,14 +30,16 @@
 
     <main class="main">
         <div class="login-form">
-            <h1 class="login-title">Login to your account</h1>
+            <h1 class="login-title">Create a new account</h1>
+            <label for="username">Username</label>
+            <input id="username-input" name="username" placeholder="Username" type="text">
             <label for="email">Email address</label>
             <input id="email-input" name="email" placeholder="Email" type="text">
             <label for="password">Password</label>
             <input id="password-input" type="password" name="password" placeholder="Password" type="text">
-            <div class="login-button">Login</div>
+            <div class="login-button">Register</div>
         </div>
-        <a href="register.html"><p class="alternative-option">Don't have an account yet? Register instead!</p></a>
+        <a href="login.html"><p class="alternative-option">Already have an account? Login instead!</p></a>
 
 
         <div class="error-message invisible">
@@ -49,6 +51,7 @@
 
     <script>
         const loginButton = document.querySelector('.login-button');
+        const usernameInput = document.getElementById('username-input');
         const emailInput = document.getElementById('email-input');
         const passwordInput = document.getElementById('password-input');
         const errorMessage = document.querySelector('.error-message');
@@ -63,8 +66,13 @@
         loginButton.addEventListener('click', () => {
             const email = emailInput.value;
             const password = passwordInput.value;
-            console.log(email, password);
+            const username = usernameInput.value;
+            console.log(email, password, username);
 
+            if(username === ''){
+                throw_error('Please fill in your username.');
+                return;
+            }
             if(email === ''){
                 throw_error('Please fill in your email address.');
                 return;
