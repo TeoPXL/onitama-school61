@@ -1,10 +1,413 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Onitama</title>
-  </head>
-  <body>
-    
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onitama</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <style>
+    html {
+      --color-background: #111412;
+      --color-background-fade: #222623;
+      --color-main: #13F287;
+      --color-main-fade: #75FFBA;
+      --color-secondary: #E6FF4B;
+      --color-text: white;
+      --color-text-fade: #ffffff57;
+      --color-text-2: #0E0007;
+      --font-logo: "Outfit", sans-serif;
+      --font-main: "Poppins", sans-serif;
+    }
+    body {
+      background: var(--color-background);
+      color: var(--color-text);
+      font-family: var(--font-main);
+      padding: 0;
+      margin: 0;
+    }
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+    i {
+      display: flex;
+      margin-left: 5px;
+    }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 60px;
+      width: calc(100% - 20px);
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+    .main {
+      width: calc(100% - 20px);
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+    .top-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-2);
+      background: var(--color-main-fade);
+      padding: 5px;
+      padding-left: 15px;
+      padding-right: 15px;
+      border-radius: 2em;
+      font-weight: 400;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .top-button:hover {
+      filter: brightness(0.5);
+    }
+    .logo {
+      font-family: var(--font-logo);
+      font-weight: 400;
+      font-size: 300%;
+      margin: 0;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    .gamelist {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .gamelist-comp {
+      margin-bottom: 50px;
+    }
+    .gamelist-left {
+      width: 100%;
+      height: 100%;
+    }
+    .gamelist-right {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-flow: column;
+      gap: 10px;
+    }
+    .gamelist-main, .gamelist-alt {
+      width: calc(100% - 30px);
+      height: calc(100% - 30px);
+      background: var(--color-main);
+      padding: 15px;
+      border-radius: 1em;
+      color: var(--color-text-2);
+      display: flex;
+      flex-flow: column;
+      justify-content: space-between;
+    }
+    .gamelist-alt {
+      background: var(--color-main-fade);
+    }
+    .gamelist-title {
+      font-size: 115%;
+      font-weight: 500;
+      margin: 0;
+    }
+    .gamelist-text {
+      opacity: 0.9;
+    }
+    .gamelist-icon {
+      transition: 0.5s;
+    }
+    .gamelist-icon i {
+      margin: 0;
+    }
+    .gamelist-item {
+      transition: 0.2s;
+      cursor: pointer;
+    }
+    .gamelist .gamelist-main p {
+      margin-top: 10px;
+      font-size: 150%;
+      font-weight: 600;
+    }
+    .gamelist-item:hover {
+      filter: brightness(0.5);
+    }
+    .gamelist-item:hover .gamelist-icon {
+      transform: rotateY(360deg);
+    }
+    .gamelist-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+    .comp-list {
+      width: calc(100% - 20px);
+      padding-left: 10px;
+      padding-right: 10px;
+      padding-top: 30px;
+      padding-bottom: 30px;
+      border-radius: 2em;
+      background: var(--color-background-fade);
+      margin-bottom: 50px;
+    }
+    .comp-list-title {
+      font-size: 110%;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+    .comp-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom-style: solid;
+      border-bottom-color: var(--color-text-fade);
+      border-width: 2px;
+      padding-top: 15px;
+      padding-bottom: 15px;
+      margin-bottom: 10px;
+      font-size: 100%;
+    }
+    .comp-item i {
+      margin: 0;
+    }
+    .comp-item-text {
+      max-width: 50%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .comp-item-spectate {
+      background: var(--color-main);
+      color: var(--color-text-2);
+      padding: 3px;
+      padding-left: 10px;
+      padding-right: 10px;
+      border-radius: 2em;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .comp-item-spectate:hover {
+      filter: brightness(0.5);
+    }
+    .hidden {
+      display: none;
+    }
+    @media screen and (min-width: 900px) {
+      .main, .top {
+        width: calc(100% - 100px);
+        max-width: 1000px;
+        margin: auto;
+        padding-left: 50px;
+        padding-right: 50px;
+      }
+      .main-content {
+        display: flex;
+        gap: 10px;
+      }
+      .main-games {
+        width: 50%;
+      }
+      .comp-list {
+        width: 50%;
+      }
+      .comp-list {
+        border-radius: 1em;
+      }
+    }
+    @media screen and (min-width: 1250px) {
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="top-button menu-button">
+      <div class="top-button-text">Team</div>
+      <div class="top-button-icon">
+        <i>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-code-slash" viewBox="0 0 16 16">
+            <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0m6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0"/>
+          </svg>
+        </i>
+      </div>
+    </div>
+    <div class="top-button top-button-user hidden">
+      <div class="top-button-text">Username</div>
+      <div class="top-button-icon">
+        <i>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+          </svg>
+        </i>
+      </div>
+    </div>
+    <div class="top-button top-button-login">
+      <div class="top-button-text">Login/Register</div>
+      <div class="top-button-icon">
+        <i>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0z"/>
+            <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+          </svg>
+        </i>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <h1 class="logo">Onitama 61</h1>
+    <div class="main-content">
+      <div class="main-games">
+        <div class="gamelist">
+          <div class="gamelist-left">
+            <div class="gamelist-main gamelist-item">
+              <p class="gamelist-title">Casual PVP classic mode</p>
+              <div class="gamelist-bottom">
+                <div class="gamelist-text">12 | 32</div>
+                <div class="gamelist-icon">
+                  <i>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-arrow-right-square-fill" viewBox="0 0 16 16">
+                      <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1"/>
+                    </svg>
+                  </i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="gamelist-right">
+            <div class="gamelist-alt gamelist-item">
+              <p class="gamelist-title">Blitz Speed mode</p>
+              <div class="gamelist-bottom">
+                <div class="gamelist-text">6 | 12</div>
+                <div class="gamelist-icon">
+                  <i>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-arrow-right-square-fill" viewBox="0 0 16 16">
+                      <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1"/>
+                    </svg>
+                  </i>
+                </div>
+              </div>
+            </div>
+            <div class="gamelist-alt gamelist-item">
+              <p class="gamelist-title">Player vs Machine</p>
+              <div class="gamelist-bottom">
+                <div class="gamelist-text">AI | 3 modes</div>
+                <div class="gamelist-icon">
+                  <i>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-arrow-right-square-fill" viewBox="0 0 16 16">
+                      <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1"/>
+                    </svg>
+                  </i>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="gamelist-comp">
+          <div class="gamelist-main gamelist-item">
+            <p class="gamelist-title">Competitive ELO PVP mode</p>
+            <div class="gamelist-bottom">
+              <div class="gamelist-text">14 active matches</div>
+              <div class="gamelist-icon">
+                <i>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-arrow-right-square-fill" viewBox="0 0 16 16">
+                    <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1"/>
+                  </svg>
+                </i>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      <div class="comp-list">
+        <div class="comp-list-title">Ongoing Competitive Matches</div>
+        <div class="comp-item">
+          <div class="comp-item-icon">
+            <i>
+              <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+              stroke-width="1.5" stroke-linecap="round"  stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M21 3v5l-11 9l-4 4l-3 -3l4 -4l9 -11z" />
+                <path d="M5 13l6 6" />
+                <path d="M14.32 17.32l3.68 3.68l3 -3l-3.365 -3.365" />
+                <path d="M10 5.5l-2 -2.5h-5v5l3 2.5" />
+              </svg>
+            </i>
+          </div>
+          <div class="comp-item-text">Username vs Usernamethatisveryverylong</div>
+          <div class="comp-item-spectate">Spectate</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-item-icon">
+            <i>
+              <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+              stroke-width="1.5" stroke-linecap="round"  stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M21 3v5l-11 9l-4 4l-3 -3l4 -4l9 -11z" />
+                <path d="M5 13l6 6" />
+                <path d="M14.32 17.32l3.68 3.68l3 -3l-3.365 -3.365" />
+                <path d="M10 5.5l-2 -2.5h-5v5l3 2.5" />
+              </svg>
+            </i>
+          </div>
+          <div class="comp-item-text">Username vs Username</div>
+          <div class="comp-item-spectate">Spectate</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-item-icon">
+            <i>
+              <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+              stroke-width="1.5" stroke-linecap="round"  stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M21 3v5l-11 9l-4 4l-3 -3l4 -4l9 -11z" />
+                <path d="M5 13l6 6" />
+                <path d="M14.32 17.32l3.68 3.68l3 -3l-3.365 -3.365" />
+                <path d="M10 5.5l-2 -2.5h-5v5l3 2.5" />
+              </svg>
+            </i>
+          </div>
+          <div class="comp-item-text">Username vs Username</div>
+          <div class="comp-item-spectate">Spectate</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-item-icon">
+            <i>
+              <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+              stroke-width="1.5" stroke-linecap="round"  stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M21 3v5l-11 9l-4 4l-3 -3l4 -4l9 -11z" />
+                <path d="M5 13l6 6" />
+                <path d="M14.32 17.32l3.68 3.68l3 -3l-3.365 -3.365" />
+                <path d="M10 5.5l-2 -2.5h-5v5l3 2.5" />
+              </svg>
+            </i>
+          </div>
+          <div class="comp-item-text">Username vs Username</div>
+          <div class="comp-item-spectate">Spectate</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-item-icon">
+            <i>
+              <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+              stroke-width="1.5" stroke-linecap="round"  stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M21 3v5l-11 9l-4 4l-3 -3l4 -4l9 -11z" />
+                <path d="M5 13l6 6" />
+                <path d="M14.32 17.32l3.68 3.68l3 -3l-3.365 -3.365" />
+                <path d="M10 5.5l-2 -2.5h-5v5l3 2.5" />
+              </svg>
+            </i>
+          </div>
+          <div class="comp-item-text">Username vs Username</div>
+          <div class="comp-item-spectate">Spectate</div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
 </html>
