@@ -7,65 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./files/css/main.css">
   <style>
-    html {
-      --color-background: #111412;
-      --color-background-fade: #222623;
-      --color-main: #13F287;
-      --color-main-fade: #75FFBA;
-      --color-secondary: #E6FF4B;
-      --color-text: white;
-      --color-text-fade: #ffffff57;
-      --color-text-2: #0E0007;
-      --font-logo: "Outfit", sans-serif;
-      --font-main: "Poppins", sans-serif;
-    }
-    body {
-      background: var(--color-background);
-      color: var(--color-text);
-      font-family: var(--font-main);
-      padding: 0;
-      margin: 0;
-    }
-    svg {
-      width: 24px;
-      height: 24px;
-    }
-    i {
-      display: flex;
-      margin-left: 5px;
-    }
-    .top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      height: 60px;
-      width: calc(100% - 20px);
-      padding-left: 10px;
-      padding-right: 10px;
-    }
-    .main {
-      width: calc(100% - 20px);
-      padding-left: 10px;
-      padding-right: 10px;
-    }
-    .top-button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--color-text-2);
-      background: var(--color-main-fade);
-      padding: 5px;
-      padding-left: 15px;
-      padding-right: 15px;
-      border-radius: 2em;
-      font-weight: 400;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .top-button:hover {
-      filter: brightness(0.5);
-    }
     .logo {
       font-family: var(--font-logo);
       font-weight: 400;
@@ -192,9 +135,6 @@
     .comp-item-spectate:hover {
       filter: brightness(0.5);
     }
-    .hidden {
-      display: none;
-    }
     @media screen and (min-width: 900px) {
       .main, .top {
         width: calc(100% - 100px);
@@ -250,7 +190,7 @@
         </i>
       </div>
     </div>
-    <div class="top-button top-button-login">
+    <a href="login.html"><div class="top-button top-button-login">
       <div class="top-button-text">Login/Register</div>
       <div class="top-button-icon">
         <i>
@@ -260,7 +200,7 @@
           </svg>
         </i>
       </div>
-    </div>
+    </div></a>
   </header>
 
   <main class="main">
