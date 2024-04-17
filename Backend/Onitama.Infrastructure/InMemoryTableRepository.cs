@@ -39,7 +39,14 @@ internal class InMemoryTableRepository : ITableRepository
         //TODO: loop over all tables (user the Values property of _tableDictionary)
         //and check if those tables have seats available.
         //Put the tables that have available seats in a list and return that list.
-       
-        throw new NotImplementedException();
+        var list = new List<ITable>();
+        foreach (var table in _tableDictionary.Values)
+        {
+            if (table.HasAvailableSeat)
+            {
+                list.Add(table);
+            }
+        }
+        return list;
     }
 }
