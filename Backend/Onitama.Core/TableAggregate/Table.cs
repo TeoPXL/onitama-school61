@@ -31,6 +31,7 @@ internal class Table : ITable
         this._id = id;
         this._preferences = preferences;
         this._hasAvailableSeat = true;
+        this._gameId = new Guid();
     }
     public Guid get_id()
     {
@@ -41,6 +42,11 @@ internal class Table : ITable
     {
         get { return this._id; }
         set { this._id = value; }
+    }
+
+    public IList<Color> AvailableColors
+    {
+        get { return _availableColors; }
     }
 
     public TablePreferences Preferences
@@ -73,9 +79,38 @@ internal class Table : ITable
         set { this.GameId = value; }
     }
 
+    public void SetGameId(Guid gameId)
+    {
+        this._gameId = gameId;
+    }
+    public IPlayer[] GetSeatedPlayers()
+    {
+        var players = new IPlayer[] { };
+        foreach(var player in _seatedPlayers)
+        {
+            players.Append(player);
+        }
+        return players;
+    }
+
     public void FillWithArtificialPlayers(IGamePlayStrategy gamePlayStrategy)
     {
         throw new NotImplementedException();
+    }
+
+    public Color[] GetUsedColors()
+    {
+        var colorList = new List<Color>() { Color.Red, Color.Blue, Color.Green, Color.Yellow, Color.Orange };
+        var colorListFinal = new Color[] { };
+        foreach (var color in _availableColors)
+        {
+            colorList.Remove(color);
+        }
+        foreach (var color in colorList)
+        {
+            colorListFinal.Append(color);
+        }
+        return colorListFinal;
     }
 
     public void Join(User user)

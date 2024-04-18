@@ -1,6 +1,7 @@
 ﻿using Onitama.Core.PlayerAggregate.Contracts;
 using Onitama.Core.PlayMatAggregate.Contracts;
 using Onitama.Core.UserAggregate;
+using System.Drawing;
 
 namespace Onitama.Core.TableAggregate.Contracts;
 
@@ -46,6 +47,10 @@ public interface ITable
     /// <param name="user">User for which a player should be created</param>
     void Join(User user);
 
+    Color[] GetUsedColors();
+
+    public void SetGameId(Guid gameId);
+
     /// <summary>
     /// Removes a player from the table.
     /// </summary>
@@ -58,4 +63,5 @@ public interface ITable
     /// <param name="gamePlayStrategy">Strategy that should be used by the AI players to determine their next move</param>
     /// <remarks>This is an EXTRA. Not needed to implement the minimal requirements.</remarks>
     void FillWithArtificialPlayers(IGamePlayStrategy gamePlayStrategy);
+    IPlayer[] GetSeatedPlayers();
 }
