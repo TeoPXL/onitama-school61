@@ -27,6 +27,9 @@
     font-size: 110%;
     font-weight: 500;
 }
+.team-item-highlight {
+    color: var(--color-main);
+}
 @media screen and (min-width: 800px){
     .team-container {
         display: grid;
