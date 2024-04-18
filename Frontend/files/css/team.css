@@ -23,6 +23,11 @@
     border-radius: 0.5em;
     overflow: hidden;
 }
+.team-item-image img {
+    width: 100%;
+    height: 100%;  
+    object-fit: cover;
+}
 .team-item-name {
     font-size: 110%;
     font-weight: 500;
