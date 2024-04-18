@@ -8,7 +8,7 @@ internal class TableFactory : ITableFactory
 {
     public ITable CreateNewForUser(User user, TablePreferences preferences)
     {
-        var table = new Table(new Guid(), preferences);
+        var table = new Table(Guid.NewGuid(), preferences);
         table.Join(user);
         return table;
     }
