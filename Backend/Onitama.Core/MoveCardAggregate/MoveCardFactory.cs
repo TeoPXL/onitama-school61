@@ -6,8 +6,11 @@ namespace Onitama.Core.MoveCardAggregate;
 /// <inheritdoc cref="IMoveCardFactory"/>
 internal class MoveCardFactory : IMoveCardFactory
 {
+    private Random _random = new Random();
     public IMoveCard Create(string name, MoveCardGridCellType[,] grid, Color[] possibleStampColors)
     {
-        throw new NotImplementedException("TODO: pick a random stamp color and return a MoveCard instance");
+        int number = _random.Next(0, possibleStampColors.Length);
+        var color = possibleStampColors[number];
+        return new MoveCard(name, grid, color);
     }
 }

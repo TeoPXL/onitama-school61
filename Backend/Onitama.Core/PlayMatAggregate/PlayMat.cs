@@ -13,8 +13,10 @@ using Onitama.Core.PlayerAggregate.Contracts;
 namespace Onitama.Core.PlayMatAggregate;
 
 /// <inheritdoc cref="IPlayMat"/>
-internal class PlayMat 
+internal class PlayMat  : IPlayMat
 {
+    private IPawn[,] _grid;
+    private int _size;
     /// <summary>
     /// Creates a play mat that is a copy of another play mat
     /// </summary>
@@ -29,5 +31,32 @@ internal class PlayMat
     public PlayMat(IPlayMat otherPlayMat, IPlayer[] copiedPlayers)
     {
         throw new NotImplementedException("TODO: copy properties of other playmat");
+    }
+
+    public IPawn[,] Grid
+    {
+        get { return _grid; }
+        set { this._grid = value; }
+    }
+
+    public int Size
+    {
+        get { return _size; }
+        set { this._size = value; }
+    }
+
+    public void ExecuteMove(IMove move, out IPawn capturedPawn)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IReadOnlyList<IMove> GetValidMoves(IPawn pawn, IMoveCard card, Direction playerDirection)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void PositionSchoolOfPlayer(IPlayer player)
+    {
+        throw new NotImplementedException();
     }
 }
