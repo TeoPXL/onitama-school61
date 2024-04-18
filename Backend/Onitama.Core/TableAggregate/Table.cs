@@ -31,7 +31,7 @@ internal class Table : ITable
         this._id = id;
         this._preferences = preferences;
         this._hasAvailableSeat = true;
-        this._gameId = new Guid();
+        this._gameId = Guid.Empty;
     }
     public Guid get_id()
     {
@@ -76,7 +76,7 @@ internal class Table : ITable
     public Guid GameId
     {
         get { return this._gameId; }
-        set { this.GameId = value; }
+        set { this._gameId = value; }
     }
 
     public void SetGameId(Guid gameId)

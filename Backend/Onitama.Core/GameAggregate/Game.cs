@@ -80,17 +80,17 @@ internal class Game : IGame
     /// </param>
     public Game(Guid id, IPlayMat playMat, IPlayer[] players, IMoveCard extraMoveCard)
     {
-        this.Players = players;
-        this.Id = id;  
-        this.PlayMat = playMat;
-        this.ExtraMoveCard = extraMoveCard;
+        this._players = players;
+        this._id = id;  
+        this._playMat = playMat;
+        this._extraMoveCard = extraMoveCard;
     }
 
     public Game(Guid id, IPlayer[] players, IMoveCard extraMoveCard)
     {
-        this.Players = players;
-        this.Id = id;
-        this.ExtraMoveCard = extraMoveCard;
+        this._players = players;
+        this._id = id;
+        this._extraMoveCard = extraMoveCard;
     }
 
     /// <summary>
