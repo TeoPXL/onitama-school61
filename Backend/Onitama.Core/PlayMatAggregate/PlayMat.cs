@@ -2,61 +2,69 @@
 using Onitama.Core.GameAggregate.Contracts;
 using Onitama.Core.MoveCardAggregate.Contracts;
 using Onitama.Core.PlayerAggregate;
-using Onitama.Core.PlayMatAggregate.Contracts;
-using Onitama.Core.SchoolAggregate;
-using Onitama.Core.SchoolAggregate.Contracts;
-using System.Data.Common;
-using Onitama.Core.Util;
-using Onitama.Core.Util.Contracts;
 using Onitama.Core.PlayerAggregate.Contracts;
+using Onitama.Core.PlayMatAggregate.Contracts;
+using Onitama.Core.SchoolAggregate.Contracts;
+using Onitama.Core.Util;
+using System.Collections.Generic;
 
-namespace Onitama.Core.PlayMatAggregate;
-
-/// <inheritdoc cref="IPlayMat"/>
-internal class PlayMat  : IPlayMat
+namespace Onitama.Core.PlayMatAggregate
 {
-    private IPawn[,] _grid;
-    private int _size;
     /// <summary>
-    /// Creates a play mat that is a copy of another play mat
+    /// Represents the play mat of the game.
     /// </summary>
-    /// <param name="otherPlayMat">The play mat to copy</param>
-    /// <param name="copiedPlayers">
-    /// Copies of the players (with their school)
-    /// that should be used to position pawn on the copy of the <paramref name="otherPlayMat"/>.</param>
-    /// <remarks>
-    /// This is an EXTRA. Not needed to implement the minimal requirements.
-    /// To make the mini-max algorithm for an AI game play strategy work, this constructor should be implemented.
-    /// </remarks>
-    public PlayMat(IPlayMat otherPlayMat, IPlayer[] copiedPlayers)
+    internal class PlayMat : IPlayMat
     {
-        throw new NotImplementedException("TODO: copy properties of other playmat");
-    }
+        private IPawn[,] _grid;
+        private int _size;
 
-    public IPawn[,] Grid
-    {
-        get { return _grid; }
-        set { this._grid = value; }
-    }
+        public IPawn[,] Grid
+        {
+            get { return _grid; }
+        }
 
-    public int Size
-    {
-        get { return _size; }
-        set { this._size = value; }
-    }
+        public int Size
+        {
+            get { return _size; }
+        }
 
-    public void ExecuteMove(IMove move, out IPawn capturedPawn)
-    {
-        throw new NotImplementedException();
-    }
+        public PlayMat(int size)
+        {
+            _size = size;
+            _grid = new IPawn[size, size];
+        }
 
-    public IReadOnlyList<IMove> GetValidMoves(IPawn pawn, IMoveCard card, Direction playerDirection)
-    {
-        throw new NotImplementedException();
-    }
+        public PlayMat(IPlayMat otherPlayMat, IPlayer[] copiedPlayers)
+        {
+            //"TODO: copy properties of other playmat"
+            
+            _size = otherPlayMat.Size;
+            _grid = new IPawn[_size, _size];
 
-    public void PositionSchoolOfPlayer(IPlayer player)
-    {
-        throw new NotImplementedException();
+            for (int i = 0; i < _size; i++)
+            {
+                for (int j = 0; j < _size; j++)
+                {
+                    _grid[i, j] = otherPlayMat.Grid[i, j];
+                }
+            }
+        }
+
+        public void PositionSchoolOfPlayer(IPlayer player)
+        {
+            // Implementation goes here
+        }
+
+        public IReadOnlyList<IMove> GetValidMoves(IPawn pawn, IMoveCard card, Direction playerDirection)
+        {
+            // Implementation goes here
+            return null; // Placeholder return
+        }
+
+        public void ExecuteMove(IMove move, out IPawn capturedPawn)
+        {
+            // Implementation goes here
+            capturedPawn = null; // Placeholder
+        }
     }
 }
