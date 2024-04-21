@@ -115,7 +115,7 @@
                     this.renderer.setSize(this.containerWidth, this.containerHeight, false);
                     this.ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
                     this.scene.add(this.ambientLight);
-                    this.sunColor = 0xF7EACD; // A warm, yellowish-orange color
+                    this.sunColor = 0xF7EACD; // A warm, yellowish-orange color (Like the sun)
                     this.sunLight = new THREE.PointLight(this.sunColor, 60, 0, 1);
                     this.sunLight.position.set(10, 10, 0);
                     this.scene.add(this.sunLight);
@@ -229,12 +229,11 @@
                 placeObject(team, coord, identity, type){
                     if(identity == 0){
                         let material = new THREE.MeshBasicMaterial({
-                            color: 0xffffff, // Red color, you can change this
+                            color: 0xffffff,
                             transparent: true, // Make it transparent
                             opacity: 0.1, // Set the opacity (0 is fully transparent, 1 is fully opaque)
                         });
 
-                        // Create a cube geometry with dimensions 2x2x2
                         let cubeGeometry = new THREE.BoxGeometry(1.25, 0.05, 1.25);
 
                         // Create a mesh using the geometry and material
@@ -271,7 +270,7 @@
                         console.log(action);     
 
                         let material = new THREE.MeshBasicMaterial({
-                            color: boxColor, // Red color, you can change this
+                            color: boxColor,
                             transparent: true, // Make it transparent
                             opacity: 0.01, // Set the opacity (0 is fully transparent, 1 is fully opaque)
                         });
@@ -283,7 +282,6 @@
                         let cube = new THREE.Mesh(cubeGeometry, material);
                         cube.name = "hover"+identity;
                         modelObject.add(cube);
-                        //cube.position.copy(modelObject.position);
 
                         self.board.currentBoard[coord[0]][coord[1]] = [identity, type, modelObject, mixer, modelGLTF];
 
@@ -417,7 +415,6 @@
 
                 let cubes = 0;
                 if (intersects.length > 0) {
-                    // Handle hover behavior here
                     intersects.forEach(element => {
                         let object = element.object;
                         if(object.name.includes("hover")){
@@ -425,13 +422,12 @@
                             cubes++;
                         }
                     });
-                    // Do something with the hovered object
                 }
                 if(cubes == 0){
                     game.scene.traverse(function(child) {
                         if (child instanceof THREE.Mesh && child.name.includes("hover")) {
-                            child.material.opacity = 0.3; // Reset opacity to fully opaque
-                            child.material.needsUpdate = true; // Update the material
+                            child.material.opacity = 0.3; // Reset opacity to default
+                            child.material.needsUpdate = true; // Update material
                         }
                     });
                 }
