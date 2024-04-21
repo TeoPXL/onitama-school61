@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+
+    <link rel="icon" type="image/webp" sizes="16x16" href="../files/icons/icon-16.webp">
+    <link rel="icon" type="image/webp" sizes="32x32" href="../files/icons/icon-32.webp">
+    <link rel="icon" type="image/webp" sizes="64x64" href="../files/icons/icon-64.webp.png">
+    <link rel="icon" type="image/webp" sizes="128x128" href="../files/icons/icon-128.webp">
+    <link rel="icon" type="image/webp" sizes="512x512" href="../files/icons/icon-512.webp">
+    <!-- iOS -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../files/icons/icon-180.webp">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../files/css/main.css">
+    <style>
+        #container {
+            width: 80%;
+            max-width: 800px;
+            aspect-ratio: 16/10;
+            margin: auto;
+            position: relative;
+            border-radius: 1em;
+            overflow: hidden;
+            margin-top: 50px;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+    </style>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.163.0/build/three.module.js"
+            }
+        }
+    </script>
+</head>
+
+<body>
+    
+    <div class="jump">Click me1</div>
+    <div class="attack">Click me2</div>
+    <div id="container">
+
+
+
+
+        <script type="module">
+            import * as THREE from 'three';
+            import { GLTFLoader } from 'https://unpkg.com/three@0.163.0/examples/jsm/loaders/GLTFLoader.js';
+            import { OrbitControls } from 'https://unpkg.com/three@0.163.0/examples/jsm/controls/OrbitControls.js';
+            const players = [
+                    {
+                        "name": "Testuser",
+                        "color": 0x13F287,
+                        "facing": 1,
+                        "ninja": ["default", "jump_flip", "attack_god"],
+                        "master": ["default", "default", "default"]
+                    },
+                    {
+                        "name": "Anotheruser",
+                        "color": 0xff0000,
+                        "facing": 0,
+                        "ninja": ["default", "default", "attack_spin"],
+                        "master": ["default", "default", "default"]
+                    },
+                ];
+            const cards = [
+                {
+                    "name": "cat",
+                    "moves": [[1, 0], [1, 1], 0, 2]
+                }
+            ];
+            class Game {
+                constructor(players){
+                    this.players = players;
+                    this.team1 = this.players[0];
+                    this.team2 = this.players[1];
+                    console.log(this.team1, this.team2);
+                    if(players.length > 2){
+                        this._board = new Board(7);
+                        this.team3 = this.players[2];
+                        this.team4 = this.players[3];
+                    } else {
+                        this._board = new Board(5);
+                    }
+
+                    //Initialize game world
+                    this._scene = new THREE.Scene();
+                    this._raycaster = new THREE.Raycaster();
+                    this.raycaster.params.Points.threshold = 0.1; 
+                    this.raycaster.params.Line.threshold = 0.1; 
+                    this._clock = new THREE.Clock();
+                    console.log(this._clock);
+                    this._mouse = new THREE.Vector2();
+                    this.scene.background = new THREE.Color(0x87ceeb);
+                    this.containerWidth = document.getElementById("container").clientWidth;
+                    this.containerHeight = document.getElementById("container").clientHeight;
+                    this._camera = new THREE.PerspectiveCamera(75, this.containerWidth / this.containerHeight, 0.1, 1000);
+                    this._renderer = new THREE.WebGLRenderer({ antialias: true });
+                    this.pixelRatio = window.devicePixelRatio || 1; // Get device pixel ratio
+                    this.renderer.setPixelRatio(this.pixelRatio);
+                    this.renderer.setSize(this.containerWidth, this.containerHeight, false);
+                    this.ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+                    this.scene.add(this.ambientLight);
+                    this.sunColor = 0xF7EACD; // A warm, yellowish-orange color
+                    this.sunLight = new THREE.PointLight(this.sunColor, 60, 0, 1);
+                    this.sunLight.position.set(10, 10, 0);
+                    this.scene.add(this.sunLight);
+                    document.getElementById('container').appendChild(this.renderer.domElement);
+
+                    this._controls = new OrbitControls(  
+                        this.camera, 
+                        this.renderer.domElement
+                    );
+                    this.controls.enableDamping = true; 
+                    this.controls.dampingFactor = 0.2;
+
+                    this.controls.screenSpacePanning = false;
+                    this.controls.enablePan = false;
+
+                    this.controls.minDistance = 2;
+                    this.controls.maxDistance = 14;
+
+                    this.controls.maxPolarAngle = Math.PI / 2.25;
+                    this.controls.target.z = -2;
+
+                    this.loader = new GLTFLoader();
+                    const self = this;
+                    this.loader.load('assets/board.gltf', function (gltf) {
+                        self.boardObject = gltf.scene;
+                        self.boardObject.rotation.y = 1.5708;
+                        self.boardObject.position.y = -0.15;
+                        self.scene.add(gltf.scene);  
+
+                    }, undefined, function (error) {
+                        console.error(error);
+                    });
+
+                    this.camera.position.z = -8;
+                    this.camera.position.y = 4.5;
+                    this.camera.rotation.x = -0.5;
+
+                    this.fillModels();
+                    animate();
+                }
+
+                get clock(){
+                    return this._clock;
+                }
+                set clock(clock){
+                    this._clock = clock;
+                }
+                get board(){
+                    return this._board;
+                }
+                set board(board){
+                    this._board = board;
+                }
+                get controls(){
+                    return this._controls;
+                }
+                set controls(controls){
+                    this._controls = controls;
+                }
+                get renderer(){
+                    return this._renderer;
+                }
+                set renderer(renderer){
+                    this._renderer = renderer;
+                }
+                get scene(){
+                    return this._scene;
+                }
+                set scene(scene){
+                    this._scene = scene;
+                }
+                get camera(){
+                    return this._camera;
+                }
+                set camera(camera){
+                    this._camera = camera;
+                }
+                get raycaster(){
+                    return this._raycaster;
+                }
+                set raycaster(raycaster){
+                    this._raycaster = raycaster;
+                }
+                get mouse(){
+                    return this._mouse;
+                }
+                set mouse(mouse){
+                    this._mouse = mouse;
+                }
+
+                fillModels(){
+                    for (let i = 0; i < this.board.currentBoard.length; i++) {
+                        for (let k = 0; k < this.board.currentBoard[i].length; k++) {
+                            const id = this.board.currentBoard[i][k][0];
+                            const type = this.board.currentBoard[i][k][1];
+                            let coord = [i, k];
+                            if (id < 6){
+                                this.placeObject(this.team1, coord, id, type);
+                            } else if (id < 11) {
+                                this.placeObject(this.team2, coord, id, type);
+                            } else if (id < 16) {
+                                this.placeObject(this.team3, coord, id, type);
+                            } else if (id < 21) {
+                                this.placeObject(this.team4, coord, id, type);
+                            }
+                            
+                        }
+                    }
+                }
+
+                placeObject(team, coord, identity, type){
+                    if(identity == 0){
+                        let material = new THREE.MeshBasicMaterial({
+                            color: 0xffffff, // Red color, you can change this
+                            transparent: true, // Make it transparent
+                            opacity: 0.1, // Set the opacity (0 is fully transparent, 1 is fully opaque)
+                        });
+
+                        // Create a cube geometry with dimensions 2x2x2
+                        let cubeGeometry = new THREE.BoxGeometry(1.25, 0.05, 1.25);
+
+                        // Create a mesh using the geometry and material
+                        let cube = new THREE.Mesh(cubeGeometry, material);
+                        cube.name = "emptyslot"+identity;
+                        cube.position.x = coord[1] * 2 - 4;
+                        cube.position.z = coord[0] * 2 - 4;
+                        this.scene.add(cube);
+                        return;
+                    }
+
+                    let asset;
+                    let orient = team.facing;
+                    let boxColor = team.color;
+
+                    if(type == "k"){
+                        asset = 'assets/master.gltf';
+                        orient = orient + 2;
+                    } else {
+                        asset = 'assets/ninja.gltf';
+                    }
+                    const self = this;
+                    this.loader.load(asset, function (gltf) {
+                        let modelGLTF = gltf;
+                        let modelObject = gltf.scene;
+                        let mixer = new THREE.AnimationMixer(modelObject);
+                        let action = mixer.clipAction( gltf.animations[0] );
+                        self.scene.add(gltf.scene);
+                        modelObject.rotation.y = orient * 1.57 * 2;
+                        modelObject.position.z = coord[0] * 2 - 4;
+                        modelObject.position.x = coord[1] * 2 - 4;
+                        action.timeScale = 2;
+                        action.play(); 
+                        console.log(action);     
+
+                        let material = new THREE.MeshBasicMaterial({
+                            color: boxColor, // Red color, you can change this
+                            transparent: true, // Make it transparent
+                            opacity: 0.01, // Set the opacity (0 is fully transparent, 1 is fully opaque)
+                        });
+
+                        // Create a cube geometry with dimensions 2x2x2
+                        let cubeGeometry = new THREE.BoxGeometry(1.25, 0.05, 1.25);
+
+                        // Create a mesh using the geometry and material
+                        let cube = new THREE.Mesh(cubeGeometry, material);
+                        cube.name = "hover"+identity;
+                        modelObject.add(cube);
+                        //cube.position.copy(modelObject.position);
+
+                        self.board.currentBoard[coord[0]][coord[1]] = [identity, type, modelObject, mixer, modelGLTF];
+
+                    }, undefined, function (error) {
+                        console.error(error);
+                    });
+                }
+            };
+
+            class Board {
+                constructor(size){
+                    switch (size) {
+                        case 7:
+                            this.currentBoard = [
+                                [[0], [1, "p"], [2, "p"], [3, "k"], [4, "p"], [5, "p"], [0]],
+                                [[11, "p"], [0], [0], [0], [0], [0], [16, "p"]],
+                                [[12, "p"], [0], [0], [0], [0], [0], [17, "p"]],
+                                [[13, "k"], [0], [0], [0], [0], [0], [18, "p"]],
+                                [[14, "p"], [0], [0], [0], [0], [0], [19, "p"]],
+                                [[15, "p"], [0], [0], [0], [0], [0], [20, "p"]],
+                                [[0], [6, "p"], [7, "p"], [8, "k"], [9, "p"], [10, "p"], [0]],
+                            ];
+                            break;
+                    
+                        default:
+                            this.currentBoard = [
+                                [[1, "p"], [2, "p"], [3, "k"], [4, "p"], [5, "p"]],
+                                [[0], [0], [0], [0], [0]],
+                                [[0], [0], [0], [0], [0]],
+                                [[0], [0], [0], [0], [0]],
+                                [[6, "p"], [7, "p"], [8, "k"], [9, "p"], [10, "p"]],
+                            ];
+                            break;
+                    }
+                }
+
+                get board(){
+                    return this.board;
+                }
+            }
+
+            var game = new Game(players);
+
+            window.addEventListener('load', () => {
+                document.querySelector('.jump').addEventListener('click', () => {
+                    giveAnimation("jump");
+                });
+                document.querySelector('.attack').addEventListener('click', () => {
+                    giveAnimation("attack");
+                });
+            });
+
+            function giveAnimation(type) {
+                const board = game.board;
+                for (let i = 0; i < board.currentBoard.length; i++) {
+                    for (let k = 0; k < board.currentBoard.length; k++) {
+                        const el = board.currentBoard[i][k][3];
+                        if(board.currentBoard[i][k][0] == 0){
+
+                        } else if (el != undefined) {
+                            try {
+                                let mixer = board.currentBoard[i][k][3];
+                                let action;
+                                if (type == "jump"){
+                                    action = mixer.clipAction( board.currentBoard[i][k][4].animations[1] );
+                                } else {
+                                    action = mixer.clipAction( board.currentBoard[i][k][4].animations[3] );
+                                }
+                                
+                                mixer.stopAllAction();
+                                action.play(); 
+                            } catch {
+                                
+                            }
+                            
+                        }
+                        
+                    }
+                }
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+                if(game == undefined){
+                    return;
+                }
+                const clock = game.clock;
+                const board = game.board;
+                const controls = game.controls;
+                const renderer = game.renderer;
+                let delta = clock.getDelta();
+                for (let i = 0; i < board.currentBoard.length; i++) {
+                    for (let k = 0; k < board.currentBoard.length; k++) {
+                        const el = board.currentBoard[i][k][3];
+                        if(board.currentBoard[i][k][0] == 0){
+
+                        } else if (el != undefined) {
+                            el.update( delta );
+                        }
+                        
+                    }
+                }
+                controls.update();
+                renderer.render(game.scene, game.camera);
+            }
+
+            function onPointerMove(event) {
+                if(game == undefined){
+                    return;
+                }
+
+                // Get the mouse coordinates in screen space
+                game.mouseX = event.clientX;
+                game.mouseY = event.clientY;
+
+                // Get the bounding rectangle of the renderer element
+                let rect = game.renderer.domElement.getBoundingClientRect();
+
+                // Calculate the mouse coordinates relative to the renderer element
+                let x = (game.mouseX - rect.left) / rect.width * 2 - 1;
+                let y = -(game.mouseY - rect.top) / rect.height * 2 + 1;
+
+                // Update the mouse vector
+                game.mouse.set(x, y);
+                
+                // update the picking ray with the camera and mouse position
+                game.raycaster.setFromCamera(game.mouse, game.camera);
+
+                // calculate objects intersecting the picking ray
+                let intersects = game.raycaster.intersectObjects(game.scene.children);
+
+                let cubes = 0;
+                if (intersects.length > 0) {
+                    // Handle hover behavior here
+                    intersects.forEach(element => {
+                        let object = element.object;
+                        if(object.name.includes("hover")){
+                            object.material.opacity = 0.8;
+                            cubes++;
+                        }
+                    });
+                    // Do something with the hovered object
+                }
+                if(cubes == 0){
+                    game.scene.traverse(function(child) {
+                        if (child instanceof THREE.Mesh && child.name.includes("hover")) {
+                            child.material.opacity = 0.3; // Reset opacity to fully opaque
+                            child.material.needsUpdate = true; // Update the material
+                        }
+                    });
+                }
+            }
+            window.addEventListener('pointermove', onPointerMove, false);
+
+        </script>
+    </div>
+</body>
+
+</html>
