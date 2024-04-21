@@ -6,8 +6,8 @@ using Onitama.Core.Util;
 
 namespace Onitama.Core.PlayerAggregate;
 
-/// <inheritdoc cref="IPlayer"/>
-internal class HumanPlayer : IPlayer
+/// <inheritdoc cref="PlayerBase"/>
+internal class HumanPlayer : PlayerBase
 {
     private Guid _id;
     private string _name;
@@ -16,7 +16,7 @@ internal class HumanPlayer : IPlayer
     private ISchool _school;
     private IList<IMoveCard> _moveCards;
 
-    public HumanPlayer(Guid userId, string name, Color color, Direction direction)
+    public HumanPlayer(Guid userId, string name, Color color, Direction direction): base(userId, name, color, direction)
     {
         _id = userId;
         _name = name;
