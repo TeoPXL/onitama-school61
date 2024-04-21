@@ -23,7 +23,9 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: |
+          cd ./backend
+          dotnet build --configuration Release
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
@@ -62,5 +64,5 @@ jobs:
         with:
           app-name: 'onitama61'
           slot-name: 'Production'
-          package: ./backend/Onitama.sln
+          package: .
           
