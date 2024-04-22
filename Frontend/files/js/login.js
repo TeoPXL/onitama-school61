@@ -24,7 +24,7 @@ loginButton.addEventListener('click', () => {
         return;
     }
 
-    const response = fetch("https://localhost:5051/api/Authentication/token", {
+    const response = fetch(currentApi + "/api/Authentication/token", {
         method: 'POST',
         headers: {
             'Accept': 'application/json',

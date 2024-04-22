@@ -40,7 +40,7 @@ loginButton.addEventListener('click', () => {
         return;
     }
 
-    const response = fetch("https://localhost:5051/api/Authentication/register", {
+    const response = fetch(currentApi + "/api/Authentication/register", {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
