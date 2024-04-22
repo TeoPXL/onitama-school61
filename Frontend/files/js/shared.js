@@ -26,4 +26,6 @@ fetch(remoteApi)
 
 if(localApiExists){
     currentApi = localApi;
+} else {
+    currentApi = remoteApi;
 }
