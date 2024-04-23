@@ -1,5 +1,6 @@
 const localApi = "https://localhost:5051";
 const remoteApi = "https://onitama61.azurewebsites.net";
+const chosenApi = JSON.parse(localStorage.getItem("api"));
 let currentApi = "";
 let localApiExists = false;
 let remoteApiExists = false;
@@ -28,4 +29,8 @@ if(localApiExists){
     currentApi = localApi;
 } else {
     currentApi = remoteApi;
+}
+
+if(chosenApi !== null){
+    currentApi = chosenApi;
 }

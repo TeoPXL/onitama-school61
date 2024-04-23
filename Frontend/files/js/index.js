@@ -55,7 +55,7 @@ setTimeout(() => {
 
 linkElements.forEach((element) => {
     element.addEventListener("click", (event) => {
-        if (element.classList.contains("link-login")) {
+        if (element.classList.contains("link-login") && user === null) {
             event.preventDefault();
             window.location.href = "login.html";
         }
