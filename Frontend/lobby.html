@@ -261,7 +261,7 @@
         }).then(data => {
             console.log(data);
             const tablesToRemove = 3 - data.length;
-            for (let i = 0; i < tablesToRemove; i++) {
+            for (let i = 1; i < tablesToRemove; i++) {
                 const element = classicTableElements[3 - i];
                 element.remove();
                 
