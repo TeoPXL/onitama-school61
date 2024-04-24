@@ -58,6 +58,8 @@
             border-radius: 1em;
             height: 150px;
             transition: 0.5s;
+            display: flex;
+            flex-flow: column;
         }
         .table-item-hidden {
             height: 0;
@@ -72,7 +74,8 @@
         }
         .table-title {
             font-size: 105%;
-            font-weight: 500;
+            font-weight: 500;  
+            margin-bottom: auto;
         }
         .table-players {
             margin-top: 20px;
@@ -92,6 +95,7 @@
             cursor: pointer;
             transition: 0.2s;
             min-width: 50px;
+            margin-bottom: 0;
         }
         .table-item-create .table-button {
             margin: 0;
@@ -130,6 +134,40 @@
             100% {
                 transform: translateX(100%);
             }
+        }
+        .floating-error {
+            position: fixed;
+            top: 200px;
+            background: #c60025;
+            width: calc(90% - 20px);
+            left: 5%;
+            padding: 10px;
+            border-radius: 0.5em;
+            box-shadow: 0px 0px 20px #000000a1;
+            transition: 0.5s;
+        }
+        .floating-error-hidden {
+            opacity: 0;
+            transform: translateY(100vh);
+        }
+        .floating-error-button {
+            margin: auto;
+            width: max-content;
+            margin-top: 10px;
+            background: #000000ab;
+            padding: 3px;
+            padding-left: 12px;
+            padding-right: 12px;
+            border-radius: 2em;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .floating-error-button:hover {
+            filter: brightness(0.5);
+        }
+        .floating-error-title {
+            font-size: 125%;
+            font-weight: 500;
         }
     </style>
 </head>
@@ -245,15 +283,31 @@
             </div>
         </section>
     </main>
+    <div class="floating-error floating-error-hidden">
+        <div class="floating-error-title">Error: 401</div>
+        <div class="floating-error-subtitle">Subtitle text</div>
+        <div class="floating-error-button">Dismiss</div>
+    </div>
     <script src="files/js/shared.js"></script>
     <script>
         let classicTableElements = document.querySelectorAll(".classic-table");
         let blitzTableElements = document.querySelectorAll(".blitz-table");
         const classicButton = document.querySelector('.classic-button');
+        const floatingError = document.querySelector('.floating-error');
 
         if(user === null ){
             window.location.href = "login.html";
         }
+
+        function throw_error(error, code){
+            console.log(error);
+            floatingError.querySelector('.floating-error-title').textContent = "Error: " + code;
+            floatingError.querySelector('.floating-error-subtitle').textContent = error;
+            floatingError.classList.remove('floating-error-hidden');
+        }
+        floatingError.querySelector('.floating-error-button').addEventListener('click', () => {
+            floatingError.classList.add('floating-error-hidden');
+        });
         const loadClassicTables = fetch(currentApi + "/api/Tables/with-available-seats", {
             method: 'GET',
             headers: {
@@ -262,6 +316,11 @@
                 'Authorization': "Bearer " + token
             }
         }).then(response => {
+            if (response.status === 401) {
+                setTimeout(() => {
+                    throw_error("Your token expired! Try logging in again.", "401")
+                }, 500);
+            }
             if (!response.ok) {
                 return response.json().then(errorData => {
                     throw_error(errorData.message);
@@ -282,6 +341,15 @@
             for (let i = 0; i < 3; i++) {
                 const table = data[i];
                 const element = classicTableElements[i];
+                const maxPlayers = table.preferences.numberOfPlayers;
+                const seatedPlayers = table.seatedPlayers.length;
+                const owner = table.seatedPlayers[0].name;
+                element.classList.remove('table-item-loading');
+                element.querySelector('.table-title').textContent = owner;
+                element.querySelector('.table-players').textContent = seatedPlayers + "/" + maxPlayers + " players";
+                element.querySelector('.table-button').textContent = "Join table";
+                console.log(owner);
+                
             }
         }).catch(error => {
             console.log(error);
