@@ -39,7 +39,7 @@ if (user !== null) {
     topButtonLogin.classList.add("hidden");
     topButtonUser.querySelector(".top-button-text").textContent =
         user.warriorName;
-    topButtonUser.classList.remove("hidden");
+    topButtonUser.classList.remove("hidden"); 
 }
 
 
