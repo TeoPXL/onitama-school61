@@ -248,7 +248,7 @@
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Bearer': user.token
+                'Authorization': "Bearer " +  user.token
             },
             body: JSON.stringify({})
         }).then(response => {
