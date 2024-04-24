@@ -84,6 +84,7 @@
             border-radius: 2em;
             cursor: pointer;
             transition: 0.2s;
+            min-width: 50px;
         }
         .table-item-create .table-button {
             margin: 0;
@@ -96,6 +97,32 @@
         }
         .table-button:hover {
             filter: brightness(0.5);
+        }
+        .table-item-loading .table-item-text {
+            position: relative;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            background: var(--color-background-loading);
+            height: 1.5em;
+            border-radius: 0.3em;
+        }
+        .table-item-loading .table-item-text::after {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            transform: translateX(-100%);
+            background-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0, rgba(55, 55, 55, 0.2) 20%, rgba(40, 40, 40, 0.5) 60%, rgba(255, 255, 255, 0));
+            animation: shimmer 2s infinite;
+            animation-timing-function: cubic-bezier;
+            content: '';
+        }
+        @keyframes shimmer {
+            100% {
+                transform: translateX(100%);
+            }
         }
     </style>
 </head>
@@ -162,25 +189,78 @@
                         </svg>
                     </i></div>
                 </div>
-                <div class="table-item">
-                    <div class="table-title">Playername</div>
-                    <div class="table-players">1/2 players</div>
-                    <div class="table-button">Join table</div>
+                <div class="table-item table-item-loading">
+                    <div class="table-title table-item-text"></div>
+                    <div class="table-players table-item-text"></div>
+                    <div class="table-button table-item-text"></div>
                 </div>
-                <div class="table-item">
-                    <div class="table-title">Playername</div>
-                    <div class="table-players">1/2 players</div>
-                    <div class="table-button">Join table</div>
+                <div class="table-item table-item-loading">
+                    <div class="table-title table-item-text"></div>
+                    <div class="table-players table-item-text"></div>
+                    <div class="table-button table-item-text"></div>
                 </div>
-                <div class="table-item">
-                    <div class="table-title">Playername</div>
-                    <div class="table-players">1/2 players</div>
-                    <div class="table-button">Join table</div>
+                <div class="table-item table-item-loading">
+                    <div class="table-title table-item-text"></div>
+                    <div class="table-players table-item-text"></div>
+                    <div class="table-button table-item-text"></div>
+                </div>
+            </div>
+        </section>
+        <section class="table-list-container">
+            <div class="table-list-top">
+                <div class="table-list-title">Blitz mode tables</div>
+                <div class="table-list-button">View all</div>
+            </div>
+            <div class="table-list-bottom">
+                <div class="table-item table-item-create">
+                    <div class="table-button">New table <i>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                        </svg>
+                    </i></div>
+                </div>
+                <div class="table-item table-item-loading">
+                    <div class="table-title table-item-text"></div>
+                    <div class="table-players table-item-text"></div>
+                    <div class="table-button table-item-text"></div>
+                </div>
+                <div class="table-item table-item-loading">
+                    <div class="table-title table-item-text"></div>
+                    <div class="table-players table-item-text"></div>
+                    <div class="table-button table-item-text"></div>
+                </div>
+                <div class="table-item table-item-loading">
+                    <div class="table-title table-item-text"></div>
+                    <div class="table-players table-item-text"></div>
+                    <div class="table-button table-item-text"></div>
                 </div>
             </div>
         </section>
     </main>
     <script src="files/js/shared.js"></script>
+    <script>
+        const loadClassicTables = fetch(currentApi + "/api/Tables/with-available-seats", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Bearer': user.token
+            },
+            body: JSON.stringify({})
+        }).then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw_error(errorData.message);
+                });
+            }
+            return response.json();
+        }).then(data => {
+            console.log(data);
+        }).catch(error => {
+            console.log(error);
+        });
+    </script>
 </body>
 
 </html>
