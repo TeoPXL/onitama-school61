@@ -13,7 +13,7 @@ function throw_error(error) {
 
 document.addEventListener('DOMContentLoaded', () => {
     if (email !== null) {
-        emailInput.value = emailFromCookie;
+        emailInput.value = email;
     }
 });
 
