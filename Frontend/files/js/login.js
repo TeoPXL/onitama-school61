@@ -63,7 +63,7 @@ loginButton.addEventListener('click', () => {
         localStorage.setItem('user', JSON.stringify(data.user));
         localStorage.setItem('token', data.token);
     }).then(() => {
-        window.location.href = "index.html";
+        window.location.href = "lobby.html";
     }).catch(error => {
         console.log(error);
     });
