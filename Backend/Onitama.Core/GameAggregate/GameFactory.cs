@@ -21,7 +21,7 @@ internal class GameFactory : IGameFactory
     public IGame CreateNewForTable(ITable table)
     {
         var moveCard = _moveCardRepository.LoadSet(table.Preferences.MoveCardSet, table.GetUsedColors());
-
+        
         table.GameId = Guid.NewGuid();
         /// <warning>
         /// This Game constructor is temprary. It needs to implement PlayMat, but at the moment I don't know how.
