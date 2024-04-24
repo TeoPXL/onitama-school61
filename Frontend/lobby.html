@@ -240,6 +240,9 @@
     </main>
     <script src="files/js/shared.js"></script>
     <script>
+        if(user === null ){
+            window.location.href = "login.html";
+        }
         const loadClassicTables = fetch(currentApi + "/api/Tables/with-available-seats", {
             method: 'POST',
             headers: {
