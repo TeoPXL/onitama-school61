@@ -189,7 +189,7 @@
             </div>
             <div class="table-list-bottom">
                 <div class="table-item table-item-create">
-                    <div class="table-button">New table <i>
+                    <div class="table-button classic-button">New table <i>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
                             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
@@ -249,6 +249,8 @@
     <script>
         let classicTableElements = document.querySelectorAll(".classic-table");
         let blitzTableElements = document.querySelectorAll(".blitz-table");
+        const classicButton = document.querySelector('.classic-button');
+
         if(user === null ){
             window.location.href = "login.html";
         }
@@ -283,6 +285,29 @@
             }
         }).catch(error => {
             console.log(error);
+        });
+
+        classicButton.addEventListener('click', () => {
+            const response = fetch(currentApi + "/api/Tables", {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({ numberOfPlayers: 2, playMatSize: 5, moveCardSet: 0 })
+            }).then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        throw_error(errorData.message);
+                    });
+                }
+                return response.json();
+            }).then(data => {
+                console.log(data);
+            }).catch(error => {
+                console.log(error);
+            });
         });
     </script>
 </body>
