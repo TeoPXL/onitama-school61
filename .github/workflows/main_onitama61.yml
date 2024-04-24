@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    #if: false
+    if: false
     
     runs-on: windows-latest
 
@@ -41,7 +41,7 @@ jobs:
           path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
-    #if: false
+    if: false
     runs-on: windows-latest
     needs: build
     environment:
