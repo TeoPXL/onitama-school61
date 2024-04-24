@@ -54,7 +54,7 @@ loginButton.addEventListener('click', () => {
             });
         }
     }).then(() => {
-        document.cookie = `email=${encodeURIComponent(email)}; path=/; max-age=3600`;
+        localStorage.setItem("email", email);
         window.location.href = "login.html";
     }).catch(error => {
         console.log(error);

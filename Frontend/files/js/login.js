@@ -4,28 +4,15 @@ const passwordInput = document.getElementById('password-input');
 const errorMessage = document.querySelector('.error-message');
 const errorSubtitle = document.querySelector('.error-subtitle');
 const errorButton = document.querySelector('.error-button');
+const email = JSON.parse(localStorage.getItem("email"));
 
 function throw_error(error) {
     errorSubtitle.textContent = error;
     errorMessage.classList.remove('invisible');
 }
 
-function getCookie(name) {
-    let cookieString = decodeURIComponent(document.cookie);
-    let cookieArray = cookieString.split(';');
-    for (let i = 0; i < cookieArray.length; i++) {
-        let cookie = cookieArray[i];
-        while (cookie.charAt(0) === ' ') cookie = cookie.substring(1);
-        if (cookie.indexOf(name + '=') === 0) {
-            return cookie.substring(name.length + 1, cookie.length);
-        }
-    }
-    return "";
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-    const emailFromCookie = getCookie('email');
-    if (emailFromCookie) {
+    if (email !== null) {
         emailInput.value = emailFromCookie;
     }
 });
