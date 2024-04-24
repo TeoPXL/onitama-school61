@@ -12,7 +12,7 @@ function throw_error(error) {
     errorMessage.classList.remove('invisible');
 }
 
-loginButton.addEventListener('click', () => {
+loginButton.addEventListener('click', () => { 
     const email = emailInput.value;
     const password = passwordInput.value;
     const confirmPassword = confirmPasswordInput.value;
@@ -54,6 +54,7 @@ loginButton.addEventListener('click', () => {
             });
         }
     }).then(() => {
+        document.cookie = `email=${encodeURIComponent(email)}; path=/; max-age=3600`;
         window.location.href = "login.html";
     }).catch(error => {
         console.log(error);
