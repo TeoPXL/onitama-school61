@@ -4,7 +4,7 @@ const passwordInput = document.getElementById('password-input');
 const errorMessage = document.querySelector('.error-message');
 const errorSubtitle = document.querySelector('.error-subtitle');
 const errorButton = document.querySelector('.error-button');
-const email = JSON.parse(localStorage.getItem("email"));
+const email = localStorage.getItem("email");
 
 function throw_error(error) {
     errorSubtitle.textContent = error;
