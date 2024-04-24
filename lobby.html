@@ -56,6 +56,13 @@
             background: var(--color-background-fade);
             padding: 10px;
             border-radius: 1em;
+            height: 150px;
+            transition: 0.5s;
+        }
+        .table-item-hidden {
+            height: 0;
+            padding: 0;
+            opacity: 0;
         }
         .table-item-create {
             display: flex;
@@ -220,17 +227,17 @@
                         </svg>
                     </i></div>
                 </div>
-                <div class="table-item table-item-loading">
+                <div class="table-item blitz-table table-item-loading">
                     <div class="table-title table-item-text"></div>
                     <div class="table-players table-item-text"></div>
                     <div class="table-button table-item-text"></div>
                 </div>
-                <div class="table-item table-item-loading">
+                <div class="table-item blitz-table table-item-loading">
                     <div class="table-title table-item-text"></div>
                     <div class="table-players table-item-text"></div>
                     <div class="table-button table-item-text"></div>
                 </div>
-                <div class="table-item table-item-loading">
+                <div class="table-item blitz-table table-item-loading">
                     <div class="table-title table-item-text"></div>
                     <div class="table-players table-item-text"></div>
                     <div class="table-button table-item-text"></div>
@@ -241,6 +248,7 @@
     <script src="files/js/shared.js"></script>
     <script>
         let classicTableElements = document.querySelectorAll(".classic-table");
+        let blitzTableElements = document.querySelectorAll(".blitz-table");
         if(user === null ){
             window.location.href = "login.html";
         }
@@ -261,14 +269,16 @@
         }).then(data => {
             console.log(data);
             const tablesToRemove = 3 - data.length;
-            for (let i = 1; i < tablesToRemove; i++) {
-                const element = classicTableElements[3 - i];
-                element.remove();
+            for (let i = 1; i <= tablesToRemove; i++) {
+                const classicTables = classicTableElements[3 - i];
+                const blitzTables = blitzTableElements[3 - i];
+                classicTables.classList.add('table-item-hidden');
+                blitzTables.classList.add('table-item-hidden');
                 
             }
 
             for (let i = 0; i < 3; i++) {
-                const table = array[i];
+                const table = data[i];
                 const element = classicTableElements[i]
                 
             }
