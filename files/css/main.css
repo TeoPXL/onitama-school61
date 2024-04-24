@@ -1,0 +1,85 @@
+html {
+    --color-background: #111412;
+    --color-background-fade: #222623;
+    --color-background-loading: #181c19;
+    --color-main: #13F287;
+    --color-main-fade: #75FFBA;
+    --color-secondary: #E6FF4B;
+    --color-text: white;
+    --color-text-fade: #ffffff57;
+    --color-text-2: #0E0007;
+    --font-logo: "Outfit", sans-serif;
+    --font-main: "Poppins", sans-serif;
+}
+
+body {
+    background: var(--color-background);
+    color: var(--color-text);
+    font-family: var(--font-main);
+    padding: 0;
+    margin: 0;
+}
+
+svg {
+    width: 24px;
+    height: 24px;
+}
+
+i {
+    display: flex;
+    margin-left: 5px;
+}
+
+a {
+    display: contents;
+    color: unset;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    width: calc(100% - 20px);
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.main {
+    width: calc(100% - 20px);
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.top-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-2);
+    background: var(--color-main-fade);
+    padding: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 2em;
+    font-weight: 400;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.top-button:hover {
+    filter: brightness(0.5);
+}
+
+.hidden {
+    display: none!important;
+}
+
+@media screen and (min-width: 900px) {
+    .main, .top {
+        width: calc(100% - 100px);
+        max-width: 1200px;
+        margin: auto;
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+}

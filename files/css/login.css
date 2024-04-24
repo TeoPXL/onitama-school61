@@ -1,0 +1,101 @@
+input {
+    background: var(--color-background);
+    border-style: hidden;
+    outline: none;
+    font-family: var(--font-main);
+    font-size: 110%;
+    padding: 10px;
+    padding-left: 16px;
+    padding-right: 16px;
+    border-radius: 2em;
+    margin-bottom: 20px;
+    color: var(--color-text);
+}
+label {
+    display: block;
+    font-size: 120%;
+    margin-bottom: 6px
+}
+.login-form {
+    background: var(--color-background-fade);
+    border-radius: 1em;
+    padding: 10px;
+    max-width: 500px;
+    margin: auto;
+    margin-top: 50px;  
+    display: flex;
+    flex-flow: column;
+}
+.top-button i {
+    margin: 0;
+    margin-right: 5px;
+}
+.login-button {
+    font-size: 125%;
+    background: var(--color-main);
+    color: var(--color-text-2);
+    width: max-content;
+    padding: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 2em;
+    margin: auto;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.login-button:hover {
+    filter: brightness(0.5);
+}
+.login-title {
+    font-family: var(--font-logo);
+    font-weight: 400;
+    font-size: 200%;
+    width: max-content;
+    margin: auto;
+    margin-top: 0px;
+    margin-bottom: 20px;
+}
+.alternative-option {
+    width: max-content;
+    margin: auto;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.alternative-option:hover {
+    color: var(--color-main);
+}
+.error-message {
+    max-width: 500px;
+    margin: auto;
+    margin-top: 25px;
+    background: #c60025;
+    padding: 10px;
+    border-radius: 1em;
+    transition: 0.1s;
+}
+.error-title {
+    font-size: 150%;
+    font-weight: 600;
+}
+.error-subtitle {
+    font-size: 120%;
+}
+.error-button {
+    background: #00000080;
+    width: max-content;
+    padding: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 2em;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.error-button:hover {
+    filter: brightness(0.5);
+}
+.invisible {
+    opacity: 0;
+    pointer-events: none;
+}

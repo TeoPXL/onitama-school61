@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Onitama</title>
+    
+    <link rel="icon" type="image/webp" sizes="16x16" href="files/icons/icon-16.webp">
+    <link rel="icon" type="image/webp" sizes="32x32" href="files/icons/icon-32.webp">
+    <link rel="icon" type="image/webp" sizes="64x64" href="files/icons/icon-64.webp.png">
+    <link rel="icon" type="image/webp" sizes="128x128" href="files/icons/icon-128.webp">
+    <link rel="icon" type="image/webp" sizes="512x512" href="files/icons/icon-512.webp">
+    <!-- iOS -->
+    <link rel="apple-touch-icon" sizes="180x180" href="files/icons/icon-180.webp">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./files/css/main.css">
+    <link rel="stylesheet" href="./files/css/login.css">
+</head>
+
+<body>
+    <header class="top login-header">
+        <a href="index.html"><div class="top-button">
+            <div class="top-button-icon">
+                <i>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+                    </svg>
+                </i>
+            </div>
+            <div class="top-button-text">Go back</div>
+        </div></a>
+    </header>
+
+    <main class="main">
+        <div class="login-form">
+            <h1 class="login-title">Create a new account</h1>
+            <label for="username">Username</label>
+            <input id="username-input" autocomplete="off" name="username" placeholder="Username" type="text">
+            <label for="email">Email address</label>
+            <input id="email-input" name="email" autocomplete="off" placeholder="Email" type="text">
+            <label for="password">Password</label>
+            <input id="password-input" type="password" autocomplete="off" name="password" placeholder="Password">
+            <label for="password">Confirm password</label>
+            <input id="confirm-password-input" type="password" autocomplete="off" name="confirm-password" placeholder="Confirm password">
+            <div class="login-button">Register</div>
+        </div>
+        <a href="login.html"><p class="alternative-option">Already have an account? Login instead!</p></a>
+
+
+        <div class="error-message invisible">
+            <div class="error-title">AN ERROR HAS OCCURRED!</div>
+            <div class="error-subtitle">Your username has already been used before.</div>
+            <div class="error-button">Dismiss message</div>
+        </div>
+    </main>
+
+    <script src="files/js/shared.js"></script>
+    <script src="files/js/register.js"></script>
+</body>
+
+</html>
