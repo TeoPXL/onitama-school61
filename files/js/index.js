@@ -46,7 +46,7 @@ if (user !== null) {
 //Temporary artificial delay. This is to show the loading animation.
 setTimeout(() => {
     compItems.items.forEach((compitem, index) => {
-        let string = compitem.warrior1 + " vs " + compitem.warrior2;
+        let string = compitem.warrior1 + " versus " + compitem.warrior2;
         let code = compitem.code;
         compElements[index].querySelector(".comp-item-text").textContent = string;
         compElements[index].classList.remove("comp-item-loading");
