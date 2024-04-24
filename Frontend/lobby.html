@@ -189,17 +189,17 @@
                         </svg>
                     </i></div>
                 </div>
-                <div class="table-item table-item-loading">
+                <div class="table-item classic-table table-item-loading">
                     <div class="table-title table-item-text"></div>
                     <div class="table-players table-item-text"></div>
                     <div class="table-button table-item-text"></div>
                 </div>
-                <div class="table-item table-item-loading">
+                <div class="table-item classic-table table-item-loading">
                     <div class="table-title table-item-text"></div>
                     <div class="table-players table-item-text"></div>
                     <div class="table-button table-item-text"></div>
                 </div>
-                <div class="table-item table-item-loading">
+                <div class="table-item classic-table table-item-loading">
                     <div class="table-title table-item-text"></div>
                     <div class="table-players table-item-text"></div>
                     <div class="table-button table-item-text"></div>
@@ -240,6 +240,7 @@
     </main>
     <script src="files/js/shared.js"></script>
     <script>
+        let classicTableElements = document.querySelectorAll(".classic-table");
         if(user === null ){
             window.location.href = "login.html";
         }
@@ -259,6 +260,18 @@
             return response.json();
         }).then(data => {
             console.log(data);
+            const tablesToRemove = 3 - data.length;
+            for (let i = 0; i < tablesToRemove; i++) {
+                const element = classicTableElements[3 - i];
+                element.remove();
+                
+            }
+
+            for (let i = 0; i < 3; i++) {
+                const table = array[i];
+                const element = classicTableElements[i]
+                
+            }
         }).catch(error => {
             console.log(error);
         });
