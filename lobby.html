@@ -244,11 +244,11 @@
             window.location.href = "login.html";
         }
         const loadClassicTables = fetch(currentApi + "/api/Tables/with-available-seats", {
-            method: 'POST',
+            method: 'GET',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': "Bearer " +  token
+                'Authorization': "Bearer " + token
             },
             body: JSON.stringify({})
         }).then(response => {
