@@ -28,8 +28,9 @@ To run the project online, follow these steps:
 1. Fork this repository.
 2. Edit the domain name in `/.github/workflows/web.yml` to match your desired domain name.
 3. Deploy the frontend using the GitHub Pages workflow.
-4. Host the backend on any Windows server. The included workflow is designed to work with Microsoft Azure App Service running ASP.NET Core (.NET 8.0 LTS) with CI/CD. Ensure you update the remote API URL in `/frontend/js/shared.js` to point to your remote API server.
-5. On your remote server, add the following environment variable / connection string: "OnitamaDbConnection"="server=YOUR_DATABASE_URL;database=YOUR_DATABASE_NAME>;uid=YOUR_USERNAME;password=YOUR_PASSWORD;" (This overrides the use of LocalDB, and will use your database instead.)
+4. Host the backend on any Windows server. The included workflow is designed to work with Microsoft Azure App Service running ASP.NET Core (.NET 8.0 LTS) with CI/CD.
+5. Ensure you update the remote API URL in `/frontend/js/shared.js` to point to your remote API server.
+6. On your remote server, add the following environment variable / connection string: "OnitamaDbConnection"="server=YOUR_DATABASE_URL;database=YOUR_DATABASE_NAME>;uid=YOUR_USERNAME;password=YOUR_PASSWORD;"
 
 ## Usage
 
