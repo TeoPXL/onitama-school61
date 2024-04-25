@@ -1,6 +1,5 @@
 const topButtonLogin = document.querySelector(".top-button-login");
 const topButtonUser = document.querySelector(".top-button-user");
-const token = localStorage.getItem("token");
 const linkElements = document.querySelectorAll("a");
 const compElements = document.querySelectorAll(".comp-item-loading");
 //Temporary example of API json response
