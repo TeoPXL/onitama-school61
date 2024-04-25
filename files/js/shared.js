@@ -3,10 +3,25 @@ const remoteApi = "https://onitama61.azurewebsites.net";
 const chosenApi = JSON.parse(localStorage.getItem("api"));
 const user = JSON.parse(localStorage.getItem("user"));
 const token = localStorage.getItem("token");
+const floatingError = document.querySelector('.floating-error');
 
 let currentApi = "";
 let localApiExists = false;
 let remoteApiExists = false;
+
+function throw_floating_error(error, code){
+    if(!floatingError.classList.contains('floating-error-hidden')){
+        return;
+    }
+    console.log(error);
+    floatingError.querySelector('.floating-error-title').textContent = "Error: " + code;
+    floatingError.querySelector('.floating-error-subtitle').textContent = error;
+    floatingError.classList.remove('floating-error-hidden');
+}
+
+floatingError.querySelector('.floating-error-button').addEventListener('click', () => {
+    floatingError.classList.add('floating-error-hidden');
+});
 
 fetch(localApi)
     .then(response => {
@@ -27,6 +42,12 @@ fetch(remoteApi)
     .catch(error => {
         console.error("Error while trying to reach remote API:", error);
     });
+    setTimeout(() => {
+        if(localApiExists == false && remoteApiExists == false){
+            throw_floating_error('Could not make a connection to both local and remote API! Try waiting for a cold start.', '504');
+        }
+    }, 2000);
+    
 
 if(localApiExists){
     currentApi = localApi;
