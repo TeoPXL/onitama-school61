@@ -73,6 +73,40 @@ a {
 .hidden {
     display: none!important;
 }
+.floating-error {
+    position: fixed;
+    top: 200px;
+    background: #c60025;
+    width: calc(90% - 20px);
+    left: 5%;
+    padding: 10px;
+    border-radius: 0.5em;
+    box-shadow: 0px 0px 20px #000000a1;
+    transition: 0.5s;
+}
+.floating-error-hidden {
+    opacity: 0;
+    transform: translateY(100vh);
+}
+.floating-error-button {
+    margin: auto;
+    width: max-content;
+    margin-top: 10px;
+    background: #000000ab;
+    padding: 3px;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 2em;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.floating-error-button:hover {
+    filter: brightness(0.5);
+}
+.floating-error-title {
+    font-size: 125%;
+    font-weight: 500;
+}
 
 @media screen and (min-width: 900px) {
     .main, .top {

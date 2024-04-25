@@ -135,40 +135,7 @@
                 transform: translateX(100%);
             }
         }
-        .floating-error {
-            position: fixed;
-            top: 200px;
-            background: #c60025;
-            width: calc(90% - 20px);
-            left: 5%;
-            padding: 10px;
-            border-radius: 0.5em;
-            box-shadow: 0px 0px 20px #000000a1;
-            transition: 0.5s;
-        }
-        .floating-error-hidden {
-            opacity: 0;
-            transform: translateY(100vh);
-        }
-        .floating-error-button {
-            margin: auto;
-            width: max-content;
-            margin-top: 10px;
-            background: #000000ab;
-            padding: 3px;
-            padding-left: 12px;
-            padding-right: 12px;
-            border-radius: 2em;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .floating-error-button:hover {
-            filter: brightness(0.5);
-        }
-        .floating-error-title {
-            font-size: 125%;
-            font-weight: 500;
-        }
+        
     </style>
 </head>
 
@@ -294,7 +261,6 @@
         let blitzTableElements = document.querySelectorAll(".blitz-table");
         const tableButtons = document.querySelectorAll('.table-button');
         const classicButton = document.querySelector('.classic-button');
-        const floatingError = document.querySelector('.floating-error');
         const topButtonLogin = document.querySelector(".top-button-login");
         const topButtonUser = document.querySelector(".top-button-user");
 
@@ -306,17 +272,6 @@
             topButtonUser.classList.remove("hidden"); 
         }
 
-        function throw_error(error, code){
-            console.log(error);
-            floatingError.querySelector('.floating-error-title').textContent = "Error: " + code;
-            floatingError.querySelector('.floating-error-subtitle').textContent = error;
-            floatingError.classList.remove('floating-error-hidden');
-        }
-
-        floatingError.querySelector('.floating-error-button').addEventListener('click', () => {
-            floatingError.classList.add('floating-error-hidden');
-        });
-
         const loadClassicTables = fetch(currentApi + "/api/Tables/with-available-seats", {
             method: 'GET',
             headers: {
@@ -326,15 +281,13 @@
             }
         }).then(response => {
             if (response.status === 401) {
-                setTimeout(() => {
-                    throw_error("Your token expired! Try logging in again.", "401");
-                    topButtonLogin.classList.remove("hidden");
-                    topButtonUser.classList.add("hidden"); 
-                }, 500);
+                throw_floating_error("Your token expired! Try logging in again.", "401");
+                topButtonLogin.classList.remove("hidden");
+                topButtonUser.classList.add("hidden"); 
             }
             if (!response.ok) {
                 return response.json().then(errorData => {
-                    throw_error(errorData.message, "500");
+                    throw_floating_error(errorData.message, "500");
                 });
             }
             return response.json();
@@ -367,7 +320,7 @@
             }
         }).catch(error => {
             console.log(error);
-            throw_error(error, "500");
+            throw_floating_error(error, "500");
         });
 
         classicButton.addEventListener('click', () => {
@@ -382,7 +335,7 @@
             }).then(response => {
                 if (!response.ok) {
                     return response.json().then(errorData => {
-                        throw_error(errorData.message, '500');
+                        throw_floating_error(errorData.message, '500');
                     });
                 }
                 return response.json();
@@ -390,7 +343,7 @@
                 console.log(data);
             }).catch(error => {
                 console.log(error);
-                throw_error(error, '500');
+                throw_floating_error(error, '500');
             });
         });
 
