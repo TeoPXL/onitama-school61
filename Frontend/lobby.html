@@ -202,7 +202,7 @@
             </div>
         </a>
         <a href="login.html">
-            <div class="top-button top-button-login">
+            <div class="top-button top-button-login hidden">
                 <div class="top-button-text">Login/Register</div>
                 <div class="top-button-icon">
                     <i>
@@ -237,17 +237,17 @@
                 <div class="table-item classic-table table-item-loading">
                     <div class="table-title table-item-text"></div>
                     <div class="table-players table-item-text"></div>
-                    <div class="table-button table-item-text"></div>
+                    <div class="table-button table-item-text" game-id=""></div>
                 </div>
                 <div class="table-item classic-table table-item-loading">
                     <div class="table-title table-item-text"></div>
                     <div class="table-players table-item-text"></div>
-                    <div class="table-button table-item-text"></div>
+                    <div class="table-button table-item-text" game-id=""></div>
                 </div>
                 <div class="table-item classic-table table-item-loading">
                     <div class="table-title table-item-text"></div>
                     <div class="table-players table-item-text"></div>
-                    <div class="table-button table-item-text"></div>
+                    <div class="table-button table-item-text" game-id=""></div>
                 </div>
             </div>
         </section>
@@ -268,17 +268,17 @@
                 <div class="table-item blitz-table table-item-loading">
                     <div class="table-title table-item-text"></div>
                     <div class="table-players table-item-text"></div>
-                    <div class="table-button table-item-text"></div>
+                    <div class="table-button table-item-text" game-id=""></div>
                 </div>
                 <div class="table-item blitz-table table-item-loading">
                     <div class="table-title table-item-text"></div>
                     <div class="table-players table-item-text"></div>
-                    <div class="table-button table-item-text"></div>
+                    <div class="table-button table-item-text" game-id=""></div>
                 </div>
                 <div class="table-item blitz-table table-item-loading">
                     <div class="table-title table-item-text"></div>
                     <div class="table-players table-item-text"></div>
-                    <div class="table-button table-item-text"></div>
+                    <div class="table-button table-item-text" game-id=""></div>
                 </div>
             </div>
         </section>
@@ -292,11 +292,18 @@
     <script>
         let classicTableElements = document.querySelectorAll(".classic-table");
         let blitzTableElements = document.querySelectorAll(".blitz-table");
+        const tableButtons = document.querySelectorAll('.table-button');
         const classicButton = document.querySelector('.classic-button');
         const floatingError = document.querySelector('.floating-error');
+        const topButtonLogin = document.querySelector(".top-button-login");
+        const topButtonUser = document.querySelector(".top-button-user");
 
         if(user === null ){
             window.location.href = "login.html";
+        } else {
+            topButtonUser.querySelector(".top-button-text").textContent = user.warriorName;
+            topButtonLogin.classList.add("hidden");
+            topButtonUser.classList.remove("hidden"); 
         }
 
         function throw_error(error, code){
@@ -318,7 +325,9 @@
         }).then(response => {
             if (response.status === 401) {
                 setTimeout(() => {
-                    throw_error("Your token expired! Try logging in again.", "401")
+                    throw_error("Your token expired! Try logging in again.", "401");
+                    topButtonLogin.classList.remove("hidden");
+                    topButtonUser.classList.add("hidden"); 
                 }, 500);
             }
             if (!response.ok) {
@@ -332,10 +341,12 @@
             const tablesToRemove = 3 - data.length;
             for (let i = 1; i <= tablesToRemove; i++) {
                 const classicTables = classicTableElements[3 - i];
-                const blitzTables = blitzTableElements[3 - i];
                 classicTables.classList.add('table-item-hidden');
+            }
+            //Currently the value "3" is a placeholder until we figure out how to distinguish game types.
+            for (let i = 1; i <= 3; i++) {
+                const blitzTables = blitzTableElements[3 - i];
                 blitzTables.classList.add('table-item-hidden');
-                
             }
 
             for (let i = 0; i < 3; i++) {
@@ -348,6 +359,7 @@
                 element.querySelector('.table-title').textContent = owner;
                 element.querySelector('.table-players').textContent = seatedPlayers + "/" + maxPlayers + " players";
                 element.querySelector('.table-button').textContent = "Join table";
+                element.querySelector('.table-button').setAttribute("game-id", table.gameId);
                 console.log(owner);
                 
             }
@@ -377,6 +389,12 @@
                 console.log(error);
             });
         });
+
+        tableButtons.forEach(element => element.addEventListener('click', () => {
+            const gameId = element.getAttribute("game-id");
+            localStorage.setItem("gameId", gameId);
+            window.location.href = "game/classic.html";
+        }));
     </script>
 </body>
 
