@@ -281,13 +281,13 @@
             }
         }).then(response => {
             if (response.status === 401) {
-                throw_floating_error("Your token expired! Try logging in again.", "401");
+                throw_floating_error("Your token expired! Try logging in again.", "401", "#c60025");
                 topButtonLogin.classList.remove("hidden");
                 topButtonUser.classList.add("hidden"); 
             }
             if (!response.ok) {
                 return response.json().then(errorData => {
-                    throw_floating_error(errorData.message, "500");
+                    throw_floating_error(errorData.message, "500", "#c60025");
                 });
             }
             return response.json();
@@ -320,7 +320,7 @@
             }
         }).catch(error => {
             console.log(error);
-            throw_floating_error(error, "500");
+            throw_floating_error(error, "500", "#c60025");
         });
 
         classicButton.addEventListener('click', () => {
@@ -335,7 +335,7 @@
             }).then(response => {
                 if (!response.ok) {
                     return response.json().then(errorData => {
-                        throw_floating_error(errorData.message, '500');
+                        throw_floating_error(errorData.message, '500', "#c60025");
                     });
                 }
                 return response.json();
@@ -343,7 +343,7 @@
                 console.log(data);
             }).catch(error => {
                 console.log(error);
-                throw_floating_error(error, '500');
+                throw_floating_error(error, '500', "#c60025");
             });
         });
 
