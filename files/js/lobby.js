@@ -12,57 +12,59 @@ if(user === null ){
     topButtonLogin.classList.add("hidden");
     topButtonUser.classList.remove("hidden"); 
 }
+function loadClassicTables (){
+    fetch(currentApi + "/api/Tables/with-available-seats", {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + token
+        }
+    }).then(response => {
+        if (response.status === 401) {
+            throw_floating_error("Your token expired! Try logging in again.", "401", "#c60025");
+            topButtonLogin.classList.remove("hidden");
+            topButtonUser.classList.add("hidden"); 
+        }
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw_floating_error(errorData.message, "500", "#c60025");
+            });
+        }
+        return response.json();
+    }).then(data => {
+        console.log(data);
+        const tablesToRemove = 3 - data.length;
+        for (let i = 1; i <= tablesToRemove; i++) {
+            const classicTables = classicTableElements[3 - i];
+            classicTables.classList.add('table-item-hidden');
+        }
+        //Currently the value "3" is a placeholder until we figure out how to distinguish game types.
+        for (let i = 1; i <= 3; i++) {
+            const blitzTables = blitzTableElements[3 - i];
+            blitzTables.classList.add('table-item-hidden');
+        }
+    
+        for (let i = 0; i < data.length; i++) {
+            const table = data[i];
+            const element = classicTableElements[i];
+            const maxPlayers = table.preferences.numberOfPlayers;
+            const seatedPlayers = table.seatedPlayers.length;
+            const owner = table.seatedPlayers[0].name;
+            element.classList.remove('table-item-loading');
+            element.querySelector('.table-title').textContent = owner;
+            element.querySelector('.table-players').textContent = seatedPlayers + "/" + maxPlayers + " players";
+            element.querySelector('.table-button').textContent = "Join table";
+            element.querySelector('.table-button').setAttribute("game-id", table.gameId);
+            console.log(owner);
+            
+        }
+    }).catch(error => {
+        console.log(error);
+        throw_floating_error(error, "500", "#c60025");
+    });
+}
 
-const loadClassicTables = fetch(currentApi + "/api/Tables/with-available-seats", {
-    method: 'GET',
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': "Bearer " + token
-    }
-}).then(response => {
-    if (response.status === 401) {
-        throw_floating_error("Your token expired! Try logging in again.", "401", "#c60025");
-        topButtonLogin.classList.remove("hidden");
-        topButtonUser.classList.add("hidden"); 
-    }
-    if (!response.ok) {
-        return response.json().then(errorData => {
-            throw_floating_error(errorData.message, "500", "#c60025");
-        });
-    }
-    return response.json();
-}).then(data => {
-    console.log(data);
-    const tablesToRemove = 3 - data.length;
-    for (let i = 1; i <= tablesToRemove; i++) {
-        const classicTables = classicTableElements[3 - i];
-        classicTables.classList.add('table-item-hidden');
-    }
-    //Currently the value "3" is a placeholder until we figure out how to distinguish game types.
-    for (let i = 1; i <= 3; i++) {
-        const blitzTables = blitzTableElements[3 - i];
-        blitzTables.classList.add('table-item-hidden');
-    }
-
-    for (let i = 0; i < data.length; i++) {
-        const table = data[i];
-        const element = classicTableElements[i];
-        const maxPlayers = table.preferences.numberOfPlayers;
-        const seatedPlayers = table.seatedPlayers.length;
-        const owner = table.seatedPlayers[0].name;
-        element.classList.remove('table-item-loading');
-        element.querySelector('.table-title').textContent = owner;
-        element.querySelector('.table-players').textContent = seatedPlayers + "/" + maxPlayers + " players";
-        element.querySelector('.table-button').textContent = "Join table";
-        element.querySelector('.table-button').setAttribute("game-id", table.gameId);
-        console.log(owner);
-        
-    }
-}).catch(error => {
-    console.log(error);
-    throw_floating_error(error, "500", "#c60025");
-});
 
 classicButton.addEventListener('click', () => {
     const response = fetch(currentApi + "/api/Tables", {
