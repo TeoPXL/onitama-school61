@@ -5,6 +5,13 @@ const user = JSON.parse(localStorage.getItem("user"));
 const token = localStorage.getItem("token");
 const floatingError = document.querySelector('.floating-error');
 
+//User settings
+const userSettings = {
+    "force-remote-api": localStorage.getItem('force-remote-api'),
+    "simulate-offline-mode": localStorage.getItem('simulate-offline-mode'),
+    "suppress-api-errors": localStorage.getItem('suppress-api-errors'),
+};
+
 let currentApi = "";
 let localApiExists = false;
 let remoteApiExists = false;
@@ -24,38 +31,47 @@ floatingError.querySelector('.floating-error-button').addEventListener('click', 
     floatingError.classList.add('floating-error-hidden');
 });
 
-fetch(localApi+"/ping")
-    .then(response => {
-        if (response.ok) {
-            localApiExists = true;
-        }
-    })
-    .catch(error => {
-        console.error("Error while trying to reach local API:", error);
-    });
+async function checkApis(){
+    try {
+        await fetch(localApi+"/ping")
+        .then(response => {
+            if (response.ok) {
+                localApiExists = true;
+            } else {
+                console.log(response);
+            }
+        });
 
-fetch(remoteApi+"/ping")
-    .then(response => {
-        if (response.ok) {
-            remoteApiExists = true;
+        await fetch(remoteApi+"/ping")
+            .then(response => {
+                if (response.ok) {
+                    remoteApiExists = true;
+                }
+            });
+
+        if(localApiExists == true && userSettings['force-remote-api'] != 'true'){
+            currentApi = localApi;
+            console.log('Using local api');
+        } else if(remoteApiExists) {
+            currentApi = remoteApi;
+            console.log('Using remote api');
+        } else {
+            throw new Error("Both the local and remote APIs are not accessible. This could be due to the remote API having a cold start. Try waiting.");
         }
-    })
-    .catch(error => {
-        console.error("Error while trying to reach remote API:", error);
-    });
-    setTimeout(() => {
-        if(localApiExists == false && remoteApiExists == false){
-            throw_floating_error('Could not make a connection to both local and remote API! Try waiting for a cold start. You can dismiss this message if you intend to play offline.', '504', '#303031');
+
+    } catch(error) {
+        console.error("Error while trying to reach local API:", error);
+        if(userSettings['suppress-api-errors'] != 'true'){
+            setTimeout(() => {
+                throw_floating_error(error.message, '504', '#303031');
+            }, 2000);
         }
-    }, 2000);
+    };
+    
+}
+
+checkApis();
+
     
 
-if(localApiExists){
-    currentApi = localApi;
-} else {
-    currentApi = remoteApi;
-}
 
-if(chosenApi !== null){
-    currentApi = chosenApi;
-}
