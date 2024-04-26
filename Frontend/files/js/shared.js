@@ -59,6 +59,10 @@ async function checkApis(){
             throw new Error("Both the local and remote APIs are not accessible. This could be due to the remote API having a cold start. Try waiting.");
         }
 
+        if(window.loadClassicTables){
+            loadClassicTables();
+        }
+
     } catch(error) {
         console.error("Error while trying to reach local API:", error);
         if(userSettings['suppress-api-errors'] != 'true'){
