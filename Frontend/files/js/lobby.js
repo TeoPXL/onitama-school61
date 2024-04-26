@@ -12,6 +12,7 @@ if(user === null ){
     topButtonLogin.classList.add("hidden");
     topButtonUser.classList.remove("hidden"); 
 }
+
 function loadClassicTables (){
     fetch(currentApi + "/api/Tables/with-available-seats", {
         method: 'GET',
@@ -64,7 +65,6 @@ function loadClassicTables (){
         throw_floating_error(error, "500", "#c60025");
     });
 }
-
 
 classicButton.addEventListener('click', () => {
     const response = fetch(currentApi + "/api/Tables", {
