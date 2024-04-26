@@ -33,6 +33,17 @@ namespace Onitama.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddCors();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAnyOrigin",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                               .AllowAnyHeader()
+                               .AllowAnyMethod();
+                    });
+            });
             ///////////////////////////////////
             // Dependency injection container//
             ///////////////////////////////////
@@ -52,7 +63,6 @@ namespace Onitama.Api
                 options.JsonSerializerOptions.Converters.Add(new TwoDimensionalArrayJsonConverter<PawnModel>());
             });
 
-            builder.Services.AddCors();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -131,6 +141,7 @@ namespace Onitama.Api
             var app = builder.Build();
             app.EnsureDatabaseIsCreated();
 
+            app.UseCors("AllowAnyOrigin");
             ///////////////////////
             //Middleware pipeline//
             ///////////////////////
@@ -142,9 +153,6 @@ namespace Onitama.Api
             }
             app.UseSwagger();
             app.UseSwaggerUI();
-
-            app.UseCors(policyBuilder => policyBuilder.AllowAnyOrigin().AllowAnyHeader());
-
             app.UseHttpsRedirection();
 
             app.UseAuthorization();

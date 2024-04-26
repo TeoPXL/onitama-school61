@@ -109,4 +109,23 @@ public class AuthenticationController : ApiControllerBase
         };
         return Ok(accessPass);
     }
+
+    [HttpGet("refresh")]
+    [ProducesResponseType(typeof(AccessPassModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> RefreshToken([FromBody] RefreshModel model)
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
+        User user = (await _userManager.GetUserAsync(User))!;
+
+        IList<string> roleNames = await _userManager.GetRolesAsync(user);
+
+        var accessPass = new AccessPassModel
+        {
+            Token = _tokenFactory.CreateToken(user, roleNames),
+            User = _mapper.Map<UserModel>(user)
+        };
+        return Ok(accessPass);
+    }
 }

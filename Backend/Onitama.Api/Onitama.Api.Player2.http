@@ -26,6 +26,11 @@ Content-Type: application/json
   "password": "{{UserPassword}}"
 }
 
+###
+
+GET {{Onitama.Api_HostAddress}}/api/authentication/refresh
+Authorization: Bearer {{BearerToken}}
+
 #######
 #Table#
 #######
