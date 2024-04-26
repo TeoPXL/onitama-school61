@@ -63,10 +63,10 @@ async function checkApis(){
 
         if(localApiExists == true && userSettings['force-remote-api'] != 'true'){
             currentApi = localApi;
-            console.log('Using local api');
+            console.log('%cUsing local api', 'font-size: 24px; font-weight: bold;');
         } else if(remoteApiExists) {
             currentApi = remoteApi;
-            console.log('Using remote api');
+            console.log('%cUsing remote api', 'font-size: 24px; font-weight: bold;');
         } else {
             throw new Error("Both the local and remote APIs are not accessible. This could be due to the remote API having a cold start. Try waiting.");
         }
