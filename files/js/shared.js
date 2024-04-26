@@ -58,7 +58,7 @@ async function checkApis(){
         } else {
             throw new Error("Both the local and remote APIs are not accessible. This could be due to the remote API having a cold start. Try waiting.");
         }
-
+        await refreshToken();
         if(window.loadClassicTables){
             loadClassicTables();
         }
@@ -75,6 +75,31 @@ async function checkApis(){
 }
 
 checkApis();
+
+//Refresh user token
+async function refreshToken(){
+
+    await fetch(currentApi + "/api/Authentication/refresh", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({})
+    }).then(response => {
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw_floating_error(errorData.message, '401', "#c60025");
+            });
+        }
+        return response.json();
+    }).then(data => {
+        console.log(data);
+        localStorage.setItem('token', data.token);
+    });
+    setTimeout(refreshToken, 30 * 60 * 1000);
+}
 
     
 
