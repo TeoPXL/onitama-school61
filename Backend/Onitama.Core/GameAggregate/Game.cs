@@ -86,13 +86,6 @@ internal class Game : IGame
         this._extraMoveCard = extraMoveCard;
     }
 
-    public Game(Guid id, IPlayer[] players, IMoveCard extraMoveCard)
-    {
-        this._players = players;
-        this._id = id;
-        this._extraMoveCard = extraMoveCard;
-    }
-
     /// <summary>
     /// Creates a game that is a copy of another game.
     /// </summary>

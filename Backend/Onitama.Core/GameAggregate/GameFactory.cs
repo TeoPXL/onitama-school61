@@ -21,12 +21,12 @@ internal class GameFactory : IGameFactory
     public IGame CreateNewForTable(ITable table)
     {
         var moveCard = _moveCardRepository.LoadSet(table.Preferences.MoveCardSet, table.GetUsedColors());
-        var playMMat = new PlayMat(5);
+        var playMat = new PlayMat(5);
         table.GameId = Guid.NewGuid();
         /// <warning>
         /// This Game constructor is temprary. It needs to implement PlayMat, but at the moment I don't know how.
         /// </warning>
-        Game game = new Game(table.GameId, table.GetSeatedPlayers(), moveCard.ElementAt(0));
+        Game game = new Game(table.GameId, playMat, table.GetSeatedPlayers(), moveCard.ElementAt(0));
         
         return game;
     }
