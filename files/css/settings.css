@@ -1,0 +1,28 @@
+.top-button i {
+    margin: 0;
+    margin-right: 5px;
+}
+.setting {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;  
+    background: var(--color-background-fade);
+    padding: 10px;
+    border-radius: 1em;
+    margin-bottom: 10px;
+}
+.setting-title {
+    font-size: 110%;
+    font-weight: 500;
+}
+.setting-subtitle {
+    font-size: 90%;
+}
+.setting-right {
+    display: flex;
+    margin-left: 20px;
+}
+.setting-right input {
+    width: 20px;
+    height: 20px;
+}
