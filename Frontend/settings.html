@@ -48,7 +48,7 @@
                     <div class="setting-subtitle">Always use the remote API, even when the local API is available.</div>
                 </div>
                 <div class="setting-right">
-                    <input type="checkbox" />
+                    <input class="setting-input" onitama-setting="force-remote-api" type="checkbox" />
                 </div>
             </div>
 
@@ -58,21 +58,35 @@
                     <div class="setting-subtitle">Intentionally disables both the local and remote API.</div>
                 </div>
                 <div class="setting-right">
-                    <input type="checkbox" />
+                    <input type="checkbox" class="setting-input" onitama-setting="simulate-offline-mode" />
                 </div>
             </div>
 
             <div class="setting">
                 <div class="setting-left">
-                    <div class="setting-title">Supress API errors</div>
+                    <div class="setting-title">Suppress API errors</div>
                     <div class="setting-subtitle">Useful when playing in offline mode.</div>
                 </div>
                 <div class="setting-right">
-                    <input type="checkbox" />
+                    <input type="checkbox" class="setting-input" onitama-setting="suppress-api-errors" />
                 </div>
             </div>
         </div>
     </main>
+    <div class="floating-error floating-error-hidden">
+        <div class="floating-error-title">Error: 401</div>
+        <div class="floating-error-subtitle">Subtitle text</div>
+        <div class="floating-error-button">Dismiss</div>
+    </div>
+    <script src="files/js/shared.js"></script>
+    <script>
+        const settingInputs = document.querySelectorAll('.setting-input');
+
+        settingInputs.forEach(element => element.addEventListener('click', () => {
+            const setting = element.getAttribute("onitama-setting");
+            localStorage.setItem(setting, element.checked);
+        }));
+    </script>
 </body>
 
 </html>
