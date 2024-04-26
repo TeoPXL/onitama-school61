@@ -2,6 +2,10 @@
     margin: 0;
     margin-right: 5px;
 }
+.settings {
+    margin: auto;
+    max-width: 600px;
+}
 .setting {
     display: flex;
     justify-content: space-between;
