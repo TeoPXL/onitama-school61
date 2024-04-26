@@ -28,7 +28,11 @@ Content-Type: application/json
 
 ###
 
-GET {{Onitama.Api_HostAddress}}/api/authentication/refresh
+POST {{Onitama.Api_HostAddress}}/api/authentication/refresh
+Content-Type: application/json
+
+{
+}
 Authorization: Bearer {{BearerToken}}
 
 #######

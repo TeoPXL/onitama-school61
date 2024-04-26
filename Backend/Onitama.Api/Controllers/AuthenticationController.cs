@@ -110,7 +110,7 @@ public class AuthenticationController : ApiControllerBase
         return Ok(accessPass);
     }
 
-    [HttpGet("refresh")]
+    [HttpPost("refresh")]
     [ProducesResponseType(typeof(AccessPassModel), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshModel model)
