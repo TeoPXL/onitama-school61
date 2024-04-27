@@ -10,8 +10,18 @@ namespace Onitama.Core.SchoolAggregate;
 /// <inheritdoc cref="ISchool"/>
 internal class School : ISchool
 {
+    private IPawn _master;
 
-    public IPawn Master { get; set; }
+    public ICoordinate _archPos;
+
+    public IPawn Master 
+    {
+        get { return _master; }
+        set {
+            _master = value;
+            _archPos = _master.Position;
+        }
+    }
 
     public IPawn[] Students { get; set; }
 
@@ -35,8 +45,8 @@ internal class School : ISchool
 
     public ICoordinate TempleArchPosition 
     {
-        get { return this.Master.Position; }
-        set { this.Master.Position = value; }
+        get { return _archPos; }
+        set { _archPos = value; }
     }
 
     public IPawn GetPawn(Guid pawnId)
