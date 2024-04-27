@@ -7,6 +7,7 @@ using Onitama.Core.PlayMatAggregate;
 using Onitama.Core.PlayMatAggregate.Contracts;
 using Onitama.Core.SchoolAggregate;
 using Onitama.Core.TableAggregate.Contracts;
+using Onitama.Core.Util;
 
 namespace Onitama.Core.GameAggregate;
 
@@ -25,6 +26,11 @@ internal class GameFactory : IGameFactory
         var players = new IPlayer[table.SeatedPlayers.Count];
         table.SeatedPlayers.CopyTo(players, 0);
         Game game = new Game(Guid.NewGuid(), playMat, players, moveCard.ElementAt(0));
+        foreach (var player in players)
+        {
+            game.PlayMat.PositionSchoolOfPlayer(player);
+        }
+        
         return game;
     }
 }

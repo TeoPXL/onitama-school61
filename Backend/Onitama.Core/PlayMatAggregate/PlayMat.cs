@@ -52,7 +52,33 @@ namespace Onitama.Core.PlayMatAggregate
 
         public void PositionSchoolOfPlayer(IPlayer player)
         {
-            // Implementation goes here
+            //This code is very sketchy. I honestly do not really understand why this works? I just threw stuff at the wall to see what stuck.
+            var pawns = player.School.AllPawns;
+            for (int i = 0; i < pawns.Length; i++)
+            {
+                Coordinate coordinate;
+                switch (player.Direction)
+                {
+                    case var d when d == Direction.North:
+                        coordinate = new Coordinate(0, i);
+                        break;
+                    case var d when d == Direction.South:
+                        coordinate = new Coordinate(this.Size - 1, i);
+                        break;
+                    case var d when d == Direction.West:
+                        coordinate = new Coordinate(i, this.Size - 1);
+                        break;
+                    case var d when d == Direction.North:
+                        coordinate = new Coordinate(i, 0);
+                        break;
+                    default:
+                        coordinate = new Coordinate(0, 0);
+                        break;
+                }
+
+                pawns[i].Position = coordinate;
+                _grid[pawns[i].Position.Row, pawns[i].Position.Column] = pawns[i];
+            }
         }
 
         public IReadOnlyList<IMove> GetValidMoves(IPawn pawn, IMoveCard card, Direction playerDirection)
