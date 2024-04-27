@@ -80,7 +80,13 @@ internal class Game : IGame
     /// </param>
     public Game(Guid id, IPlayMat playMat, IPlayer[] players, IMoveCard extraMoveCard)
     {
-        this._players = players;
+        this._players = new IPlayer[players.Count()];
+        //throw new Exception(players[0].ToString());
+        for (int i = 0; i < _players.Length; i++)
+        {
+            _players[i] = players.ElementAt(i);
+        }
+        //this._players = players;
         this._id = id;  
         this._playMat = playMat;
         this._extraMoveCard = extraMoveCard;
@@ -106,12 +112,14 @@ internal class Game : IGame
 
     public IReadOnlyList<IMove> GetPossibleMovesForPawn(Guid playerId, Guid pawnId, string moveCardName)
     {
-        throw new NotImplementedException();
+        var list = new List<IMove>();
+        return list;
     }
 
     public IReadOnlyList<IMove> GetAllPossibleMovesFor(Guid playerId)
     {
-        throw new NotImplementedException();
+        var list = new List<IMove>();
+        return list;
     }
 
     public void MovePawn(Guid playerId, Guid pawnId, string moveCardName, ICoordinate to)
@@ -126,6 +134,19 @@ internal class Game : IGame
 
     public IPlayer GetNextOpponent(Guid playerId)
     {
-        throw new NotImplementedException();
+        int k = 0;
+        for (int i = 0; i < _players.Length; i++)
+        {
+            if (_players[i].Id == playerId) {
+                k = i + 1; break;
+            }
+        }
+        if(k > 2)
+        {
+            return _players.ElementAt(0);
+        } else
+        {
+            return _players.ElementAt(k);
+        }
     }
 }

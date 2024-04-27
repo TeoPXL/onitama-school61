@@ -54,6 +54,8 @@ internal class MoveCard : IMoveCard
 
     public IReadOnlyList<ICoordinate> GetPossibleTargetCoordinates(ICoordinate startCoordinate, Direction playDirection, int matSize)
     {
-        throw new NotImplementedException();
+        var list = new List<ICoordinate>();
+        list.Add(startCoordinate);
+        return list;
     }
 }

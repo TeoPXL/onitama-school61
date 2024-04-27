@@ -72,9 +72,9 @@ internal class TableManager : ITableManager
         {
             throw new InvalidOperationException("Only the owner can start the game at this table.");
         }
-        IGame game = _gameFactory.CreateNewForTable(table);
-        table.GameId = game.Id;
+        var game = _gameFactory.CreateNewForTable(table);
         _gameRepository.Add(game);
+        table.GameId = game.Id;
         return game;
     }
 }

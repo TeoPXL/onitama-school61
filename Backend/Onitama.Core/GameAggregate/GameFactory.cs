@@ -22,12 +22,9 @@ internal class GameFactory : IGameFactory
     {
         var moveCard = _moveCardRepository.LoadSet(table.Preferences.MoveCardSet, table.GetUsedColors());
         var playMat = new PlayMat(5);
-        table.GameId = Guid.NewGuid();
-        /// <warning>
-        /// This Game constructor is temprary. It needs to implement PlayMat, but at the moment I don't know how.
-        /// </warning>
-        Game game = new Game(table.GameId, playMat, table.GetSeatedPlayers(), moveCard.ElementAt(0));
-        
+        var players = new IPlayer[table.SeatedPlayers.Count];
+        table.SeatedPlayers.CopyTo(players, 0);
+        Game game = new Game(Guid.NewGuid(), playMat, players, moveCard.ElementAt(0));
         return game;
     }
 }

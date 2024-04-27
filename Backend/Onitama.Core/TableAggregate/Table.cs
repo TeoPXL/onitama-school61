@@ -83,15 +83,6 @@ internal class Table : ITable
     {
         this._gameId = gameId;
     }
-    public IPlayer[] GetSeatedPlayers()
-    {
-        var players = new IPlayer[] { };
-        foreach(var player in _seatedPlayers)
-        {
-            players.Append(player);
-        }
-        return players;
-    }
 
     public void FillWithArtificialPlayers(IGamePlayStrategy gamePlayStrategy)
     {
