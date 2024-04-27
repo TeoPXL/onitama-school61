@@ -53,6 +53,7 @@ namespace Onitama.Core.PlayMatAggregate
         public void PositionSchoolOfPlayer(IPlayer player)
         {
             //This code is very sketchy. I honestly do not really understand why this works? I just threw stuff at the wall to see what stuck.
+            
             var pawns = player.School.AllPawns;
             for (int i = 0; i < pawns.Length; i++)
             {
@@ -68,7 +69,7 @@ namespace Onitama.Core.PlayMatAggregate
                     case var d when d == Direction.West:
                         coordinate = new Coordinate(i, this.Size - 1);
                         break;
-                    case var d when d == Direction.North:
+                    case var d when d == Direction.East:
                         coordinate = new Coordinate(i, 0);
                         break;
                     default:

@@ -6,6 +6,7 @@ using Onitama.Core.PlayerAggregate.Contracts;
 using Onitama.Core.PlayMatAggregate;
 using Onitama.Core.PlayMatAggregate.Contracts;
 using Onitama.Core.SchoolAggregate;
+using Onitama.Core.SchoolAggregate.Contracts;
 using Onitama.Core.TableAggregate.Contracts;
 using Onitama.Core.Util;
 using static Onitama.Core.TableAggregate.Table;
@@ -24,6 +25,7 @@ internal class GameFactory : IGameFactory
     public IGame CreateNewForTable(ITable table)
     {
         Color[] colors = table.SeatedPlayers.Select(p => p.Color).ToArray();
+        
         IMoveCard[] moveCards;
         moveCards = _moveCardRepository.LoadSet(table.Preferences.MoveCardSet, colors);
         moveCards = moveCards.OrderBy(card => _random.Next()).ToArray();
@@ -38,6 +40,20 @@ internal class GameFactory : IGameFactory
         Game game = new Game(Guid.NewGuid(), playMat, players, moveCards.ElementAt(moveCards.Length - 1));
         foreach (var player in players)
         {
+            player.School = new School();
+            player.School.AllPawns = new Pawn[5];
+            player.School.Students = new Pawn[4];
+            player.School.AllPawns[0] = new Pawn(Guid.NewGuid(), player.Id, SchoolAggregate.Contracts.PawnType.Student);
+            player.School.AllPawns[1] = new Pawn(Guid.NewGuid(), player.Id, SchoolAggregate.Contracts.PawnType.Student);
+            player.School.AllPawns[2] = new Pawn(Guid.NewGuid(), player.Id, SchoolAggregate.Contracts.PawnType.Master);
+            player.School.AllPawns[3] = new Pawn(Guid.NewGuid(), player.Id, SchoolAggregate.Contracts.PawnType.Student);
+            player.School.AllPawns[4] = new Pawn(Guid.NewGuid(), player.Id, SchoolAggregate.Contracts.PawnType.Student);
+            player.School.Master = player.School.AllPawns[2];
+            player.School.Students[0] = player.School.AllPawns[0];
+            player.School.Students[1] = player.School.AllPawns[1];
+            player.School.Students[2] = player.School.AllPawns[2];
+            player.School.Students[3] = player.School.AllPawns[3];
+
             game.PlayMat.PositionSchoolOfPlayer(player);
         }
         

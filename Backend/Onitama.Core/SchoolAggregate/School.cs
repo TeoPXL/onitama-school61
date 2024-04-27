@@ -28,10 +28,19 @@ internal class School : ISchool
         throw new NotImplementedException("TODO: copy properties of other school. Make sure to copy the pawns, not just reference them");
     }
 
-    public ICoordinate TempleArchPosition { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public School()
+    {
+
+    }
+
+    public ICoordinate TempleArchPosition 
+    {
+        get { return this.Master.Position; }
+        set { this.Master.Position = value; }
+    }
 
     public IPawn GetPawn(Guid pawnId)
     {
-        throw new NotImplementedException();
+        return this.AllPawns.FirstOrDefault(p => p.Id == pawnId);
     }
 }

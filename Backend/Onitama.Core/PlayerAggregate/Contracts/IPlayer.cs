@@ -33,7 +33,7 @@ public interface IPlayer
     /// <summary>
     /// The school of the player (1 master and 4 students)
     /// </summary>
-    ISchool School { get; }
+    ISchool School { get; set; }
 
     /// <summary>
     /// The move cards that the player can use to play its next move (2 of the 5 available)

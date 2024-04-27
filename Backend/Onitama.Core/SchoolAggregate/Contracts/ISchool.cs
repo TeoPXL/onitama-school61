@@ -11,17 +11,17 @@ public interface ISchool
     /// <summary>
     /// The master of the school
     /// </summary>
-    IPawn Master { get; }
+    IPawn Master { get; set; }
 
     /// <summary>
     /// The students of the school (4 students)
     /// </summary>
-    IPawn[] Students { get; }
+    IPawn[] Students { get; set; }
 
     /// <summary>
     /// All the pawns of the school (one master and 4 students)
     /// </summary>
-    IPawn[] AllPawns { get; }
+    IPawn[] AllPawns { get; set; }
 
     /// <summary>
     /// The position on the play mat of the temple arch of the school
