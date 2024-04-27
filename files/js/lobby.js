@@ -93,5 +93,7 @@ classicButton.addEventListener('click', () => {
 tableButtons.forEach(element => element.addEventListener('click', () => {
     const gameId = element.getAttribute("game-id");
     localStorage.setItem("gameId", gameId);
-    window.location.href = "game/classic.html";
+    setTimeout(() => {
+        window.location.href = "game/classic.html";
+    }, 250);
 }));
