@@ -31,30 +31,42 @@ floatingError.querySelector('.floating-error-button').addEventListener('click', 
     floatingError.classList.add('floating-error-hidden');
 });
 
-async function checkApis(){
+async function pingApi(api){
     try {
-        await fetch(localApi+"/ping")
-        .then(response => {
-            if (response.ok) {
-                localApiExists = true;
-            } else {
-                console.log(response);
-            }
-        });
-
-        await fetch(remoteApi+"/ping")
+        await fetch(api+"/ping")
             .then(response => {
-                if (response.ok) {
-                    remoteApiExists = true;
+                if (!response.ok) {
+                    return false;
                 }
             });
+        return true;
+        //return false;
+    } catch (error) {
+        //console.log(error);
+        return false;
+    }
+}
+
+async function checkApis(){
+    try {
+        const localResponse = await pingApi(localApi);
+        if(localResponse == true){
+            localApiExists = true;
+        }
+
+        const remoteResponse = await pingApi(remoteApi);
+        if(remoteResponse == true){
+            remoteApiExists = true;
+        } else {
+            console.log("RESPONSE: "+remoteResponse);
+        }
 
         if(localApiExists == true && userSettings['force-remote-api'] != 'true'){
             currentApi = localApi;
-            console.log('Using local api');
+            console.log('%cUsing local api', 'font-size: 24px; font-weight: bold;');
         } else if(remoteApiExists) {
             currentApi = remoteApi;
-            console.log('Using remote api');
+            console.log('%cUsing remote api', 'font-size: 24px; font-weight: bold;');
         } else {
             throw new Error("Both the local and remote APIs are not accessible. This could be due to the remote API having a cold start. Try waiting.");
         }
@@ -78,7 +90,6 @@ checkApis();
 
 //Refresh user token
 async function refreshToken(){
-
     await fetch(currentApi + "/api/Authentication/refresh", {
         method: 'POST',
         headers: {
@@ -90,14 +101,17 @@ async function refreshToken(){
     }).then(response => {
         if (!response.ok) {
             return response.json().then(errorData => {
-                throw_floating_error(errorData.message, '401', "#c60025");
+                throw new Error("Your token has expired already!");
             });
         }
         return response.json();
     }).then(data => {
         console.log(data);
         localStorage.setItem('token', data.token);
+    }).catch(error => {
+        //console.log(error);
     });
+    
     setTimeout(refreshToken, 30 * 60 * 1000);
 }
 
