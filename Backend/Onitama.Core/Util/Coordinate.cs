@@ -55,11 +55,51 @@ internal class Coordinate : ICoordinate
 
     public ICoordinate RotateTowards(Direction direction)
     {
-        throw new NotImplementedException();
+        int x = this.Column;
+        int y = this.Row;
+
+        switch (direction)
+        {
+            case var d when d == Direction.North:
+                int newXNorth = x;
+                int newYNorth = y;
+                return new Coordinate(newYNorth, newXNorth);
+
+            case var d when d == Direction.West:
+                int newXWest = -y;
+                int newYWest = x;
+                return new Coordinate(newYWest, newXWest);
+
+            case var d when d == Direction.South:
+                int newXSouth = -x;
+                int newYSouth = -y;
+                return new Coordinate(newYSouth, newXSouth);
+
+            case var d when d == Direction.East:
+                int newXEast = y;
+                int newYEast = -x;
+                return new Coordinate(newYEast, newXEast);
+
+            default:
+                throw new FormatException("Must use a valid direction.");
+        }
+    }
+    private static double GetDistance(double x1, double y1, double x2, double y2)
+    {
+        return Math.Sqrt(Math.Pow((x2 - x1), 2) + Math.Pow((y2 - y1), 2));
     }
 
     public int GetDistanceTo(ICoordinate other)
     {
-        throw new NotImplementedException();
+        int x = this.Column;
+        int y = this.Row;
+
+        int xOther = other.Column;
+        int yOther = other.Row;
+
+        int distance = Convert.ToInt32(Math.Floor(GetDistance(x, y, xOther, yOther)));
+
+        return distance;
+
     }
 }
