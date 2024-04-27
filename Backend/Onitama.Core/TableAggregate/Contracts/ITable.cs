@@ -47,8 +47,6 @@ public interface ITable
     /// <param name="user">User for which a player should be created</param>
     void Join(User user);
 
-    Color[] GetUsedColors();
-
     public void SetGameId(Guid gameId);
 
     /// <summary>

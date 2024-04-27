@@ -44,11 +44,6 @@ internal class Table : ITable
         set { this._id = value; }
     }
 
-    public IList<Color> AvailableColors
-    {
-        get { return _availableColors; }
-    }
-
     public TablePreferences Preferences
     {
         get { return this._preferences; }
@@ -79,6 +74,27 @@ internal class Table : ITable
         set { this._gameId = value; }
     }
 
+    public static class ColorHelper
+    {
+
+        public static Color[] GetRandomDistinctColors(int seatedPlayersCount)
+        {
+            var availableColors = PossibleColors.ToList();
+            var selectedColors = new List<Color>();
+
+            // Shuffle the possible colors
+            availableColors = availableColors.OrderBy(x => _random.Next()).ToList();
+
+            // Select colors based on seated players count
+            for (int i = 0; i < seatedPlayersCount; i++)
+            {
+                selectedColors.Add(availableColors[i]);
+            }
+
+            return selectedColors.ToArray();
+        }
+    }
+
     public void SetGameId(Guid gameId)
     {
         this._gameId = gameId;
@@ -87,21 +103,6 @@ internal class Table : ITable
     public void FillWithArtificialPlayers(IGamePlayStrategy gamePlayStrategy)
     {
         throw new NotImplementedException();
-    }
-
-    public Color[] GetUsedColors()
-    {
-        var colorList = new List<Color>() { Color.Red, Color.Blue, Color.Green, Color.Yellow, Color.Orange };
-        var colorListFinal = new Color[] { };
-        foreach (var color in _availableColors)
-        {
-            colorList.Remove(color);
-        }
-        foreach (var color in colorList)
-        {
-            colorListFinal.Append(color);
-        }
-        return colorListFinal;
     }
 
     public void Join(User user)
