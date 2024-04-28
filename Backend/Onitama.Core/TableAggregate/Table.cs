@@ -137,6 +137,12 @@ internal class Table : ITable
 
     public void Leave(Guid userId)
     {
+        if (_seatedPlayers.Count == 0)
+        {
+            // Handle the case when there are no seated players
+            throw new InvalidOperationException("There are no players at this table.");
+        }
+        //Double check this code, something is probably wrong here.
         for (int i = _seatedPlayers.Count - 1; i >= 0; i--)
         {
             var player = _seatedPlayers[i];
