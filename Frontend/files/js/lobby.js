@@ -1,6 +1,6 @@
 let classicTableElements = document.querySelectorAll(".classic-table");
 let blitzTableElements = document.querySelectorAll(".blitz-table");
-const tableButtons = document.querySelectorAll('.table-button');
+const tableButtons = document.querySelectorAll('.table-button-small');
 const classicButton = document.querySelector('.classic-button');
 const topButtonLogin = document.querySelector(".top-button-login");
 const topButtonUser = document.querySelector(".top-button-user");
@@ -56,7 +56,7 @@ function loadClassicTables (){
             element.querySelector('.table-title').textContent = owner;
             element.querySelector('.table-players').textContent = seatedPlayers + "/" + maxPlayers + " players";
             element.querySelector('.table-button').textContent = "Join table";
-            element.querySelector('.table-button').setAttribute("game-id", table.gameId);
+            element.querySelector('.table-button').setAttribute("table-id", table.id);
             console.log(owner);
             
         }
@@ -91,8 +91,8 @@ classicButton.addEventListener('click', () => {
 });
 
 tableButtons.forEach(element => element.addEventListener('click', () => {
-    const gameId = element.getAttribute("game-id");
-    localStorage.setItem("gameId", gameId);
+    const tableId = element.getAttribute("table-id");
+    localStorage.setItem("tableId", tableId);
     setTimeout(() => {
         window.location.href = "game/classic.html";
     }, 250);
