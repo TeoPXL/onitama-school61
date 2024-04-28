@@ -112,13 +112,81 @@ internal class Game : IGame
 
     public IReadOnlyList<IMove> GetPossibleMovesForPawn(Guid playerId, Guid pawnId, string moveCardName)
     {
-        var list = new List<IMove>();
+        IPlayer player = null;
+        IPawn pawn = null;
+        IMoveCard moveCard = null;
+
+        for (int i = 0; i < Players.Length; i++)
+        {
+            if (Players[i].Id == playerId)
+            {
+                player = Players[i];
+            }
+        }
+
+        if (player == null)
+        {
+            throw new InvalidOperationException("There is no player with that ID");
+        }
+
+        for (int i = 0; i < player.School.AllPawns.Length; i++)
+        {
+            if (player.School.AllPawns[i].Id == pawnId)
+            {
+                pawn = player.School.AllPawns[i];
+            }
+        }
+
+        if (pawn == null)
+        {
+            throw new InvalidOperationException("There is no pawn with that ID");
+        }
+
+        for (int i = 0; i < player.MoveCards.Count; i++)
+        {
+            if (player.MoveCards[i].Name == moveCardName)
+            {
+                moveCard = player.MoveCards[i];
+            }
+        }
+
+        if (moveCard == null)
+        {
+            throw new ApplicationException("There is no moveCard with that name for this player");
+        }
+
+        var list = PlayMat.GetValidMoves(pawn, moveCard, player.Direction);
+        
         return list;
     }
 
     public IReadOnlyList<IMove> GetAllPossibleMovesFor(Guid playerId)
     {
         var list = new List<IMove>();
+        IPlayer player = null;
+        for (int i = 0; i < Players.Length; i++)
+        {
+            if (Players[i].Id == playerId)
+            {
+                player = Players[i];
+            }
+        }
+        if (player == null)
+        {
+            throw new InvalidOperationException("There is no player with that ID");
+        }
+
+        for (int i = 0; i < player.School.AllPawns.Length; i++)
+        {
+            for (int j = 0; j < player.MoveCards.Count; j++)
+            {
+                var newList = PlayMat.GetValidMoves(player.School.AllPawns[i], player.MoveCards[j], player.Direction);
+                for (int k = 0; k < newList.Count; k++)
+                {
+                    list.Add(newList[k]);
+                }
+            }
+        }
         return list;
     }
 
