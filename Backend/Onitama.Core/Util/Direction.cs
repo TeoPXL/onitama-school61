@@ -48,7 +48,9 @@ public class Direction
     {
         get
         {
-            throw new NotImplementedException();
+            int perpendicularX = this.YStep;
+            int perpendicularY = -this.XStep;
+            return new Direction(perpendicularX, perpendicularY);
         }
     }
 
