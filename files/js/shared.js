@@ -74,6 +74,9 @@ async function checkApis(){
         if(window.loadClassicTables){
             loadClassicTables();
         }
+        if(window.fetchTable){
+            fetchTable();
+        }
 
     } catch(error) {
         console.error("Error while trying to reach local API:", error);

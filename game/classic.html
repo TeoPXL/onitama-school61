@@ -30,12 +30,28 @@
             border-radius: 1em;
             overflow: hidden;
             margin-top: 50px;
+            position: relative;
         }
 
         canvas {
             width: 100%;
             height: 100%;
             display: block;
+        }
+        .container-loading::after {
+            content: 'Waiting for other players...';
+            display: flex;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000bd;
+            justify-content: center;
+            align-items: center;
+            font-size: 150%;
+            font-weight: 500;
+            backdrop-filter: blur(5px);
         }
         @media screen and (min-width: 450px) {
             #container {
@@ -64,14 +80,18 @@
 </head>
 
 <body>
-    
+    <div class="floating-error floating-error-hidden">
+        <div class="floating-error-title">Error: 401</div>
+        <div class="floating-error-subtitle">Subtitle text</div>
+        <div class="floating-error-button">Dismiss</div>
+    </div>
     <div class="jump">Click me1</div>
     <div class="attack">Click me2</div>
-    <div id="container">
+    <div id="container" class="container-loading">
 
 
 
-
+        <script src="../files/js/shared.js"></script>
         <script type="module">
             import * as THREE from 'three';
             import { GLTFLoader } from 'https://unpkg.com/three@0.163.0/examples/jsm/loaders/GLTFLoader.js';
@@ -98,16 +118,12 @@
                     "moves": [[1, 0], [1, 1], 0, 2]
                 }
             ];
+            const currentTableId = localStorage.getItem('tableId');
             class Game {
-                constructor(players){
-                    this.players = players;
-                    this.team1 = this.players[0];
-                    this.team2 = this.players[1];
-                    console.log(this.team1, this.team2);
-                    if(players.length > 2){
+                constructor(playercount){
+                    //console.log(this.team1, this.team2);
+                    if(playercount > 2){
                         this._board = new Board(7);
-                        this.team3 = this.players[2];
-                        this.team4 = this.players[3];
                     } else {
                         this._board = new Board(5);
                     }
@@ -168,7 +184,7 @@
                     this.camera.position.y = 4.5;
                     this.camera.rotation.x = -0.5;
 
-                    this.fillModels();
+                    //this.fillModels();
                     animate();
                 }
 
@@ -338,7 +354,7 @@
                 }
             }
 
-            var game = new Game(players);
+            var game = new Game(2);
 
             window.addEventListener('load', () => {
                 document.querySelector('.jump').addEventListener('click', () => {
@@ -470,6 +486,35 @@
             window.addEventListener('touchmove', onPointerMove, false);
             window.addEventListener('touchstart', onPointerMove, false);
             window.addEventListener('touchend', resetHighlightedObjects, false);
+
+            async function fetchTable(){
+                const response = fetch(currentApi + "/api/Tables/" + currentTableId, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    }
+                }).then(response => {
+                    if (!response.ok) {
+                        return response.json().then(errorData => {
+                            throw_floating_error(errorData.message, '500', "#c60025");
+                        });
+                    }
+                    return response.json();
+                }).then(data => {
+                    console.log(data);
+                    if(data.hasAvailableSeat != true){
+                        //The table is full, do stuff
+                        document.getElementById('container').classList.remove('container-loading');
+                    }
+                }).catch(error => {
+                    console.log(error);
+                    throw_floating_error(error, '500', "#c60025");
+                });
+                setTimeout(fetchTable, 5 * 1000);
+            }
+            window.fetchTable = fetchTable;
         </script>
     </div>
 </body>
