@@ -93,7 +93,30 @@ classicButton.addEventListener('click', () => {
 tableButtons.forEach(element => element.addEventListener('click', () => {
     const tableId = element.getAttribute("table-id");
     localStorage.setItem("tableId", tableId);
-    setTimeout(() => {
-        window.location.href = "game/classic.html";
-    }, 250);
+
+    const response = fetch(currentApi + "/api/Tables/" + tableId + "/join", {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }
+    }).then(response => {
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw_floating_error(errorData.message, '500', "#c60025");
+            });
+        }
+        return response.json();
+    }).then(data => {
+        console.log(data);
+        setTimeout(() => {
+            window.location.href = "game/classic.html";
+        }, 250);
+    }).catch(error => {
+        console.log(error);
+        throw_floating_error(error, '500', "#c60025");
+    });
+
+    
 }));
