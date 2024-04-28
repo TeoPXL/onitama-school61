@@ -35,7 +35,7 @@ function loadClassicTables (){
         return response.json();
     }).then(data => {
         console.log(data);
-        const tablesToRemove = 3 - data.length;
+        const tablesToRemove = 3 - Math.max(data.length, 3);
         for (let i = 1; i <= tablesToRemove; i++) {
             const classicTables = classicTableElements[3 - i];
             classicTables.classList.add('table-item-hidden');
@@ -46,8 +46,9 @@ function loadClassicTables (){
             blitzTables.classList.add('table-item-hidden');
         }
     
-        for (let i = 0; i < data.length; i++) {
+        for (let i = 0; i < Math.min(data.length, 3); i++) {
             const table = data[i];
+            console.log(i);
             const element = classicTableElements[i];
             const maxPlayers = table.preferences.numberOfPlayers;
             const seatedPlayers = table.seatedPlayers.length;
@@ -104,7 +105,7 @@ tableButtons.forEach(element => element.addEventListener('click', () => {
     }).then(response => {
         if (!response.ok) {
             return response.json().then(errorData => {
-                throw_floating_error(errorData.message, '500', "#c60025");
+                throw_floating_error(errorData.message, '405', "#c60025");
             });
         }
         return response.json();
@@ -115,7 +116,7 @@ tableButtons.forEach(element => element.addEventListener('click', () => {
         }, 250);
     }).catch(error => {
         console.log(error);
-        throw_floating_error(error, '500', "#c60025");
+        //throw_floating_error(error, '500', "#c60025");
     });
 
     
