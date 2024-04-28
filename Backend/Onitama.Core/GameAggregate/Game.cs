@@ -10,6 +10,7 @@ using Onitama.Core.Util;
 using Onitama.Core.Util.Contracts;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.AccessControl;
 
 namespace Onitama.Core.GameAggregate;
 
@@ -22,6 +23,7 @@ internal class Game : IGame
     private IPlayer[] _players;
     private Guid _playerToPlayId;
     private Guid _winnerPlayerId;
+    private string _gameType;
 
 
     public Guid Id
@@ -61,7 +63,13 @@ internal class Game : IGame
         set { this._winnerPlayerId = value; }
     }
 
-    public string WinnerMethod => throw new NotImplementedException();
+    public string GameType
+    {
+        get { return this._gameType; }
+        set { this._gameType = value; }
+    }
+
+    public string WinnerMethod { get; set; }
 
     /// <summary>
     /// Creates a new game and determines the player to play first.
@@ -78,18 +86,20 @@ internal class Game : IGame
     /// <param name="extraMoveCard">
     /// The fifth card used to exchange cards after the first move
     /// </param>
+    /// <param name="gameType"></param>
+    /// The type of the game (WayOfTheStone or WayOfTheWind)
     public Game(Guid id, IPlayMat playMat, IPlayer[] players, IMoveCard extraMoveCard)
     {
         this._players = new IPlayer[players.Count()];
-        //throw new Exception(players[0].ToString());
         for (int i = 0; i < _players.Length; i++)
         {
             _players[i] = players.ElementAt(i);
         }
-        //this._players = players;
+        this._playerToPlayId = players[0].Id;
         this._id = id;  
         this._playMat = playMat;
         this._extraMoveCard = extraMoveCard;
+        this._gameType = "WayOfTheStone";
     }
 
     /// <summary>
@@ -192,12 +202,96 @@ internal class Game : IGame
 
     public void MovePawn(Guid playerId, Guid pawnId, string moveCardName, ICoordinate to)
     {
-        throw new NotImplementedException();
+        IPlayer player = null;
+        IPawn pawn = null;
+        IMoveCard moveCard = null;
+
+        if (PlayerToPlayId != playerId)
+        {
+            throw new ApplicationException("It is not this player's turn yet.");
+        }
+
+        for (int i = 0; i < Players.Length; i++)
+        {
+            if (Players[i].Id == playerId)
+            {
+                player = Players[i];
+            }
+        }
+
+        if (player == null)
+        {
+            throw new InvalidOperationException("There is no player with that ID");
+        }
+
+        for (int i = 0; i < player.School.AllPawns.Length; i++)
+        {
+            if (player.School.AllPawns[i].Id == pawnId)
+            {
+                pawn = player.School.AllPawns[i];
+            }
+        }
+
+        if (pawn == null)
+        {
+            throw new InvalidOperationException("There is no pawn with that ID");
+        }
+
+        for (int i = 0; i < player.MoveCards.Count; i++)
+        {
+            if (player.MoveCards[i].Name == moveCardName)
+            {
+                moveCard = player.MoveCards[i];
+            }
+        }
+
+        if (moveCard == null)
+        {
+            throw new InvalidOperationException("There is no moveCard with that name for this player");
+        }
+
+        var move = new Move(moveCard, pawn, player.Direction, to);
+
+        if(move == null)
+        {
+            throw new InvalidOperationException("Move is null");
+        }
+
+        IPawn capturedPawn;
+        IList<ICoordinate> coordinates = new List<ICoordinate>();
+        PlayMat.ExecuteMove(move, out capturedPawn);
+
+        for (int i = 0; i < Players.Length; i++)
+        {
+            coordinates.Add(Players[i].School.TempleArchPosition);
+        }
+
+        if (coordinates.Contains(pawn.Position))
+        {
+            //Won by way of the wind, but for some reason we need to say "stream"... This inconsistency is very confusing
+            WinnerPlayerId = playerId;
+            WinnerMethod = "Way of the stream";
+
+        } else if (capturedPawn.Type == PawnType.Master)
+        {
+            WinnerPlayerId = playerId;
+            WinnerMethod = "Way of the stone";
+        }
+
+        PlayerToPlayId = this.GetNextOpponent(playerId).Id;
     }
 
     public void SkipMovementAndExchangeCard(Guid playerId, string moveCardName)
     {
-        throw new NotImplementedException();
+        if (PlayerToPlayId != playerId)
+        {
+            throw new ApplicationException("It is not this player's turn yet.");
+        }
+
+        if (GetAllPossibleMovesFor(playerId).Count != 0)
+        {
+            throw new ApplicationException("The player can still do a valid move");
+        }
     }
 
     public IPlayer GetNextOpponent(Guid playerId)
