@@ -81,7 +81,9 @@ public class Direction
     /// </summary>
     public Direction CombineWith(Direction other)
     {
-        throw new NotImplementedException();
+        int combinedX = this.XStep + other.XStep;
+        int combinedY = this.YStep + other.YStep;
+        return new Direction(combinedX, combinedY);
     }
 
     /// <summary>
@@ -93,7 +95,27 @@ public class Direction
     /// <param name="playMatSize">The size of the <see cref="IPlayMat"/>. Typically, 5.</param>
     public ICoordinate GetStartCoordinate(int playMatSize)
     {
-        throw new NotImplementedException();
+        switch (this)
+        {
+            case { XStep: 0, YStep: 1 }: // North
+                return new Coordinate(0, (playMatSize - 1) / 2);
+            case { XStep: 1, YStep: 0 }: // East
+                return new Coordinate((playMatSize - 1) / 2, (playMatSize - 1) - 1);
+            case { XStep: 0, YStep: -1 }: // South
+                return new Coordinate((playMatSize - 1), (playMatSize - 1) / 2);
+            case { XStep: - 1, YStep: 0 }: // West
+                return new Coordinate((playMatSize - 1) / 2, 0);
+            case { XStep: 1, YStep: 1 }: // Northeast
+                return new Coordinate(0, 0);
+            case { XStep: 1, YStep: -1 }: // Southeast
+                return new Coordinate((playMatSize - 1), 0);
+            case { XStep: -1, YStep: -1 }: // Southwest
+                return new Coordinate((playMatSize - 1), (playMatSize - 1));
+            case { XStep: -1, YStep: 1 }: // Northwest
+                return new Coordinate(0, (playMatSize - 1));
+            default:
+                throw new InvalidOperationException("Invalid direction");
+        }
     }
 
     //Do not change
