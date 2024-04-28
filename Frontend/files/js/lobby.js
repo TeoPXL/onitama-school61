@@ -35,7 +35,7 @@ function loadClassicTables (){
         return response.json();
     }).then(data => {
         console.log(data);
-        const tablesToRemove = 3 - Math.max(data.length, 3);
+        const tablesToRemove = 3 - data.length;
         for (let i = 1; i <= tablesToRemove; i++) {
             const classicTables = classicTableElements[3 - i];
             classicTables.classList.add('table-item-hidden');
