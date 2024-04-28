@@ -404,7 +404,7 @@
             }
 
             function onPointerMove(event) {
-                if(game == undefined){
+                if (game === undefined) {
                     return;
                 }
 
@@ -437,6 +437,9 @@
                 // update the picking ray with the camera and mouse position
                 game.raycaster.setFromCamera(game.mouse, game.camera);
 
+                // Reset previously highlighted objects
+                resetHighlightedObjects();
+
                 // calculate objects intersecting the picking ray
                 let intersects = game.raycaster.intersectObjects(game.scene.children);
 
@@ -450,18 +453,23 @@
                         }
                     });
                 }
-                if(cubes == 0){
-                    game.scene.traverse(function(child) {
-                        if (child instanceof THREE.Mesh && child.name.includes("hover")) {
-                            child.material.opacity = 0.3; // Reset opacity to default
-                            child.material.needsUpdate = true; // Update material
-                        }
-                    });
-                }
             }
+
+            function resetHighlightedObjects() {
+                // Reset opacity for all objects with the name "hover"
+                game.scene.traverse(function(child) {
+                    if (child instanceof THREE.Mesh && child.name.includes("hover")) {
+                        child.material.opacity = 0.3; // Reset opacity to default
+                        child.material.needsUpdate = true; // Update material
+                    }
+                });
+            }
+
+            // Add event listeners for pointer and touch events
             window.addEventListener('pointermove', onPointerMove, false);
             window.addEventListener('touchmove', onPointerMove, false);
             window.addEventListener('touchstart', onPointerMove, false);
+            window.addEventListener('touchend', resetHighlightedObjects, false);
         </script>
     </div>
 </body>
