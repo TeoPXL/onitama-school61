@@ -408,9 +408,21 @@
                     return;
                 }
 
-                // Get the mouse coordinates in screen space
-                game.mouseX = event.clientX;
-                game.mouseY = event.clientY;
+                // Get the pointer coordinates in screen space
+                let pointerX, pointerY;
+                if (event.type.startsWith('touch')) {
+                    // For touch events, get the coordinates of the first touch point
+                    pointerX = event.touches[0].clientX;
+                    pointerY = event.touches[0].clientY;
+                } else {
+                    // For mouse events, use clientX and clientY directly
+                    pointerX = event.clientX;
+                    pointerY = event.clientY;
+                }
+
+                // Set the mouse coordinates in the game object
+                game.mouseX = pointerX;
+                game.mouseY = pointerY;
 
                 // Get the bounding rectangle of the renderer element
                 let rect = game.renderer.domElement.getBoundingClientRect();
