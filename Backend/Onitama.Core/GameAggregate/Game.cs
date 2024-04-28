@@ -95,11 +95,12 @@ internal class Game : IGame
         {
             _players[i] = players.ElementAt(i);
         }
-        this._playerToPlayId = players[0].Id;
         this._id = id;  
         this._playMat = playMat;
         this._extraMoveCard = extraMoveCard;
         this._gameType = "WayOfTheStone";
+        this.PlayerToPlayId = players[0].Id;
+        this.PlayerToPlayId = players.FirstOrDefault(player => player.Color == _extraMoveCard.StampColor).Id;
     }
 
     /// <summary>
@@ -125,6 +126,7 @@ internal class Game : IGame
         IPlayer player = null;
         IPawn pawn = null;
         IMoveCard moveCard = null;
+        //var list = new List<IMove>();
 
         for (int i = 0; i < Players.Length; i++)
         {
@@ -165,9 +167,7 @@ internal class Game : IGame
             throw new ApplicationException("There is no moveCard with that name for this player");
         }
 
-        var list = PlayMat.GetValidMoves(pawn, moveCard, player.Direction);
-        
-        return list;
+        return PlayMat.GetValidMoves(pawn, moveCard, player.Direction);
     }
 
     public IReadOnlyList<IMove> GetAllPossibleMovesFor(Guid playerId)
@@ -208,7 +208,7 @@ internal class Game : IGame
 
         if (PlayerToPlayId != playerId)
         {
-            throw new ApplicationException("It is not this player's turn yet.");
+            throw new ApplicationException($"It is not this player's turn yet. {playerId} tried to play instead of {PlayerToPlayId}");
         }
 
         for (int i = 0; i < Players.Length; i++)
@@ -256,10 +256,12 @@ internal class Game : IGame
         {
             throw new InvalidOperationException("Move is null");
         }
+        //Check if move is invalid at some point
+        
 
         IPawn capturedPawn;
         IList<ICoordinate> coordinates = new List<ICoordinate>();
-        PlayMat.ExecuteMove(move, out capturedPawn);
+        PlayMat.ExecuteMove(move, out capturedPawn); 
 
         for (int i = 0; i < Players.Length; i++)
         {
@@ -277,38 +279,54 @@ internal class Game : IGame
             WinnerPlayerId = playerId;
             WinnerMethod = "Way of the stone";
         }
-
+        ExtraMoveCard = moveCard;
         PlayerToPlayId = this.GetNextOpponent(playerId).Id;
     }
 
     public void SkipMovementAndExchangeCard(Guid playerId, string moveCardName)
     {
+        IPlayer player = null;
+
+        for (int i = 0; i < Players.Length; i++)
+        {
+            if (Players[i].Id == playerId)
+            {
+                player = Players[i];
+            }
+        }
+
+        if (player == null)
+        {
+            throw new InvalidOperationException("There is no player with that ID");
+        }
+
         if (PlayerToPlayId != playerId)
         {
-            throw new ApplicationException("It is not this player's turn yet.");
+            throw new ApplicationException($"It is not this player's turn yet. {playerId} tried to play instead of {PlayerToPlayId}");
         }
 
         if (GetAllPossibleMovesFor(playerId).Count != 0)
         {
             throw new ApplicationException("The player can still do a valid move");
         }
+        ExtraMoveCard = player.MoveCards[0];
+        PlayerToPlayId = this.GetNextOpponent(playerId).Id;
     }
 
     public IPlayer GetNextOpponent(Guid playerId)
     {
-        int k = 0;
-        for (int i = 0; i < _players.Length; i++)
+        // Find the index of the player with the given ID
+        int index = Array.FindIndex(_players, p => p.Id == playerId);
+
+        if (index == -1)
         {
-            if (_players[i].Id == playerId) {
-                k = i + 1; break;
-            }
+            // Player not found, handle the error accordingly
+            return null; // or throw an exception
         }
-        if(k > 2)
-        {
-            return _players.ElementAt(0);
-        } else
-        {
-            return _players.ElementAt(k);
-        }
+
+        // Calculate the index of the next player, wrapping around if necessary
+        int nextIndex = (index + 1) % _players.Length;
+
+        return _players[nextIndex];
     }
 }

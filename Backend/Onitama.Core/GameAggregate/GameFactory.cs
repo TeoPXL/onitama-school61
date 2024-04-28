@@ -40,19 +40,13 @@ internal class GameFactory : IGameFactory
         Game game = new Game(Guid.NewGuid(), playMat, players, moveCards.ElementAt(moveCards.Length - 1));
         foreach (var player in players)
         {
-            player.School = new School();
-            player.School.AllPawns = new Pawn[5];
-            player.School.Students = new Pawn[4];
-            player.School.AllPawns[0] = new Pawn(Guid.NewGuid(), player.Id, SchoolAggregate.Contracts.PawnType.Student);
-            player.School.AllPawns[1] = new Pawn(Guid.NewGuid(), player.Id, SchoolAggregate.Contracts.PawnType.Student);
-            player.School.AllPawns[2] = new Pawn(Guid.NewGuid(), player.Id, SchoolAggregate.Contracts.PawnType.Master);
-            player.School.AllPawns[3] = new Pawn(Guid.NewGuid(), player.Id, SchoolAggregate.Contracts.PawnType.Student);
-            player.School.AllPawns[4] = new Pawn(Guid.NewGuid(), player.Id, SchoolAggregate.Contracts.PawnType.Student);
-            player.School.Master = player.School.AllPawns[2];
-            player.School.Students[0] = player.School.AllPawns[0];
-            player.School.Students[1] = player.School.AllPawns[1];
-            player.School.Students[2] = player.School.AllPawns[2];
-            player.School.Students[3] = player.School.AllPawns[3];
+            var pawns = new IPawn[5];
+            pawns[0] = new Pawn(Guid.NewGuid(), player.Id, SchoolAggregate.Contracts.PawnType.Student);
+            pawns[1] = new Pawn(Guid.NewGuid(), player.Id, SchoolAggregate.Contracts.PawnType.Student);
+            pawns[2] = new Pawn(Guid.NewGuid(), player.Id, SchoolAggregate.Contracts.PawnType.Master);
+            pawns[3] = new Pawn(Guid.NewGuid(), player.Id, SchoolAggregate.Contracts.PawnType.Student);
+            pawns[4] = new Pawn(Guid.NewGuid(), player.Id, SchoolAggregate.Contracts.PawnType.Student);
+            player.SetSchool(new School(pawns));
 
             game.PlayMat.PositionSchoolOfPlayer(player);
         }

@@ -84,14 +84,30 @@ namespace Onitama.Core.PlayMatAggregate
 
         public IReadOnlyList<IMove> GetValidMoves(IPawn pawn, IMoveCard card, Direction playerDirection)
         {
-            // Implementation goes here
-            return null; // Placeholder return
+            List<IMove> moves = new List<IMove>();
+            var possibleMoves = card.GetPossibleTargetCoordinates(pawn.Position, playerDirection, _size);
+            for (int i = 0; i < possibleMoves.Count; i++)
+            {
+                var x = possibleMoves[i].Column;
+                var y = possibleMoves[i].Row;
+                if (_grid[y, x] is IPawn)
+                {
+                    if (_grid[y, x].OwnerId != pawn.OwnerId)
+                    {
+                        //There is a pawn here and it is not ours?
+                        var move = new Move(card, pawn, playerDirection, possibleMoves[i]);
+                        moves.Add(move);
+                    }
+                }
+                
+            }
+            return moves;
         }
-
+         
         public void ExecuteMove(IMove move, out IPawn capturedPawn)
         {
-            // Implementation goes here
-            capturedPawn = null; // Placeholder
+            capturedPawn = _grid[move.To.Row, move.To.Column];
+            move.Pawn.Position = move.To;
         }
     }
 }

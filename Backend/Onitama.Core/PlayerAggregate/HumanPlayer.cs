@@ -51,7 +51,6 @@ internal class HumanPlayer : PlayerBase
     public ISchool School
     {
         get { return _school; }
-        set { this._school = value; }
     }
 
     public IList<IMoveCard> MoveCards

@@ -4,6 +4,7 @@ using Onitama.Core.SchoolAggregate.Contracts;
 using Onitama.Core.Util;
 using Onitama.Core.Util.Contracts;
 using System.Drawing;
+using System.Numerics;
 
 namespace Onitama.Core.SchoolAggregate;
 
@@ -23,9 +24,9 @@ internal class School : ISchool
         }
     }
 
-    public IPawn[] Students { get; set; }
+    public IPawn[] Students { get; }
 
-    public IPawn[] AllPawns { get; set; }
+    public IPawn[] AllPawns { get; }
     /// <summary>
     /// Creates a school that is a copy of another school.
     /// </summary>
@@ -38,9 +39,24 @@ internal class School : ISchool
         throw new NotImplementedException("TODO: copy properties of other school. Make sure to copy the pawns, not just reference them");
     }
 
-    public School()
+    public School(IPawn[] pawns)
     {
+        //4 for now
+        this.AllPawns = new Pawn[5];
+        this.AllPawns[0] = pawns[0];
+        this.AllPawns[1] = pawns[1];
+        this.AllPawns[2] = pawns[2];
+        this.AllPawns[3] = pawns[3];
+        this.AllPawns[4] = pawns[4];
 
+        this.Students = new Pawn[4];
+
+        Students[0] = AllPawns[0];
+        Students[1] = AllPawns[1];
+        Students[2] = AllPawns[2];
+        Students[3] = AllPawns[3];
+
+        SetMaster(AllPawns[2]);
     }
 
     public ICoordinate TempleArchPosition 
@@ -52,5 +68,15 @@ internal class School : ISchool
     public IPawn GetPawn(Guid pawnId)
     {
         return this.AllPawns.FirstOrDefault(p => p.Id == pawnId);
+    }
+
+    public void SetMaster(IPawn master)
+    {
+        this._master = master;
+    }
+
+    public void SetStudent(IPawn student, int i)
+    {
+        this.Students[i] = student;
     }
 }

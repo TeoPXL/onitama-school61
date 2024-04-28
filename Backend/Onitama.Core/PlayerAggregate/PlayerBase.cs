@@ -11,11 +11,15 @@ namespace Onitama.Core.PlayerAggregate;
 /// <inheritdoc cref="IPlayer"/>
 internal class PlayerBase : IPlayer
 {
+    private ISchool _school;
     public Guid Id { get; }
     public string Name { get; }
     public Color Color { get; }
     public Direction Direction { get; }
-    public ISchool School { get; set; }
+    public ISchool School
+    {
+        get { return _school; }
+    }
     public IList<IMoveCard> MoveCards { get; set; } 
 
     protected PlayerBase(Guid id, string name, Color color, Direction direction)
@@ -37,5 +41,10 @@ internal class PlayerBase : IPlayer
     public PlayerBase(IPlayer otherPlayer)
     {
         throw new NotImplementedException("TODO: copy properties of other player");
+    }
+
+    public void SetSchool(ISchool school)
+    {
+        this._school = school;
     }
 }

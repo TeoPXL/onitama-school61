@@ -11,17 +11,17 @@ public interface ISchool
     /// <summary>
     /// The master of the school
     /// </summary>
-    IPawn Master { get; set; }
+    IPawn Master { get; }
 
     /// <summary>
     /// The students of the school (4 students)
     /// </summary>
-    IPawn[] Students { get; set; }
+    IPawn[] Students { get; }
 
     /// <summary>
     /// All the pawns of the school (one master and 4 students)
     /// </summary>
-    IPawn[] AllPawns { get; set; }
+    IPawn[] AllPawns { get; }
 
     /// <summary>
     /// The position on the play mat of the temple arch of the school
@@ -34,4 +34,8 @@ public interface ISchool
     /// </summary>
     /// <param name="pawnId">The unique identifier of the pawn</param>
     IPawn GetPawn(Guid pawnId);
+
+    public void SetMaster(IPawn master);
+
+    public void SetStudent(IPawn student, int i);
 }

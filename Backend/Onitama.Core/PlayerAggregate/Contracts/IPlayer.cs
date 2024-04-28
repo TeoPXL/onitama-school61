@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using Onitama.Core.MoveCardAggregate.Contracts;
+using Onitama.Core.SchoolAggregate;
 using Onitama.Core.SchoolAggregate.Contracts;
 using Onitama.Core.Util;
 
@@ -33,10 +34,12 @@ public interface IPlayer
     /// <summary>
     /// The school of the player (1 master and 4 students)
     /// </summary>
-    ISchool School { get; set; }
+    ISchool School { get; }
 
     /// <summary>
     /// The move cards that the player can use to play its next move (2 of the 5 available)
     /// </summary>
     IList<IMoveCard> MoveCards { get; }
+
+    public void SetSchool(SchoolAggregate.Contracts.ISchool school);
 }
