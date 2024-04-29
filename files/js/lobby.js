@@ -65,6 +65,54 @@ function loadClassicTables (){
         console.log(error);
         throw_floating_error(error, "500", "#c60025");
     });
+
+    //Tables loaded, but let's check if there are any tables that we are actually in.
+    checkAllTables();
+
+}
+
+function checkAllTables(){
+    fetch(currentApi + "/api/Tables/all", {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + token
+        }
+    }).then(response => {
+        if (response.status === 401) {
+            throw_floating_error("Your token expired! Try logging in again.", "401", "#c60025");
+            topButtonLogin.classList.remove("hidden");
+            topButtonUser.classList.add("hidden"); 
+        }
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw_floating_error(errorData.message, "500", "#c60025");
+            });
+        }
+        return response.json();
+    }).then(data => {
+        //All tables here
+        //console.log("All tables:");
+        //console.log(data);
+        for (let i = 0; i < data.length; i++) {
+            const table = data[i];
+            if(table.hasAvailableSeat == true){
+                for (let j = 0; j < table.seatedPlayers.length; j++) {
+                    const player = table.seatedPlayers[j];
+                    if(player.id == user.id){
+                        console.log("User already in a table");
+                        document.querySelector('.main').classList.add('no-pointer');
+                        document.querySelector('.floating-message').classList.remove('floating-message-hidden');
+                    }
+                }
+            }
+            
+        }
+    }).catch(error => {
+        console.log(error);
+        throw_floating_error(error, "500", "#c60025");
+    });
 }
 
 classicButton.addEventListener('click', () => {
