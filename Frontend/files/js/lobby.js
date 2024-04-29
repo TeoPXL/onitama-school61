@@ -96,7 +96,7 @@ tableButtons.forEach(element => element.addEventListener('click', () => {
     localStorage.setItem("tableId", tableId);
 
     const response = fetch(currentApi + "/api/Tables/" + tableId + "/join", {
-        method: 'GET',
+        method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
