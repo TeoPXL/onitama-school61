@@ -98,6 +98,10 @@ namespace Onitama.Core.PlayMatAggregate
                         var move = new Move(card, pawn, playerDirection, possibleMoves[i]);
                         moves.Add(move);
                     }
+                } else
+                {
+                    var move = new Move(card, pawn, playerDirection, possibleMoves[i]);
+                    moves.Add(move);
                 }
                 
             }

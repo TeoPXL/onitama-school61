@@ -256,8 +256,21 @@ internal class Game : IGame
         {
             throw new InvalidOperationException("Move is null");
         }
-        //Check if move is invalid at some point
-        
+
+        var possibleMoves = PlayMat.GetValidMoves(pawn, moveCard, player.Direction);
+        bool moveExists = false;
+
+        for (int i = 0; i < possibleMoves.Count; i++)
+        {
+            if (possibleMoves[i].Equals(move))
+            {
+                moveExists = true;
+            }
+        }
+        if (possibleMoves.Contains(move) == false)
+        {
+            throw new InvalidOperationException("The move is invalid");
+        }
 
         IPawn capturedPawn;
         IList<ICoordinate> coordinates = new List<ICoordinate>();
@@ -274,10 +287,14 @@ internal class Game : IGame
             WinnerPlayerId = playerId;
             WinnerMethod = "Way of the stream";
 
-        } else if (capturedPawn.Type == PawnType.Master)
+        } else if (capturedPawn != null)
         {
-            WinnerPlayerId = playerId;
-            WinnerMethod = "Way of the stone";
+            if (capturedPawn.Type == PawnType.Master)
+            {
+                WinnerPlayerId = playerId;
+                WinnerMethod = "Way of the stone";
+            }
+                
         }
         ExtraMoveCard = moveCard;
         PlayerToPlayId = this.GetNextOpponent(playerId).Id;
