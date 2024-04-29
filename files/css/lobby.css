@@ -63,7 +63,7 @@
     margin: auto;
     margin-top: 10px;
     width: max-content;
-    background: var(--color-main);
+    background: var(--color-main-gradient);
     color: var(--color-text-2);
     padding: 3px;
     padding-left: 12px;
