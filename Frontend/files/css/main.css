@@ -1,8 +1,10 @@
 html {
-    --color-background: #111412;
-    --color-background-fade: #222623;
-    --color-background-loading: #181c19;
-    --color-main: #13F287;
+    --color-background: rgb(30,31,36);
+    --color-background-gradient: linear-gradient(121deg, rgba(30,31,36,1) 0%, rgba(15,16,18,1) 100%);
+    --color-background-fade: linear-gradient(121deg, rgb(42, 43, 49) 0%, rgb(32, 33, 36) 100%);
+    --color-background-loading: rgb(30,31,36);
+    --color-main: rgb(19,242,151);
+    --color-main-gradient: linear-gradient(121deg, rgba(19,242,151,1) 0%, rgba(11,171,106,1) 100%);
     --color-main-fade: #75FFBA;
     --color-secondary: #E6FF4B;
     --color-text: white;
@@ -16,7 +18,7 @@ html {
 }
 
 body {
-    background: var(--color-background);
+    background: var(--color-background-gradient);
     color: var(--color-text);
     font-family: var(--font-main);
     padding: 0;
