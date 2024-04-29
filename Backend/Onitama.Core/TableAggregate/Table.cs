@@ -143,7 +143,7 @@ internal class Table : ITable
             throw new InvalidOperationException("There are no players at this table.");
         }
         //Double check this code, something is probably wrong here.
-        for (int i = 0; i < _seatedPlayers.count; i++)
+        for (int i = 0; i < _seatedPlayers.Count; i++)
         {
             var player = _seatedPlayers[i];
             if (player.Id == userId)
@@ -152,7 +152,7 @@ internal class Table : ITable
 
                 if (player.Id == _ownerPlayerId)
                 {
-                    if(_seatedPlayers.count > 0){
+                    if(_seatedPlayers.Count > 0){
                         _ownerPlayerId = _seatedPlayers[0].Id;
                     }
                     return;
