@@ -259,18 +259,22 @@ internal class Game : IGame
 
         var possibleMoves = PlayMat.GetValidMoves(pawn, moveCard, player.Direction);
         bool moveExists = false;
-
-        for (int i = 0; i < possibleMoves.Count; i++)
+        if(possibleMoves != null)
         {
-            if (possibleMoves[i].Equals(move))
+            for (int i = 0; i < possibleMoves.Count; i++)
             {
-                moveExists = true;
+                if (possibleMoves[i].Equals(move))
+                {
+                    moveExists = true;
+                }
+            }
+            if (moveExists == false)
+            {
+                throw new InvalidOperationException("The move is invalid");
             }
         }
-        if (possibleMoves.Contains(move) == false)
-        {
-            throw new InvalidOperationException("The move is invalid");
-        }
+        
+        
 
         IPawn capturedPawn;
         IList<ICoordinate> coordinates = new List<ICoordinate>();
