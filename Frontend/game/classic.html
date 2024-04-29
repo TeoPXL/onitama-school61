@@ -512,7 +512,7 @@
                     console.log(error);
                     throw_floating_error(error, '500', "#c60025");
                 });
-                setTimeout(fetchTable, 5 * 1000);
+                await setTimeout(fetchTable, 5000);
             }
             window.fetchTable = fetchTable;
         </script>
