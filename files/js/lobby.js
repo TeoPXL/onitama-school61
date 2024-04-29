@@ -1,5 +1,6 @@
 let classicTableElements = document.querySelectorAll(".classic-table");
 let blitzTableElements = document.querySelectorAll(".blitz-table");
+let alreadyJoinedTable;
 const tableButtons = document.querySelectorAll('.table-button-small');
 const classicButton = document.querySelector('.classic-button');
 const topButtonLogin = document.querySelector(".top-button-login");
@@ -52,7 +53,12 @@ function loadClassicTables (){
             const element = classicTableElements[i];
             const maxPlayers = table.preferences.numberOfPlayers;
             const seatedPlayers = table.seatedPlayers.length;
-            const owner = table.seatedPlayers[0].name;
+            const ownerId = table.ownerId;
+            let owner;
+            for (let k = 0; k < table.seatedPlayers.length; k++) {
+                owner = table.seatedPlayers[k].name;
+                
+            }
             element.classList.remove('table-item-loading');
             element.querySelector('.table-title').textContent = owner;
             element.querySelector('.table-players').textContent = seatedPlayers + "/" + maxPlayers + " players";
@@ -103,6 +109,7 @@ function checkAllTables(){
                     if(player.id == user.id){
                         console.log("User already in a table");
                         document.querySelector('.main').classList.add('no-pointer');
+                        alreadyJoinedTable = table.id;
                         document.querySelector('.floating-message').classList.remove('floating-message-hidden');
                     }
                 }
@@ -167,5 +174,40 @@ tableButtons.forEach(element => element.addEventListener('click', () => {
         //throw_floating_error(error, '500', "#c60025");
     });
 
-    
 }));
+
+document.querySelector('.button-leave').addEventListener('click', () => {
+    //Leave table
+    const response = fetch(currentApi + "/api/Tables/" + alreadyJoinedTable + "/leave", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }
+    }).then(response => {
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw_floating_error(errorData.message, '405', "#c60025");
+            });
+        }
+        return response.json();
+    }).then(data => {
+        document.querySelector('.floating-message').classList.add('floating-message-hidden');
+        document.querySelector('.main').classList.remove('no-pointer');
+    }).catch(error => {
+        console.log(error);
+        //throw_floating_error(error, '500', "#c60025");
+    });
+    
+});
+
+document.querySelector('.button-join').addEventListener('click', () => {
+    //Join table
+    localStorage.setItem("tableId", alreadyJoinedTable);
+    setTimeout(() => {
+        document.querySelector('.floating-message').classList.add('floating-message-hidden');
+        document.querySelector('.main').classList.remove('no-pointer');
+        window.location.href = "game/classic.html";
+    }, 250);
+});
