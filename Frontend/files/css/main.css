@@ -8,6 +8,9 @@ html {
     --color-text: white;
     --color-text-fade: #ffffff57;
     --color-text-2: #0E0007;
+    --color-red: #c60025;
+    --color-gray: #1b1c20;
+    --color-green: #1ea24b;
     --font-logo: "Outfit", sans-serif;
     --font-main: "Poppins", sans-serif;
 }
@@ -73,10 +76,10 @@ a {
 .hidden {
     display: none!important;
 }
-.floating-error {
+.floating-error, .floating-message {
     position: fixed;
     top: 200px;
-    background: #c60025;
+    background: var(--color-red);
     width: calc(90% - 20px);
     left: 5%;
     padding: 10px;
@@ -84,7 +87,10 @@ a {
     box-shadow: 0px 0px 20px #000000a1;
     transition: 0.5s;
 }
-.floating-error-hidden {
+.floating-message {
+    background: var(--color-gray);
+}
+.floating-error-hidden, .floating-message-hidden {
     opacity: 0;
     transform: translateY(100vh);
 }
@@ -100,14 +106,43 @@ a {
     cursor: pointer;
     transition: 0.2s;
 }
-.floating-error-button:hover {
+.floating-message-button {
+    padding: 3px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 2em;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.floating-error-button:hover, .floating-message-button:hover {
     filter: brightness(0.5);
 }
 .floating-error-title {
     font-size: 125%;
     font-weight: 500;
 }
-
+.floating-message-title {
+    font-size: 115%;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+.floating-message-subtitle {
+    margin-bottom: 10px;
+}
+.floating-message-buttons {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.button-leave {
+    background: var(--color-red);
+}
+.button-join {
+    background: var(--color-green);
+}
+.no-pointer {
+    pointer-events: none;
+}
 @media screen and (min-width: 900px) {
     .main, .top {
         width: calc(100% - 100px);
