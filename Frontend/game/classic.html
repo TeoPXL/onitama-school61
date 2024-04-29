@@ -661,11 +661,16 @@
                 await setTimeout(fetchTable, 5000);
             }
             window.fetchTable = fetchTable;
+
+            function startGame(){
+                document.getElementById('container').classList.remove('container-waiting');
+            }
+            window.startGame = startGame;
         </script>
     </div>
     <div class="game-controls">
         <div class="game-buttons">
-            <div class="game-button">Start game</div>
+            <div class="game-button game-button-start">Start game</div>
         </div>
         <div class="game-cards">
             <div class="game-cards-info">
@@ -686,6 +691,11 @@
             </div>
         </div>
     </div>
+    <script>
+        document.querySelector('.game-button-start').addEventListener('click', () => {
+            startGame();
+        })
+    </script>
     </main>
 </body>
 
