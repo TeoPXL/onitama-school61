@@ -21,16 +21,38 @@
         rel="stylesheet">
     <link rel="stylesheet" href="../files/css/main.css">
     <style>
+        .main {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: calc(100% - 20px);
+            height: calc(100% - 20px);
+            padding: 0;
+            background: var(--color-background-gradient);
+            display: flex;
+            flex-flow: column;
+            gap: 10px;
+            padding: 10px;
+            justify-content: center;
+            align-items: center;
+        }
         #container {
-            width: 95%;
-            max-width: 900px;
-            aspect-ratio: 3/4;
-            margin: auto;
+            width: 100%;
+            height: 100%;
             position: relative;
             border-radius: 1em;
             overflow: hidden;
-            margin-top: 50px;
             position: relative;
+            max-width: 500px;
+            max-height: 500px;
+        }
+        .game-controls {
+            background: var(--color-background-fade);
+            width: 100%;
+            height: 100%;
+            border-radius: 1em;
+            max-width: 500px;
+            max-height: 500px;
         }
 
         canvas {
@@ -52,20 +74,32 @@
             font-size: 150%;
             font-weight: 500;
             backdrop-filter: blur(5px);
+            text-align: center;
         }
-        @media screen and (min-width: 450px) {
-            #container {
-                aspect-ratio: 5/4;
-            }
+        .container-waiting::after {
+            content: 'Almost ready! Waiting for the owner to start the game...';
+            display: flex;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #00000095;
+            justify-content: center;
+            align-items: center;
+            font-size: 150%;
+            font-weight: 500;
+            backdrop-filter: blur(5px);
+            text-align: center;
         }
         @media screen and (min-width: 600px) {
-            #container {
-                aspect-ratio: 6/4;
+            .main {
+                flex-flow: row;
             }
         }
         @media screen and (min-width: 750px) {
             #container {
-                aspect-ratio: 7/4;
+                
             }
         }
     </style>
@@ -85,8 +119,9 @@
         <div class="floating-error-subtitle">Subtitle text</div>
         <div class="floating-error-button">Dismiss</div>
     </div>
-    <div class="jump">Click me1</div>
-    <div class="attack">Click me2</div>
+    <div style="display: none;" class="jump">Click me1</div>
+    <div style="display: none;" class="attack">Click me2</div>
+    <main class="main">
     <div id="container" class="container-loading">
 
 
@@ -119,6 +154,8 @@
                 }
             ];
             const currentTableId = localStorage.getItem('tableId');
+            let currentPlayer;
+
             class Game {
                 constructor(playercount){
                     //console.log(this.team1, this.team2);
@@ -134,7 +171,7 @@
                     this.raycaster.params.Points.threshold = 0.1; 
                     this.raycaster.params.Line.threshold = 0.1; 
                     this._clock = new THREE.Clock();
-                    console.log(this._clock);
+                    //console.log(this._clock);
                     this._mouse = new THREE.Vector2();
                     this.scene.background = new THREE.Color(0x87ceeb);
                     this.containerWidth = document.getElementById("container").clientWidth;
@@ -258,7 +295,9 @@
                 }
 
                 placeObject(team, coord, identity, type){
+                    console.log("placing object")
                     if(identity == 0){
+                        console.log("Identity: 0")
                         let material = new THREE.MeshBasicMaterial({
                             color: 0xffffff,
                             transparent: true, // Make it transparent
@@ -278,7 +317,22 @@
 
                     let asset;
                     let orient = team.facing;
-                    let boxColor = team.color;
+                    let boxColor;
+                    if(team.color == "Green"){
+                        boxColor = 0x13F287;
+                    }
+                    if(team.color == "Red"){
+                        boxColor = 0xff0000;
+                    }
+                    if(team.color == "Yellow"){
+                        boxColor = 0xfffb0c;
+                    }
+                    if(team.color == "Orange"){
+                        boxColor = 0xff5c0c;
+                    }
+                    if(team.color == "Blue"){
+                        boxColor = 0x0c82ff;
+                    }
 
                     if(type == "k"){
                         asset = 'assets/master.gltf';
@@ -298,7 +352,7 @@
                         modelObject.position.x = coord[1] * 2 - 4;
                         action.timeScale = 2;
                         action.play(); 
-                        console.log(action);     
+                        //console.log(action);     
 
                         let material = new THREE.MeshBasicMaterial({
                             color: boxColor,
@@ -311,7 +365,7 @@
 
                         // Create a mesh using the geometry and material
                         let cube = new THREE.Mesh(cubeGeometry, material);
-                        cube.name = "hover"+identity;
+                        cube.name = team.number + "hover"+identity;
                         modelObject.add(cube);
 
                         self.board.currentBoard[coord[0]][coord[1]] = [identity, type, modelObject, mixer, modelGLTF];
@@ -463,7 +517,7 @@
                 if (intersects.length > 0) {
                     intersects.forEach(element => {
                         let object = element.object;
-                        if(object.name.includes("hover")){
+                        if(object.name.includes(currentPlayer+"hover")){
                             object.material.opacity = 0.8;
                             cubes++;
                         }
@@ -488,6 +542,10 @@
             window.addEventListener('touchend', resetHighlightedObjects, false);
 
             async function fetchTable(){
+                if(currentPlayer != undefined){
+                    //console.log("Not undefined");
+                    return;
+                }
                 const response = fetch(currentApi + "/api/Tables/" + currentTableId, {
                     method: 'GET',
                     headers: {
@@ -503,11 +561,42 @@
                     }
                     return response.json();
                 }).then(data => {
-                    console.log(data);
+                    //console.log(data);
                     if(data.hasAvailableSeat != true){
                         //The table is full, do stuff
                         document.getElementById('container').classList.remove('container-loading');
+                        document.getElementById('container').classList.add('container-waiting');
+                        //Set team1, 2, (3 and 4) as players in order, or by direction.
+                        for (let i = 0; i < data.seatedPlayers.length; i++) {
+                            const player = data.seatedPlayers[i];
+                            if(player.direction == "North"){
+                                player.facing = 1;
+                                player.number = 1;
+                                game.team1 = player;
+                                if(user.id == player.id){
+                                    currentPlayer = 1;
+                                }
+                            } else if (player.direction == "South"){
+                                player.facing = 0;
+                                player.number = 2;
+                                game.team2 = player;
+                                if(user.id == player.id){
+                                    currentPlayer = 2;
+                                }
+                            }
+                        }
+                        //Orient game camera so that the player sees his team in front
+                        if(currentPlayer == 1){
+                            //Orient camera
+                        } else if (currentPlayer == 2){
+                            //Orient camera for player 2
+                        }
+                        //Maybe set limits for cam rotation?
+                        //fill the models based on team color
+                        console.log("filling models");
                         game.fillModels();
+                        //Make sure the current player can only control his own pawns, and only when it is his turn.
+                        //Move this to its own function
                     }
                 }).catch(error => {
                     console.log(error);
@@ -518,6 +607,10 @@
             window.fetchTable = fetchTable;
         </script>
     </div>
+    <div class="game-controls">
+
+    </div>
+    </main>
 </body>
 
 </html>
