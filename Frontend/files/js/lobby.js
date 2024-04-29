@@ -140,6 +140,10 @@ classicButton.addEventListener('click', () => {
         return response.json();
     }).then(data => {
         console.log(data);
+        localStorage.setItem("tableId", data.id);
+        setTimeout(() => {
+            window.location.href = "game/classic.html";
+        }, 250);
     }).catch(error => {
         console.log(error);
         throw_floating_error(error, '500', "#c60025");
@@ -191,10 +195,17 @@ document.querySelector('.button-leave').addEventListener('click', () => {
                 throw_floating_error(errorData.message, '405', "#c60025");
             });
         }
-        return response.json();
+        return response;
     }).then(data => {
+        console.log(data);
         document.querySelector('.floating-message').classList.add('floating-message-hidden');
         document.querySelector('.main').classList.remove('no-pointer');
+        for (let i = 0; i < classicTableElements.length; i++) {
+            const table = classicTableElements[i];
+            if(table.querySelector('.table-button').getAttribute('table-id') == alreadyJoinedTable){
+                table.classList.add('table-item-hidden');
+            }
+        }
     }).catch(error => {
         console.log(error);
         //throw_floating_error(error, '500', "#c60025");
