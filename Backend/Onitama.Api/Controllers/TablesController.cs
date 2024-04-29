@@ -53,6 +53,18 @@ public class TablesController : ApiControllerBase
     }
 
     /// <summary>
+    /// Gets all the tables that are currently active, regardless of available seats.
+    /// </summary>
+    [HttpGet("all")]
+    [ProducesResponseType(typeof(IList<TableModel>), StatusCodes.Status200OK)]
+    public IActionResult GetTables()
+    {
+        IList<ITable> tables = _tableRepository.FindTables();
+        List<TableModel> models = tables.Select(t => _mapper.Map<TableModel>(t)).ToList();
+        return Ok(models);
+    }
+
+    /// <summary>
     /// Adds a new table to the system. The user that creates the table is automatically seated.
     /// </summary>
     /// <param name="preferences">

@@ -49,4 +49,17 @@ internal class InMemoryTableRepository : ITableRepository
         }
         return list;
     }
+
+    public IList<ITable> FindTables()
+    {
+        //TODO: loop over all tables (user the Values property of _tableDictionary)
+        //and check if those tables have seats available.
+        //Put the tables that have available seats in a list and return that list.
+        var list = new List<ITable>();
+        foreach (var table in _tableDictionary.Values)
+        {
+            list.Add(table);
+        }
+        return list;
+    }
 }
