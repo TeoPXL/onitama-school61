@@ -507,6 +507,7 @@
                     if(data.hasAvailableSeat != true){
                         //The table is full, do stuff
                         document.getElementById('container').classList.remove('container-loading');
+                        game.fillModels();
                     }
                 }).catch(error => {
                     console.log(error);
