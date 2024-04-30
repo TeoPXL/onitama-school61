@@ -249,6 +249,8 @@
 
                         // Update renderer size
                         this._renderer.setSize(containerWidth, containerHeight);
+                        this.camera.fov = 60;
+                        this.camera.updateProjectionMatrix();
                     };
 
                     // Add event listener for window resize
@@ -278,7 +280,7 @@
                     this.controls.enablePan = false;
 
                     this.controls.minDistance = 2;
-                    this.controls.maxDistance = 14;
+                    this.controls.maxDistance = 16;
 
                     this.controls.maxPolarAngle = Math.PI / 2.25;
                     this.controls.target.z = -0;
@@ -295,7 +297,7 @@
                         console.error(error);
                     });
 
-                    this.camera.position.z = -8;
+                    this.camera.position.z = -12;
                     this.camera.position.y = 4.5;
                     this.camera.rotation.x = -0.5;
 
@@ -677,7 +679,7 @@
                                 game.team2 = player;
                                 if(user.id == player.id){
                                     currentPlayer = 2;
-                                    game.camera.position.set(0, 4.5, 8); // Move the camera along the negative z-axis
+                                    game.camera.position.set(0, 4.5, 12); // Move the camera along the negative z-axis
                                     game.camera.lookAt(0, 0, 0); // Look back towards the origin
 
                                     // Update OrbitControls to reflect changes
