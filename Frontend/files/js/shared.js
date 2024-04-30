@@ -26,6 +26,7 @@ function throw_floating_error(error, code, color){
     floatingError.querySelector('.floating-error-subtitle').textContent = error;
     floatingError.classList.remove('floating-error-hidden');
 }
+//window.throw_floating_error = throw_floating_error;
 
 floatingError.querySelector('.floating-error-button').addEventListener('click', () => {
     floatingError.classList.add('floating-error-hidden');
