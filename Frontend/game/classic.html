@@ -374,27 +374,42 @@
                     let asset;
                     let orient = team.facing;
                     let boxColor;
+                    let ninja;
+                    let master;
+
                     if(team.color == "Green"){
                         boxColor = 0x13F287;
+                        ninja = 'assets/green_ninja.gltf';
+                        master = 'assets/green_master.gltf';
                     }
                     if(team.color == "Red"){
                         boxColor = 0xff0000;
+                        ninja = 'assets/red_ninja.gltf';
+                        master = 'assets/red_master.gltf';
                     }
                     if(team.color == "Yellow"){
                         boxColor = 0xfffb0c;
+                        ninja = 'assets/yellow_ninja.gltf';
+                        master = 'assets/yellow_master.gltf';
                     }
                     if(team.color == "Orange"){
                         boxColor = 0xff5c0c;
+                        ninja = 'assets/orange_ninja.gltf';
+                        master = 'assets/orange_master.gltf';
                     }
                     if(team.color == "Blue"){
                         boxColor = 0x0c82ff;
+                        ninja = 'assets/blue_ninja.gltf';
+                        master = 'assets/blue_master.gltf';
                     }
 
                     if(type == "k"){
-                        asset = 'assets/master.gltf';
+                        //load master based on color!
+                        asset = master;
                         orient = orient + 2;
                     } else {
-                        asset = 'assets/ninja.gltf';
+                        //load ninja based on color!
+                        asset = ninja;
                     }
                     const self = this;
                     this.loader.load(asset, function (gltf) {
@@ -638,6 +653,12 @@
                                 game.team2 = player;
                                 if(user.id == player.id){
                                     currentPlayer = 2;
+                                    game.camera.position.set(0, 4.5, 8); // Move the camera along the negative z-axis
+                                    game.camera.lookAt(0, 0, 0); // Look back towards the origin
+
+                                    // Update OrbitControls to reflect changes
+                                    game.controls.update();
+
                                 }
                             }
                         }
@@ -663,6 +684,7 @@
             window.fetchTable = fetchTable;
 
             function startGame(){
+                //Do a fetch to start the game here
                 document.getElementById('container').classList.remove('container-waiting');
             }
             window.startGame = startGame;
@@ -682,7 +704,7 @@
                 </div>
             </div>
             <div class="game-cards-info">
-                <div class="game-cards-name">Playername:</div>
+                <div class="game-cards-name game-cards-you">You:</div>
                 <div class="game-cards-container">
                     <div class="game-card"></div>
                     <div class="game-card"></div>
