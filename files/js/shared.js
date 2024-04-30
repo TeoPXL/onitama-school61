@@ -115,8 +115,8 @@ async function refreshToken(){
     }).catch(error => {
         //console.log(error);
     });
-    
-    setTimeout(refreshToken, 30 * 60 * 1000);
+    //Disabled this for now to save on database resources
+    //setTimeout(refreshToken, 30 * 60 * 1000);
 }
 
     

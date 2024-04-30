@@ -785,7 +785,8 @@
                         //Move this to its own function
                     }
 
-                    setTimeout(fetchTable, 2500);
+                    //setTimeout(fetchTable, 2500);
+                    setTimeout(fetchTable, 10000); //Changed from 2.5s to 10s to save on db resources
                 }).catch(error => {
                     console.log(error);
                     throw_floating_error(error, '500', "#c60025");
