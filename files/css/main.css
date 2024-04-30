@@ -153,4 +153,8 @@ a {
         padding-left: 50px;
         padding-right: 50px;
     }
+    .floating-error, .floating-message {
+        width: 450px;
+        left: calc(50vw - 225px);
+    }
 }

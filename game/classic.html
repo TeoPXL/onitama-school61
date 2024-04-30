@@ -184,6 +184,9 @@
                 transform: translateX(100%);
             }
         }
+        .floating-error {
+            z-index: 3;
+        }
         @media screen and (min-width: 600px) {
             .main {
                 flex-flow: row;
@@ -745,7 +748,7 @@
                         //Move this to its own function
                     }
 
-                    setTimeout(fetchTable, 5000);
+                    setTimeout(fetchTable, 2500);
                 }).catch(error => {
                     console.log(error);
                     throw_floating_error(error, '500', "#c60025");
@@ -753,10 +756,31 @@
             }
             window.fetchTable = fetchTable;
 
-            function startGame(){
+            async function startGame(){
                 //Do a fetch to start the game here
-                document.getElementById('container').classList.remove('container-waiting');
-                document.querySelector('.loading').remove();
+                const response = await fetch(currentApi + "/api/Tables/" + currentTableId + "/start-game", {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ })
+                }).then(response => {
+                    if (!response.ok) {
+                        return response.json().then(errorData => {
+                            throw_floating_error(errorData.message, '400', "#c60025");
+                        });
+                    } else {
+                        document.getElementById('container').classList.remove('container-waiting');
+                        document.querySelector('.loading').remove();
+                    }
+                    return response.json();
+                }).then(data => {
+                }).catch(error => {
+                    console.log(error);
+                    throw_floating_error(error, '500', "#c60025");
+                });
             }
             window.startGame = startGame;
         </script>
