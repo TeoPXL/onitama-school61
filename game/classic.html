@@ -376,6 +376,7 @@
                     let boxColor;
                     let ninja;
                     let master;
+                    let tScale = 2;
 
                     if(team.color == "Green"){
                         boxColor = 0x13F287;
@@ -407,6 +408,7 @@
                         //load master based on color!
                         asset = master;
                         orient = orient + 2;
+                        tScale = 1;
                     } else {
                         //load ninja based on color!
                         asset = ninja;
@@ -421,7 +423,7 @@
                         modelObject.rotation.y = orient * 1.57 * 2;
                         modelObject.position.z = coord[0] * 2 - 4;
                         modelObject.position.x = coord[1] * 2 - 4;
-                        action.timeScale = 2;
+                        action.timeScale = tScale;
                         action.play(); 
                         //console.log(action);     
 
