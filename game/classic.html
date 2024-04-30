@@ -35,6 +35,7 @@
             padding: 10px;
             justify-content: center;
             align-items: center;
+            max-width: unset;
         }
         #container {
             width: 100%;
@@ -43,7 +44,7 @@
             border-radius: 1em;
             overflow: hidden;
             position: relative;
-            max-width: 500px;
+            max-width: 700px;
             max-height: 700px;
         }
         .game-controls {
@@ -51,7 +52,7 @@
             width: 100%;
             height: 100%;
             border-radius: 1em;
-            max-width: 500px;
+            max-width: 700px;
             max-height: 700px;
             display: flex;
             flex-flow: column;
@@ -152,6 +153,9 @@
             .main {
                 flex-flow: row;
             }
+            #container {
+                height: 100%;
+            }
         }
         @media screen and (min-width: 750px) {
             #container {
@@ -234,6 +238,24 @@
                     this.containerHeight = document.getElementById("container").clientHeight;
                     this._camera = new THREE.PerspectiveCamera(75, this.containerWidth / this.containerHeight, 0.1, 1000);
                     this._renderer = new THREE.WebGLRenderer({ antialias: true });
+                    const onWindowResize = () => {
+                        // Update container dimensions
+                        const containerWidth = document.getElementById("container").clientWidth;
+                        const containerHeight = document.getElementById("container").clientHeight;
+
+                        // Update camera aspect ratio
+                        this._camera.aspect = containerWidth / containerHeight;
+                        this._camera.updateProjectionMatrix();
+
+                        // Update renderer size
+                        this._renderer.setSize(containerWidth, containerHeight);
+                    };
+
+                    // Add event listener for window resize
+                    window.addEventListener('resize', onWindowResize);
+
+                    // Call onWindowResize initially to set up the correct dimensions
+                    onWindowResize();
                     this.pixelRatio = window.devicePixelRatio || 1; // Get device pixel ratio
                     this.renderer.setPixelRatio(this.pixelRatio);
                     this.renderer.setSize(this.containerWidth, this.containerHeight, false);
