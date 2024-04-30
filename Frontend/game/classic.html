@@ -74,6 +74,9 @@
             cursor: pointer;
             transition: 0.2s;
         }
+        .game-button-hidden {
+            display: none;
+        }
         .game-button:hover {
             filter: brightness(0.5);
         }
@@ -86,6 +89,40 @@
             display: flex;
             flex-flow: column;
             gap: 15px;
+            overflow-x: hidden;
+        }
+        .game-cards-info-list {
+            width: 300%;
+            height: 100%;
+            display: flex;
+            transition: 0.5s;
+            position: relative;
+        }
+        .list-show-1 {
+            transform: translateX(0);
+        }
+        .list-show-2 {
+            transform: translateX(-33.333%);
+        }
+        .list-show-3 {
+            transform: translateX(-66.666%);
+        }
+        .list-button-right {
+            position: absolute;
+            right: 66.66%;
+        }
+        .list-button-left {
+            position: absolute;
+            left: -5px;
+        }
+        .list-button i {
+            height: 25px;
+            justify-content: center;
+            align-items: center;
+        }
+        .list-button svg {
+            width: 40px;
+            height: 40px;
         }
         .game-cards-info {
             height: 100%;
@@ -774,6 +811,7 @@
                     } else {
                         document.getElementById('container').classList.remove('container-waiting');
                         document.querySelector('.loading').remove();
+                        document.querySelector('.game-button-start').classList.add('game-button-hidden');
                     }
                     return response.json();
                 }).then(data => {
@@ -790,14 +828,46 @@
             <div class="game-button game-button-start">Start game</div>
         </div>
         <div class="game-cards">
-            <div class="game-cards-info">
-                <div class="game-cards-name">Playername:</div>
-                <div class="game-cards-container">
-                    <div class="game-card"></div>
-                    <div class="game-card"></div>
-                    <div class="game-card game-card-extra"></div>
+            <div class="game-cards-info-list">
+                <div class="game-cards-info">
+                    <div class="game-cards-name">Playername:</div>
+                    <div class="game-cards-container">
+                        <div class="game-card"></div>
+                        <div class="game-card"></div>
+                        <div class="game-card game-card-extra"></div>
+                    </div>
                 </div>
+
+                <div class="game-cards-info">
+                    <div class="game-cards-name">Playername:</div>
+                    <div class="game-cards-container">
+                        <div class="game-card"></div>
+                        <div class="game-card"></div>
+                        <div class="game-card game-card-extra"></div>
+                    </div>
+                </div>
+
+                <div class="game-cards-info">
+                    <div class="game-cards-name">Playername:</div>
+                    <div class="game-cards-container">
+                        <div class="game-card"></div>
+                        <div class="game-card"></div>
+                        <div class="game-card game-card-extra"></div>
+                    </div>
+                </div>
+
+                <div class="list-button list-button-left"><i>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5"/>
+                    </svg>
+                </i></div>
+                <div class="list-button list-button-right"><i>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"/>
+                    </svg>
+                </i></div>
             </div>
+            
             <div class="game-cards-info">
                 <div class="game-cards-name game-cards-you">You:</div>
                 <div class="game-cards-container">
