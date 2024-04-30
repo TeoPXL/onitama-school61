@@ -118,7 +118,7 @@
             display: block;
         }
         .container-loading::after {
-            content: 'Waiting for other players...';
+            content: 'Loading...';
             display: flex;
             position: absolute;
             top: 0;
@@ -132,6 +132,36 @@
             font-weight: 500;
             backdrop-filter: blur(5px);
             text-align: center;
+        }
+        .loading {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            transform: translateX(-100%);
+            background-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0, rgba(55, 55, 55, 0.1) 25%, rgba(40, 40, 40, 0.1) 75%, rgba(255, 255, 255, 0));
+            animation: shimmer 2s infinite;
+            animation-timing-function: cubic-bezier;
+            content: '';
+        }
+        .container-2-1::after {
+            content: '(1/2) - Waiting for other players...';
+        }
+        .container-2-2::after {
+            content: '(2/2) - The table is full...';
+        }
+        .container-4-1::after {
+            content: '(1/4) - Waiting for other players...';
+        }
+        .container-4-2::after {
+            content: '(2/4) - Waiting for other players...';
+        }
+        .container-4-3::after {
+            content: '(3/4) - Waiting for other players...';
+        }
+        .container-4-4::after {
+            content: '(4/4) - The table is full...';
         }
         .container-waiting::after {
             content: 'Almost ready! Waiting for the owner to start the game...';
@@ -148,6 +178,11 @@
             font-weight: 500;
             backdrop-filter: blur(5px);
             text-align: center;
+        }
+        @keyframes shimmer {
+            100% {
+                transform: translateX(100%);
+            }
         }
         @media screen and (min-width: 600px) {
             .main {
@@ -279,7 +314,7 @@
                     this.controls.screenSpacePanning = false;
                     this.controls.enablePan = false;
 
-                    this.controls.minDistance = 2;
+                    this.controls.minDistance = 6;
                     this.controls.maxDistance = 16;
 
                     this.controls.maxPolarAngle = Math.PI / 2.25;
@@ -507,6 +542,10 @@
 
             var game = new Game(2);
 
+            const loadingDivElement = document.createElement('div');
+            loadingDivElement.className = 'loading';
+            document.getElementById('container').appendChild(loadingDivElement);
+
             window.addEventListener('load', () => {
                 document.querySelector('.jump').addEventListener('click', () => {
                     giveAnimation("jump");
@@ -643,7 +682,7 @@
                     //console.log("Not undefined");
                     return;
                 }
-                const response = fetch(currentApi + "/api/Tables/" + currentTableId, {
+                const response = await fetch(currentApi + "/api/Tables/" + currentTableId, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json',
@@ -659,6 +698,10 @@
                     return response.json();
                 }).then(data => {
                     //console.log(data);
+                    const table = data;
+                    const className = "container-"+table.preferences.numberOfPlayers+"-"+table.seatedPlayers.length;
+                    console.log(className);
+                    document.getElementById('container').classList.add(className);
                     if(data.hasAvailableSeat != true){
                         //The table is full, do stuff
                         document.getElementById('container').classList.remove('container-loading');
@@ -701,17 +744,19 @@
                         //Make sure the current player can only control his own pawns, and only when it is his turn.
                         //Move this to its own function
                     }
+
+                    setTimeout(fetchTable, 5000);
                 }).catch(error => {
                     console.log(error);
                     throw_floating_error(error, '500', "#c60025");
                 });
-                await setTimeout(fetchTable, 5000);
             }
             window.fetchTable = fetchTable;
 
             function startGame(){
                 //Do a fetch to start the game here
                 document.getElementById('container').classList.remove('container-waiting');
+                document.querySelector('.loading').remove();
             }
             window.startGame = startGame;
         </script>
