@@ -868,7 +868,7 @@
         </div>
     </div>
     <script>
-        document.querySelector('.game-button-start').addEventListener('click', () => {
+        document.querySelector('.game-button-start').addEventListener('click', async () => {
             const response = await fetch(currentApi + "/api/Tables/" + currentTableId + "/start-game", {
                     method: 'POST',
                     headers: {
