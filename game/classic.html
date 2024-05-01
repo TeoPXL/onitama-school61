@@ -719,7 +719,7 @@
             window.addEventListener('touchend', resetHighlightedObjects, false);
 
             async function fetchTable(){
-                if(gameID != undefined && gameId != "00000000-0000-0000-0000-000000000000"){
+                if(gameId != undefined && gameId != "00000000-0000-0000-0000-000000000000"){
                     return;
                 }
                 const response = await fetch(currentApi + "/api/Tables/" + currentTableId, {
@@ -789,7 +789,7 @@
                         }
                     } {
                         //Check if table game exists
-                        gameID = table.gameID;
+                        gameId = table.gameId;
                         if(gameId == "00000000-0000-0000-0000-000000000000"){
                             //Something went wrong
                         }
