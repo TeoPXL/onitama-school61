@@ -290,6 +290,7 @@
             ];
             const currentTableId = localStorage.getItem('tableId');
             let currentPlayer;
+            let gameId;
 
             class Game {
                 constructor(playercount){
@@ -718,6 +719,9 @@
             window.addEventListener('touchend', resetHighlightedObjects, false);
 
             async function fetchTable(){
+                if(gameID != undefined && gameId != "00000000-0000-0000-0000-000000000000"){
+                    return;
+                }
                 const response = await fetch(currentApi + "/api/Tables/" + currentTableId, {
                     method: 'GET',
                     headers: {
@@ -735,9 +739,9 @@
                 }).then(data => {
                     //console.log(data);
 
+                    const table = data;
                     if(currentPlayer == undefined){
-                            //console.log("Not undefined");
-                        const table = data;
+                        //console.log("Not undefined");
                         const className = "container-"+table.preferences.numberOfPlayers+"-"+table.seatedPlayers.length;
                         console.log(className);
                         document.getElementById('container').classList.add(className);
@@ -785,6 +789,12 @@
                         }
                     } {
                         //Check if table game exists
+                        gameID = table.gameID;
+                        if(gameId == "00000000-0000-0000-0000-000000000000"){
+                            //Something went wrong
+                        }
+                        //Things are ok, the game has started
+                        startGame();
                     }
                     setTimeout(fetchTable, 2500);
                 }).catch(error => {
