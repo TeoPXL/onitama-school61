@@ -28,6 +28,7 @@ class Game {
         this.clock = new THREE.Clock();
         this.mouse = new THREE.Vector2();
         this.scene.background = new THREE.Color(0x87ceeb);
+        this.scene.fog = new THREE.Fog( 0xcccccc, 15, 25 );
         this.containerWidth = container.clientWidth;
         this.containerHeight = container.clientHeight;
         this.camera = new THREE.PerspectiveCamera(75, this.containerWidth / this.containerHeight, 0.1, 1000);
@@ -395,7 +396,6 @@ async function fetchTable(){
 
         setTimeout(fetchTable, 500);
         } else if(game.id == undefined || game.id == "00000000-0000-0000-0000-000000000000") {
-
             game.id = table.gameId;
             console.log(game.id);
             setTimeout(fetchTable, 500);

@@ -118,7 +118,7 @@
                             throw_floating_error(errorData.message, '400', "#c60025");
                         });
                     } else {
-                        game.start();
+                        fetchTable();
                     }
                     return response.json();
                 }).then(data => {
