@@ -291,6 +291,7 @@
             const currentTableId = localStorage.getItem('tableId');
             let currentPlayer;
             let gameId;
+            let gameStarted = false;
 
             class Game {
                 constructor(playercount){
@@ -719,7 +720,7 @@
             window.addEventListener('touchend', resetHighlightedObjects, false);
 
             async function fetchTable(){
-                if(gameId != undefined && gameId != "00000000-0000-0000-0000-000000000000"){
+                if(gameStarted == true){
                     return;
                 }
                 const response = await fetch(currentApi + "/api/Tables/" + currentTableId, {
@@ -807,6 +808,7 @@
             window.fetchTable = fetchTable;
 
             async function startGame(){
+                gameStarted = true;
                 document.getElementById('container').classList.remove('container-waiting');
                 document.querySelector('.loading').remove();
                 document.querySelector('.game-button-start').classList.add('game-button-hidden');
