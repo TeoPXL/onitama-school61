@@ -786,8 +786,7 @@
                     } {
                         //Check if table game exists
                     }
-                    //setTimeout(fetchTable, 2500);
-                    setTimeout(fetchTable, 10000); //Changed from 2.5s to 10s to save on db resources
+                    setTimeout(fetchTable, 2500);
                 }).catch(error => {
                     console.log(error);
                     throw_floating_error(error, '500', "#c60025");

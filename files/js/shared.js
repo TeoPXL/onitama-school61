@@ -1,5 +1,6 @@
 const localApi = "https://localhost:5051";
 const remoteApi = "https://onitama61.azurewebsites.net";
+const devApi = "https://172.30.202.134:5051";
 const chosenApi = JSON.parse(localStorage.getItem("api"));
 const user = JSON.parse(localStorage.getItem("user"));
 const token = localStorage.getItem("token");
@@ -15,6 +16,7 @@ const userSettings = {
 let currentApi = "";
 let localApiExists = false;
 let remoteApiExists = false;
+let devApiExists = false;
 
 function throw_floating_error(error, code, color){
     if(!floatingError.classList.contains('floating-error-hidden')){
@@ -62,12 +64,22 @@ async function checkApis(){
             console.log("RESPONSE: "+remoteResponse);
         }
 
+        const devResponse = await pingApi(devApi);
+        if(devResponse == true){
+            devApiExists = true;
+        }
+
         if(localApiExists == true && userSettings['force-remote-api'] != 'true'){
             currentApi = localApi;
             console.log('%cUsing local api', 'font-size: 24px; font-weight: bold;');
         } else if(remoteApiExists) {
             currentApi = remoteApi;
             console.log('%cUsing remote api', 'font-size: 24px; font-weight: bold;');
+        } else if(devApiExists) {
+            //REMOVE THIS IN PRODUCTION
+            currentApi = devApi;
+            console.log('%cUsing DEV api', 'font-size: 24px; font-weight: bold;');
+            console.log("Do not use this during production!");
         } else {
             throw new Error("Both the local and remote APIs are not accessible. This could be due to the remote API having a cold start. Try waiting.");
         }
@@ -115,8 +127,7 @@ async function refreshToken(){
     }).catch(error => {
         //console.log(error);
     });
-    //Disabled this for now to save on database resources
-    //setTimeout(refreshToken, 30 * 60 * 1000);
+    setTimeout(refreshToken, 30 * 60 * 1000);
 }
 
     
