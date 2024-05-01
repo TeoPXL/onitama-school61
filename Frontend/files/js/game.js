@@ -173,8 +173,11 @@ class Game {
     start(){
         game.started = true;
         container.classList.remove('container-waiting');
-        document.querySelector('.loading').remove();
+        if(document.querySelector('.loading')){
+            document.querySelector('.loading').remove();
+        }
         document.querySelector('.game-button-start').classList.add('game-button-hidden');
+        document.querySelector('.game-button-test').classList.remove('game-button-hidden');
     }
 };
 
@@ -447,8 +450,64 @@ async function getGame(){
                     game.board.currentBoard[i][j][2] = item;
                 }
             }
-            //Set gameCards with actual data
         } else {
+            //Set gameCards with actual data
+            let enemyName;
+            let enemyCards;
+            let playerCards;
+            let extraCard = data.extraMoveCard;
+            const enemyCardElements = document.querySelectorAll('.enemy-card-blocks .block');
+            const playerCardElements = document.querySelectorAll('.player-card-blocks .block');
+            data.players.forEach(player => {
+                if(player.id == data.playerToPlayId && user.id != data.playerToPlayId){
+                    //Set enemy name
+                    enemyName = player.name;
+                    enemyCards = player.moveCards;
+                }
+                if(player.id == user.id){
+                    playerCards = player.moveCards;
+                }
+            });
+            document.querySelector('.enemy-name').textContent = enemyName;
+            
+            if(enemyCards != undefined){
+                let count = 0;
+                for (let i = 0; i < enemyCards.length; i++) {
+                    const card = enemyCards[i];
+                    for (let j = 0; j < card.grid.length; j++) {
+                        for (let k = 0; k < card.grid[j].length; k++) {
+                            let block = enemyCardElements[count];
+                            count++;
+                            if(card.grid[j][k] == "0"){
+                                block.style.background = "#37383c";
+                            } else if(card.grid[j][k] == "1"){
+                                block.style.background = enemyCards[i].stampColor;
+                            } else {
+                                block.style.background = "black";
+                            }
+                        }
+                    }
+                }
+            }
+            if(playerCards != undefined){
+                let count = 0;
+                for (let i = 0; i < playerCards.length; i++) {
+                    const card = playerCards[i];
+                    for (let j = 0; j < card.grid.length; j++) {
+                        for (let k = 0; k < card.grid[j].length; k++) {
+                            let block = playerCardElements[count];
+                            count++;
+                            if(card.grid[j][k] == "0"){
+                                block.style.background = "#37383c";
+                            } else if(card.grid[j][k] == "1"){
+                                block.style.background = playerCards[i].stampColor;
+                            } else {
+                                block.style.background = "black";
+                            }
+                        }
+                    }
+                }
+            }
             //The game has started. Check playerToPlay
             if(user.id == data.playerToPlayId){
                 //We can play
