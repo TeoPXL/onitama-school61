@@ -793,10 +793,12 @@
                         //Check if table game exists
                         gameId = table.gameId;
                         if(gameId == "00000000-0000-0000-0000-000000000000"){
-                            //Something went wrong
+                            setTimeout(fetchTable, 2500);
+                        } else {
+                            startGame();
                         }
+                        console.log(gameId);
                         //Things are ok, the game has started
-                        startGame();
                     }
                     //setTimeout(fetchTable, 2500);
                 }).catch(error => {
