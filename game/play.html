@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+
+    <link rel="icon" type="image/webp" sizes="16x16" href="../files/icons/icon-16.webp">
+    <link rel="icon" type="image/webp" sizes="32x32" href="../files/icons/icon-32.webp">
+    <link rel="icon" type="image/webp" sizes="64x64" href="../files/icons/icon-64.webp.png">
+    <link rel="icon" type="image/webp" sizes="128x128" href="../files/icons/icon-128.webp">
+    <link rel="icon" type="image/webp" sizes="512x512" href="../files/icons/icon-512.webp">
+    <!-- iOS -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../files/icons/icon-180.webp">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../files/css/main.css">
+    <link rel="stylesheet" href="../files/css/game.css">
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.163.0/build/three.module.js"
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="floating-error floating-error-hidden">
+        <div class="floating-error-title">Error: 401</div>
+        <div class="floating-error-subtitle">Subtitle text</div>
+        <div class="floating-error-button">Dismiss</div>
+    </div>
+    <div style="display: none;" class="jump">Click me1</div>
+    <div style="display: none;" class="attack">Click me2</div>
+    <main class="main">
+    <div id="container" class="container-loading">
+
+
+
+        <script src="../files/js/shared.js"></script>
+        <script src="../files/js/game.js" type="module"></script>
+    </div>
+    <div class="game-controls">
+        <div class="game-buttons">
+            <div class="game-button game-button-start">Start game</div>
+        </div>
+        <div class="game-cards">
+            <div class="game-cards-info-list">
+                <div class="game-cards-info">
+                    <div class="game-cards-name">Playername:</div>
+                    <div class="game-cards-container">
+                        <div class="game-card"></div>
+                        <div class="game-card"></div>
+                        <div class="game-card game-card-extra"></div>
+                    </div>
+                </div>
+
+                <div class="game-cards-info">
+                    <div class="game-cards-name">Playername:</div>
+                    <div class="game-cards-container">
+                        <div class="game-card"></div>
+                        <div class="game-card"></div>
+                        <div class="game-card game-card-extra"></div>
+                    </div>
+                </div>
+
+                <div class="game-cards-info">
+                    <div class="game-cards-name">Playername:</div>
+                    <div class="game-cards-container">
+                        <div class="game-card"></div>
+                        <div class="game-card"></div>
+                        <div class="game-card game-card-extra"></div>
+                    </div>
+                </div>
+
+                <div class="list-button list-button-left"><i>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5"/>
+                    </svg>
+                </i></div>
+                <div class="list-button list-button-right"><i>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"/>
+                    </svg>
+                </i></div>
+            </div>
+            
+            <div class="game-cards-info">
+                <div class="game-cards-name game-cards-you">You:</div>
+                <div class="game-cards-container">
+                    <div class="game-card"></div>
+                    <div class="game-card"></div>
+                    <div class="game-card game-card-extra"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.querySelector('.game-button-start').addEventListener('click', async () => {
+            const response = await fetch(currentApi + "/api/Tables/" + game.tableId + "/start-game", {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ })
+                }).then(response => {
+                    if (!response.ok) {
+                        return response.json().then(errorData => {
+                            throw_floating_error(errorData.message, '400', "#c60025");
+                        });
+                    } else {
+                        game.start();
+                    }
+                    return response.json();
+                }).then(data => {
+                }).catch(error => {
+                    console.log(error);
+                    throw_floating_error(error, '500', "#c60025");
+                });
+        });
+    </script>
+    </main>
+</body>
+
+</html>
