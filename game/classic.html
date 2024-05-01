@@ -789,12 +789,12 @@
                             //Move this to its own function
                         }
 
-                    setTimeout(fetchTable, 2500);
+                    setTimeout(fetchTable, 500);
                     } else if(gameId == undefined || gameId == "00000000-0000-0000-0000-000000000000") {
 
                         gameId = table.gameId;
                         console.log(gameId);
-                        setTimeout(fetchTable, 2500);
+                        setTimeout(fetchTable, 500);
                     } else {
                         startGame();
                         console.log(gameId);
