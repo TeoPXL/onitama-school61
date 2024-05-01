@@ -3,6 +3,8 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'https://unpkg.com/three@0.163.0/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'https://unpkg.com/three@0.163.0/examples/jsm/controls/OrbitControls.js';
 const container = document.getElementById('container');
+const gameId = localStorage.getItem("gameId");
+
 class Game {
     scene;
     raycaster;
@@ -328,6 +330,13 @@ async function fetchTable(){
     if(game.started == true){
         return;
     }
+    if(gameId != undefined && gameId != "null"){
+        game.id = gameId;
+        console.log(game.id);
+        getGame();
+        game.start();
+        return;
+    }
     const response = await fetch(currentApi + "/api/Tables/" + game.tableId, {
         method: 'GET',
         headers: {
@@ -400,13 +409,62 @@ async function fetchTable(){
             console.log(game.id);
             setTimeout(fetchTable, 500);
         } else {
-            game.start();
             console.log(game.id);
+            getGame();
+            game.start();
         }
         //setTimeout(fetchTable, 2500);
     }).catch(error => {
         console.log(error);
         throw_floating_error(error, '500', "#c60025");
     });
+}
+
+async function getGame(){
+    const response = await fetch(currentApi + "/api/Games/" + game.id, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }
+    }).then(response => {
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw_floating_error(errorData.message, '400', "#c60025");
+            });
+        } else {
+        }
+        return response.json();
+    }).then(data => {
+        if(game.started == false){
+            localStorage.setItem("gameId", data.id);
+            //Set game board with actual data
+            const grid = data.playMat.grid;
+            for (let i = 0; i < grid.length; i++) {
+                for (let j = 0; j < grid[i].length; j++) {
+                    let item = grid[i][j];
+                    game.board.currentBoard[i][j][2] = item;
+                }
+            }
+            //Set gameCards with actual data
+        } else {
+            //The game has started. Check playerToPlay
+            if(user.id == data.playerToPlayId){
+                //We can play
+                console.log("Your turn!");
+            } else {
+                //Someone else's turn
+                console.log("Someone else's turn!");
+            }
+        }
+        //Get game again
+        setTimeout(getGame, 500);
+    }).catch(error => {
+        console.log(error);
+        throw_floating_error(error, '500', "#c60025");
+    });
+
+
 }
 window.fetchTable = fetchTable;
