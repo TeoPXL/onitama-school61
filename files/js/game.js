@@ -4,6 +4,8 @@ import { GLTFLoader } from 'https://unpkg.com/three@0.163.0/examples/jsm/loaders
 import { OrbitControls } from 'https://unpkg.com/three@0.163.0/examples/jsm/controls/OrbitControls.js';
 const container = document.getElementById('container');
 const gameId = localStorage.getItem("gameId");
+let perspective = 1;
+window.perspective = perspective;
 
 class Game {
     scene;
@@ -177,7 +179,7 @@ class Game {
             document.querySelector('.loading').remove();
         }
         document.querySelector('.game-button-start').classList.add('game-button-hidden');
-        document.querySelector('.game-button-test').classList.remove('game-button-hidden');
+        document.querySelector('.game-button-perspective').classList.remove('game-button-hidden');
     }
 };
 
