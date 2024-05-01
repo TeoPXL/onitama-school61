@@ -873,6 +873,7 @@
     </div>
     <script>
         document.querySelector('.game-button-start').addEventListener('click', async () => {
+            const currentTableId = localStorage.getItem('tableId');
             const response = await fetch(currentApi + "/api/Tables/" + currentTableId + "/start-game", {
                     method: 'POST',
                     headers: {
