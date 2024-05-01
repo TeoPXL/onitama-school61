@@ -805,31 +805,9 @@
             window.fetchTable = fetchTable;
 
             async function startGame(){
-                //Do a fetch to start the game here
-                const response = await fetch(currentApi + "/api/Tables/" + currentTableId + "/start-game", {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + token
-                    },
-                    body: JSON.stringify({ })
-                }).then(response => {
-                    if (!response.ok) {
-                        return response.json().then(errorData => {
-                            throw_floating_error(errorData.message, '400', "#c60025");
-                        });
-                    } else {
-                        document.getElementById('container').classList.remove('container-waiting');
-                        document.querySelector('.loading').remove();
-                        document.querySelector('.game-button-start').classList.add('game-button-hidden');
-                    }
-                    return response.json();
-                }).then(data => {
-                }).catch(error => {
-                    console.log(error);
-                    throw_floating_error(error, '500', "#c60025");
-                });
+                document.getElementById('container').classList.remove('container-waiting');
+                document.querySelector('.loading').remove();
+                document.querySelector('.game-button-start').classList.add('game-button-hidden');
             }
             window.startGame = startGame;
         </script>
@@ -891,7 +869,28 @@
     </div>
     <script>
         document.querySelector('.game-button-start').addEventListener('click', () => {
-            startGame();
+            const response = await fetch(currentApi + "/api/Tables/" + currentTableId + "/start-game", {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ })
+                }).then(response => {
+                    if (!response.ok) {
+                        return response.json().then(errorData => {
+                            throw_floating_error(errorData.message, '400', "#c60025");
+                        });
+                    } else {
+                        startGame();
+                    }
+                    return response.json();
+                }).then(data => {
+                }).catch(error => {
+                    console.log(error);
+                    throw_floating_error(error, '500', "#c60025");
+                });
         })
     </script>
     </main>
