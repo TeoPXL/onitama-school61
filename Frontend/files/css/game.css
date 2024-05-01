@@ -1,0 +1,220 @@
+
+.main {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    padding: 0;
+    background: var(--color-background-gradient);
+    display: flex;
+    flex-flow: column;
+    gap: 10px;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    max-width: unset;
+}
+#container {
+    width: 100%;
+    height: 60%;
+    position: relative;
+    border-radius: 1em;
+    overflow: hidden;
+    position: relative;
+    max-width: 700px;
+    max-height: 700px;
+}
+.game-controls {
+    background: var(--color-background-fade);
+    width: 100%;
+    height: 100%;
+    border-radius: 1em;
+    max-width: 700px;
+    max-height: 700px;
+    display: flex;
+    flex-flow: column;
+}
+.game-buttons {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.game-button {
+    padding: 3px;
+    padding-left: 12px;
+    padding-right: 12px;
+    background: var(--color-main);
+    color: var(--color-background);
+    border-radius: 2em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.game-button-hidden {
+    display: none;
+}
+.game-button:hover {
+    filter: brightness(0.5);
+}
+.game-cards {
+    height: calc(100% - 20px);
+    width: calc(100% - 20px);
+    margin-left: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-flow: column;
+    gap: 15px;
+    overflow-x: hidden;
+}
+.game-cards-info-list {
+    width: 300%;
+    height: 100%;
+    display: flex;
+    transition: 0.5s;
+    position: relative;
+}
+.list-show-1 {
+    transform: translateX(0);
+}
+.list-show-2 {
+    transform: translateX(-33.333%);
+}
+.list-show-3 {
+    transform: translateX(-66.666%);
+}
+.list-button-right {
+    position: absolute;
+    right: 66.66%;
+    top: 5px;
+}
+.list-button-left {
+    top: 5px;
+    position: absolute;
+    left: -5px;
+}
+.list-button i {
+    height: 25px;
+    justify-content: center;
+    align-items: center;
+}
+.list-button svg {
+    width: 40px;
+    height: 40px;
+}
+.game-cards-info {
+    height: 100%;
+    width: 100%;
+    text-align: center;  
+    display: flex;
+    flex-flow: column;
+}
+.game-cards-name {
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+.game-cards-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.game-card {
+    background: black;
+    border-radius: 1em;
+    width: 32%;
+    margin-left: 0.5%;
+    margin-right: 0.5%;
+    height: 100%;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+.container-loading::after {
+    content: 'Loading...';
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000000bd;
+    justify-content: center;
+    align-items: center;
+    font-size: 150%;
+    font-weight: 500;
+    backdrop-filter: blur(5px);
+    text-align: center;
+}
+.loading {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0, rgba(55, 55, 55, 0.2) 25%, rgba(40, 40, 40, 0.2) 75%, rgba(255, 255, 255, 0));
+    animation: shimmer 2s infinite;
+    animation-timing-function: cubic-bezier;
+    content: '';
+}
+.container-2-1::after {
+    content: '(1/2) - Waiting for other players...';
+}
+.container-2-2::after {
+    content: '(2/2) - The table is full...';
+}
+.container-4-1::after {
+    content: '(1/4) - Waiting for other players...';
+}
+.container-4-2::after {
+    content: '(2/4) - Waiting for other players...';
+}
+.container-4-3::after {
+    content: '(3/4) - Waiting for other players...';
+}
+.container-4-4::after {
+    content: '(4/4) - The table is full...';
+}
+.container-waiting::after {
+    content: 'Almost ready! Waiting for the owner to start the game...';
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #00000095;
+    justify-content: center;
+    align-items: center;
+    font-size: 150%;
+    font-weight: 500;
+    backdrop-filter: blur(5px);
+    text-align: center;
+}
+@keyframes shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+.floating-error {
+    z-index: 3;
+}
+@media screen and (min-width: 600px) {
+    .main {
+        flex-flow: row;
+    }
+    #container {
+        height: 100%;
+    }
+}
+@media screen and (min-width: 750px) {
+    #container {
+        
+    }
+}
