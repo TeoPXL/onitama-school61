@@ -34,18 +34,15 @@ floatingError.querySelector('.floating-error-button').addEventListener('click', 
     floatingError.classList.add('floating-error-hidden');
 });
 
-async function pingApi(api){
+async function pingApi(api) {
     try {
-        await fetch(api+"/ping")
-            .then(response => {
-                if (!response.ok) {
-                    return false;
-                }
-            });
+        const response = await fetch(api + "/ping");
+        if (!response.ok) {
+            return false; // or throw new Error("API Error: " + response.status);
+        }
         return true;
-        //return false;
     } catch (error) {
-        //console.log(error);
+        // Handle network errors or other exceptions
         return false;
     }
 }
