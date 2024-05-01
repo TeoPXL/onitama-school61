@@ -787,7 +787,9 @@
                             //Make sure the current player can only control his own pawns, and only when it is his turn.
                             //Move this to its own function
                         }
-                    } {
+
+                    setTimeout(fetchTable, 2500);
+                    } else if(gameId == undefined) {
                         //Check if table game exists
                         gameId = table.gameId;
                         if(gameId == "00000000-0000-0000-0000-000000000000"){
@@ -796,7 +798,7 @@
                         //Things are ok, the game has started
                         startGame();
                     }
-                    setTimeout(fetchTable, 2500);
+                    //setTimeout(fetchTable, 2500);
                 }).catch(error => {
                     console.log(error);
                     throw_floating_error(error, '500', "#c60025");
