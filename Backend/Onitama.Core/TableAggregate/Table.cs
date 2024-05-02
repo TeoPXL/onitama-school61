@@ -6,7 +6,6 @@ using Onitama.Core.PlayerAggregate.Contracts;
 using Onitama.Core.TableAggregate.Contracts;
 using Onitama.Core.UserAggregate;
 using Onitama.Core.Util;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Onitama.Core.TableAggregate;
 
