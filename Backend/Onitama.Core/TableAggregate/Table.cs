@@ -6,6 +6,7 @@ using Onitama.Core.PlayerAggregate.Contracts;
 using Onitama.Core.TableAggregate.Contracts;
 using Onitama.Core.UserAggregate;
 using Onitama.Core.Util;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Onitama.Core.TableAggregate;
 
@@ -149,7 +150,8 @@ internal class Table : ITable
             if (player.Id == userId)
             {
                 _seatedPlayers.RemoveAt(i);
-
+                _availableDirections.Insert(0, player.Direction);
+                _availableColors.Append(player.Color);
                 if (player.Id == _ownerPlayerId)
                 {
                     if(_seatedPlayers.Count > 0){
