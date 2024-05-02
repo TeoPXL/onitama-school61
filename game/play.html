@@ -161,10 +161,10 @@
                 }).then(response => {
                     if (!response.ok) {
                         return response.json().then(errorData => {
-                            throw_floating_error(errorData.message, '400', "#c60025");
+                            //throw_floating_error(errorData.message, '400', "#c60025");
                         });
                     } else {
-                        //window.location.href = "../lobby.html";
+                        window.location.href = "../lobby.html";
                         console.log(response);
                     }
                 }).then({
