@@ -179,6 +179,7 @@ class Game {
             document.querySelector('.loading').remove();
         }
         document.querySelector('.game-button-start').classList.add('game-button-hidden');
+        document.querySelector('.game-button-leave').classList.add('game-button-hidden');
         document.querySelector('.game-button-perspective').classList.remove('game-button-hidden');
     }
 };
