@@ -6,6 +6,12 @@ const container = document.getElementById('container');
 const gameId = localStorage.getItem("gameId");
 let perspective = 1;
 window.perspective = perspective;
+let hoveredCube;
+let clickedCube;
+let hovering = false;
+window.hoveredCube = hoveredCube;
+window.hovering = hovering;
+window.clickedCube = clickedCube;
 
 class Game {
     scene;
@@ -312,8 +318,13 @@ function onPointerMove(event) {
         intersects.forEach(element => {
             let object = element.object;
             if(object.name.includes(game.currentPlayer+"hover")){
+                if(game.playerToPlay != user.warriorName){
+                    return;
+                }
                 object.material.opacity = 0.8;
                 cubes++;
+                hovering = true;
+                hoveredCube = object;
             }
         });
     }
@@ -323,10 +334,45 @@ function resetHighlightedObjects() {
     // Reset opacity for all objects with the name "hover"
     game.scene.traverse(function(child) {
         if (child instanceof THREE.Mesh && child.name.includes("hover")) {
+            if(hoveredCube != undefined){
+                if(child.name == hoveredCube.name){
+                    return;
+                }
+            }
             child.material.opacity = 0.3; // Reset opacity to default
             child.material.needsUpdate = true; // Update material
+            hoveredCube = undefined;
         }
     });
+    hovering = false;
+}
+
+function onClick(){
+    if(game.playerToPlay != user.warriorName){
+        return;
+    }
+    if(hovering == true){
+        console.log(hoveredCube.name); //Click detected!
+        clickedCube = hoveredCube;
+        //Check if a card has been selected. If not, pick the first card.
+        let cardSelected = false;
+        const playerCardElements = document.querySelectorAll('.player-card');
+        for (let i = 0; i < playerCardElements.length; i++) {
+            const element = playerCardElements[i];
+            if(element.classList.contains('player-card-selected')){
+                cardSelected = true;
+            }
+        }
+        if(cardSelected == false){
+            playerCardElements.forEach(card => {
+                card.classList.remove('player-card-selected');
+                card.querySelector('.card-name').textContent = card.querySelector('.card-name').textContent.replace(" (Active)", "");
+            });
+            playerCardElements[0].classList.add('player-card-selected');
+            game.selectedCard = playerCardElements[0].querySelector('.card-name').textContent;
+            playerCardElements[0].querySelector('.card-name').textContent += " (Active)";
+        }
+    }
 }
 
 // Add event listeners for pointer and touch events
@@ -334,6 +380,7 @@ window.addEventListener('pointermove', onPointerMove, false);
 window.addEventListener('touchmove', onPointerMove, false);
 window.addEventListener('touchstart', onPointerMove, false);
 window.addEventListener('touchend', resetHighlightedObjects, false);
+window.addEventListener('click', onClick, false);
 
 async function fetchTable(){
     if(game.started == true){
