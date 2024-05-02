@@ -9,6 +9,7 @@ window.perspective = perspective;
 let hoveredCube;
 let clickedCube;
 let hovering = false;
+let lastPointerCoords = { x: 0, y: 0 };
 window.hoveredCube = hoveredCube;
 window.hovering = hovering;
 window.clickedCube = clickedCube;
@@ -297,6 +298,7 @@ function onPointerMove(event) {
         pointerX = event.clientX;
         pointerY = event.clientY;
     }
+    lastPointerCoords = { x: pointerX, y: pointerY };
     // Set the mouse coordinates in the game object
     game.mouseX = pointerX;
     game.mouseY = pointerY;
@@ -318,6 +320,7 @@ function onPointerMove(event) {
         intersects.forEach(element => {
             let object = element.object;
             if(object.name.includes(game.currentPlayer+"hover")){
+                document.body.style.cursor = 'pointer';
                 if(game.playerToPlay != user.warriorName){
                     return;
                 }
@@ -327,6 +330,7 @@ function onPointerMove(event) {
                 hoveredCube = object;
             }
         });
+    } else {
     }
 }
 
@@ -334,16 +338,18 @@ function resetHighlightedObjects() {
     // Reset opacity for all objects with the name "hover"
     game.scene.traverse(function(child) {
         if (child instanceof THREE.Mesh && child.name.includes("hover")) {
-            if(hoveredCube != undefined){
-                if(child.name == hoveredCube.name){
-                    return;
-                }
-            }
             child.material.opacity = 0.3; // Reset opacity to default
             child.material.needsUpdate = true; // Update material
+            document.body.style.cursor = 'default';
             hoveredCube = undefined;
         }
     });
+    if(clickedCube != undefined){
+        if(game.playerToPlay != user.warriorName){
+            return;
+        }
+        clickedCube.material.opacity = 0.8;
+    }
     hovering = false;
 }
 
@@ -371,10 +377,26 @@ function onClick(){
             playerCardElements[0].classList.add('player-card-selected');
             game.selectedCard = playerCardElements[0].querySelector('.card-name').textContent;
             playerCardElements[0].querySelector('.card-name').textContent += " (Active)";
+            cardSelected = true;
         }
+        resetHighlightedObjects();
+        simulatePointerMove();
+        //We need to how possible moves. Luckily for us, we don't need to rotate anything here.
+        //When we send the move to the API though, we probably will have to rotate the data.
     }
 }
+function simulatePointerMove() {
+    // Create a new MouseEvent object
+    var event = new MouseEvent('pointermove', {
+        bubbles: true,
+        cancelable: true,
+        clientX: lastPointerCoords.x,
+        clientY: lastPointerCoords.y
+    });
 
+    // Dispatch the event on the window object
+    window.dispatchEvent(event);
+}
 // Add event listeners for pointer and touch events
 window.addEventListener('pointermove', onPointerMove, false);
 window.addEventListener('touchmove', onPointerMove, false);
