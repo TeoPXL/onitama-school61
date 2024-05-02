@@ -154,9 +154,17 @@ internal class Table : ITable
                 {
                     if(_seatedPlayers.Count > 0){
                         _ownerPlayerId = _seatedPlayers[0].Id;
+                    } else
+                    {
+                        _ownerPlayerId = Guid.Empty;
                     }
-                    return;
                 }
+
+                if(_seatedPlayers.Count < _preferences.NumberOfPlayers)
+                {
+                    _hasAvailableSeat = true;
+                }
+                return;
             }
         }
         throw new InvalidOperationException("This user is not at this table.");

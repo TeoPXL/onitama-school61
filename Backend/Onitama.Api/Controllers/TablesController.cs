@@ -35,9 +35,16 @@ public class TablesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult GetTableById(Guid id)
     {
-        ITable table = _tableRepository.Get(id);
-        TableModel model = _mapper.Map<TableModel>(table);
-        return Ok(model);
+        try
+        {
+            ITable table = _tableRepository.Get(id);
+            TableModel model = _mapper.Map<TableModel>(table);
+            return Ok(model);
+        } catch (Exception ex) 
+        {
+            return BadRequest(ex.Message);
+        }
+        
     }
 
     /// <summary>

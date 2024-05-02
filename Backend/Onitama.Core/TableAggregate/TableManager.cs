@@ -50,7 +50,7 @@ internal class TableManager : ITableManager
     {
         var table = _tableRepository.Get(tableId);
         table.Leave(user.Id);
-        if(table.SeatedPlayers.Count == 0)
+        if(table.SeatedPlayers.Count < 1)
         {
             _tableRepository.Remove(tableId);
         }

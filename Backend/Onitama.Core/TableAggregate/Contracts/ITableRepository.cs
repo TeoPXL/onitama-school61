@@ -26,10 +26,6 @@ namespace Onitama.Core.TableAggregate.Contracts
         /// Finds all the tables in storage that have a seat available.
         /// </summary>
         IList<ITable> FindTablesWithAvailableSeats();
-
-        /// <summary>
-        /// Finds all the tables.
-        /// </summary>
         IList<ITable> FindTables();
     }
 }
