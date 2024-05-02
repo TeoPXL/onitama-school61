@@ -407,6 +407,9 @@ async function fetchTable(){
                 game.fillModels();
                 //Make sure the current player can only control his own pawns, and only when it is his turn.
                 //Move this to its own function
+            } else {
+                container.classList.remove('container-waiting');
+                container.classList.add('container-loading');
             }
 
         setTimeout(fetchTable, 500);
