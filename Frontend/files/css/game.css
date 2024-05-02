@@ -1,0 +1,197 @@
+
+.main {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    background: var(--color-background-gradient);
+    display: flex;
+    flex-flow: column;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    max-width: unset;
+}
+#container {
+    width: 100%;
+    height: 60%;
+    position: relative;
+    overflow: hidden;
+    position: relative;
+    max-width: 700px;
+    max-height: 700px;
+}
+.game-controls {
+    background: var(--color-background-gradient);
+    width: 100%;
+    height: 100%;
+    max-width: 700px;
+    max-height: 700px;
+    display: flex;
+    flex-flow: column;
+}
+.game-buttons {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.game-button {
+    padding: 3px;
+    padding-left: 12px;
+    padding-right: 12px;
+    background: var(--color-main);
+    color: var(--color-background);
+    border-radius: 2em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.game-button-hidden {
+    display: none;
+}
+.game-button:hover {
+    filter: brightness(0.5);
+}
+.game-cards {
+    height: calc(100% - 20px);
+    width: calc(100% - 20px);
+    margin-left: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-end;
+    overflow-x: hidden;
+}
+.game-cards-name {
+    text-align: center;
+    margin-bottom: 5px;
+}
+.game-cards-top, .game-cards-bottom, .game-cards-mid {
+    display: flex;
+    justify-content: space-between;
+}
+.game-cards-center {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+.game-cards-top, .game-cards-mid {
+    margin-bottom: 25px;
+}
+.game-card {
+    width: calc(50% - 5px);
+    height: 110px;
+    background: var(--color-background-fade);;
+    border-radius: 0.5em;
+    display: flex;
+    justify-content :Center;
+    align-items: center;
+}
+.game-card-blocks {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    grid-row-gap: 0px;
+    grid-column-gap: 0px;
+    width: 100px;
+    height: 100px;
+}
+.block {
+    width: 18px;
+    height: 18px;
+    border-style: solid;
+    border-color: #00000073;
+    border-width: 1px;
+}
+canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+.container-loading::after {
+    content: 'Loading...';
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000000bd;
+    justify-content: center;
+    align-items: center;
+    font-size: 150%;
+    font-weight: 500;
+    backdrop-filter: blur(5px);
+    text-align: center;
+}
+.loading {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0, rgba(55, 55, 55, 0.2) 25%, rgba(40, 40, 40, 0.2) 75%, rgba(255, 255, 255, 0));
+    animation: shimmer 2s infinite;
+    animation-timing-function: cubic-bezier;
+    content: '';
+}
+.container-2-1::after {
+    content: '(1/2) - Waiting for other players...';
+}
+.container-2-2::after {
+    content: '(2/2) - The table is full...';
+}
+.container-4-1::after {
+    content: '(1/4) - Waiting for other players...';
+}
+.container-4-2::after {
+    content: '(2/4) - Waiting for other players...';
+}
+.container-4-3::after {
+    content: '(3/4) - Waiting for other players...';
+}
+.container-4-4::after {
+    content: '(4/4) - The table is full...';
+}
+.container-waiting::after {
+    content: 'Almost ready! Waiting for the owner to start the game...';
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #00000095;
+    justify-content: center;
+    align-items: center;
+    font-size: 150%;
+    font-weight: 500;
+    backdrop-filter: blur(5px);
+    text-align: center;
+}
+@keyframes shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+.floating-error {
+    z-index: 3;
+}
+@media screen and (min-width: 600px) {
+    .main {
+        flex-flow: row;
+    }
+    #container {
+        height: 100%;
+    }
+}
+@media screen and (min-width: 750px) {
+    #container {
+        
+    }
+}
