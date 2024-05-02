@@ -149,7 +149,8 @@ internal class Table : ITable
             if (player.Id == userId)
             {
                 _seatedPlayers.RemoveAt(i);
-
+                _availableDirections.Insert(0, player.Direction);
+                _availableColors.Append(player.Color);
                 if (player.Id == _ownerPlayerId)
                 {
                     if(_seatedPlayers.Count > 0){
