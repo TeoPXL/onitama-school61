@@ -20,6 +20,9 @@ class Game {
     started = false;
     tableId = localStorage.getItem('tableId');
     currentPlayer;
+    playerToPlay;
+    playerCards;
+    selectedCard;
 
     constructor(playercount){
         this.board = new Board(playercount + 3);
@@ -464,14 +467,29 @@ async function getGame(){
             let extraCard = data.extraMoveCard;
             const enemyCardElements = document.querySelectorAll('.enemy-card-blocks .block');
             const playerCardElements = document.querySelectorAll('.player-card-blocks .block');
+            const extraCardElements = document.querySelectorAll('.extra-card-blocks .block');
             data.players.forEach(player => {
                 if(player.id == data.playerToPlayId && user.id != data.playerToPlayId){
                     //Set enemy name
                     enemyName = player.name;
                     enemyCards = player.moveCards;
+                } else {
+                    //Enemy is the one after us.
+                    for (let i = 0; i < data.players.length; i++) {
+                        const player = data.players[i];
+                        if(player.id == user.id){
+                            let num = i+1;
+                            if(i+1 >= data.players.length){
+                                num = 0;
+                            }
+                            enemyName = data.players[num].name;
+                            enemyCards = data.players[num].moveCards;
+                        }
+                    }
                 }
                 if(player.id == user.id){
                     playerCards = player.moveCards;
+                    game.playerCards = playerCards;
                 }
             });
             document.querySelector('.enemy-name').textContent = enemyName;
@@ -480,6 +498,7 @@ async function getGame(){
                 let count = 0;
                 for (let i = 0; i < enemyCards.length; i++) {
                     const card = enemyCards[i];
+                    document.querySelectorAll('.enemy-card-name')[i].textContent = card.name;
                     for (let j = 0; j < card.grid.length; j++) {
                         for (let k = 0; k < card.grid[j].length; k++) {
                             let block = enemyCardElements[count];
@@ -499,6 +518,11 @@ async function getGame(){
                 let count = 0;
                 for (let i = 0; i < playerCards.length; i++) {
                     const card = playerCards[i];
+                    if(document.querySelectorAll('.player-card')[i].classList.contains('player-card-selected')){
+                        document.querySelectorAll('.player-card-name')[i].textContent = card.name + " (Active)";
+                    } else {
+                        document.querySelectorAll('.player-card-name')[i].textContent = card.name;
+                    }
                     for (let j = 0; j < card.grid.length; j++) {
                         for (let k = 0; k < card.grid[j].length; k++) {
                             let block = playerCardElements[count];
@@ -514,13 +538,46 @@ async function getGame(){
                     }
                 }
             }
+            if(extraCard != undefined){
+                const card = extraCard;
+                document.querySelector('.extra-card-name').textContent = card.name;
+                let count = 0;
+                for (let j = 0; j < card.grid.length; j++) {
+                    for (let k = 0; k < card.grid[j].length; k++) {
+                        let block = extraCardElements[count];
+                        count++;
+                        if(card.grid[j][k] == "0"){
+                            block.style.background = "#37383c";
+                        } else if(card.grid[j][k] == "1"){
+                            block.style.background = extraCard.stampColor;
+                        } else {
+                            block.style.background = "black";
+                        }
+                    }
+                }
+            }
             //The game has started. Check playerToPlay
             if(user.id == data.playerToPlayId){
                 //We can play
-                console.log("Your turn!");
+                //console.log("Your turn!");
+                document.querySelectorAll('.player-card').forEach(element => {
+                    element.classList.add('player-card-pointer');
+                });
+                game.playerToPlay = user.warriorName;
             } else {
                 //Someone else's turn
-                console.log("Someone else's turn!");
+                for (let i = 0; i < data.players.length; i++) {
+                    const player = data.players[i];
+                    if(player.id == data.playerToPlayId){
+                        //console.log(player.name+"'s turn!");
+                        game.playerToPlay = player.name;
+                    }
+                }
+                document.querySelectorAll('.player-card').forEach(element => {
+                    element.classList.remove('player-card-pointer');
+                    element.classList.remove('player-card-selected');
+                    element.querySelector('.card-name').textContent = element.querySelector('.card-name').textContent.replace(" (Active)", "");
+                });
             }
         }
         //Get game again
