@@ -25,6 +25,7 @@ class Game {
     board;
     id;
     started = false;
+    loaded = false;
     tableId = localStorage.getItem('tableId');
     currentPlayer;
     playerToPlay;
@@ -104,8 +105,11 @@ class Game {
         this.camera.position.z = -12;
         this.camera.position.y = 4.5;
         this.camera.rotation.x = -0.5;
-
         animate();
+    }
+
+    showCoordinates(){
+        console.log(this.board.currentBoard);
     }
 
     fillModels() {
@@ -137,6 +141,7 @@ class Game {
             cube.name = "emptyslot"+identity;
             cube.position.x = coord[1] * 2 - 4;
             cube.position.z = coord[0] * 2 - 4;
+            this.board.currentBoard[coord[0]][coord[1]][5] = cube;
             this.scene.add(cube);
             return;
         }
@@ -176,14 +181,24 @@ class Game {
             const cube = new THREE.Mesh(cubeGeometry, material);
             cube.name = team.number + "hover"+identity;
             modelObject.add(cube);
-            self.board.currentBoard[coord[0]][coord[1]] = [identity, type, modelObject, mixer, gltf];
+            self.board.currentBoard[coord[0]][coord[1]] = [identity, type, modelObject, mixer, gltf, cube];
         }, undefined, function (error) {
             console.error(error);
         });
     }
+    rotate180(array) {
+        // Reversing the rows
+        let reversedRows = array.slice().reverse();
+        
+        // Reversing the elements in each row
+        let rotatedArray = reversedRows.map(row => row.slice().reverse());
+        
+        return rotatedArray;
+    }
 
     start(){
         game.started = true;
+        //Something needs to happen here to assign the pawns properly.
         container.classList.remove('container-waiting');
         if(document.querySelector('.loading')){
             document.querySelector('.loading').remove();
@@ -191,6 +206,8 @@ class Game {
         document.querySelector('.game-button-start').classList.add('game-button-hidden');
         document.querySelector('.game-button-leave').classList.add('game-button-hidden');
         document.querySelector('.game-button-perspective').classList.remove('game-button-hidden');
+
+        this.showCoordinates();
     }
 };
 
@@ -383,6 +400,48 @@ function onClick(){
         simulatePointerMove();
         //We need to how possible moves. Luckily for us, we don't need to rotate anything here.
         //When we send the move to the API though, we probably will have to rotate the data.
+        let startCoords;
+        let board = game.board.currentBoard;
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board[i].length; j++) {
+                const coord = [i, j];
+                const cube = board[i][j][5];
+                if(clickedCube.name == cube.name){
+                    startCoords = [i, j];
+                }
+            }
+        }
+        let selectedCard;
+        for (let i = 0; i < game.playerCards.length; i++) {
+            const card = game.playerCards[i];
+            if(card.name == game.selectedCard){
+                selectedCard = card;
+            }
+        }
+        if(startCoords != undefined && selectedCard != undefined){
+            console.log(startCoords);
+            const offset = [startCoords[0] - 2, startCoords[1] - 2];
+            let grid = selectedCard.grid;
+            if(game.currentPlayer == 1){
+                grid = game.rotate180(grid);
+            }
+            for (let i = 0; i < grid.length; i++) {
+                for (let j = 0; j < grid[i].length; j++) {
+                    let coord = [i, j];
+                    let item = grid[i][j];
+                    if(item == 1){
+                        const newCoord = [startCoords[0] - 2 + i, startCoords[1] - 2 + j];
+                        console.log(newCoord + " : " + item);
+                        if(newCoord[0] >= 0 && newCoord[1] >= 0 && newCoord[0] < 5 && newCoord[1] < 5){
+                            if(game.board.currentBoard[newCoord[0]][newCoord[1]][6].ownerId != user.id){
+                                console.log(game.board.currentBoard[newCoord[0]][newCoord[1]][6].ownerId);
+                                game.board.currentBoard[newCoord[0]][newCoord[1]][5].material.opacity = 1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 function simulatePointerMove() {
@@ -411,7 +470,7 @@ async function fetchTable(){
     if(gameId != undefined && gameId != "null"){
         game.id = gameId;
         console.log(game.id);
-        getGame();
+        await getGame();
         game.start();
         return;
     }
@@ -528,7 +587,22 @@ async function getGame(){
                     game.board.currentBoard[i][j][2] = item;
                 }
             }
+            for (let f = 0; f < data.players.length; f++) {
+                let player = data.players[f];
+                for (let i = 0; i < game.board.currentBoard.length; i++) {
+                    for (let k = 0; k < game.board.currentBoard[i].length; k++) {
+                        const coord = [i, k];
+                        let index = ((coord[0] * 5) + coord[1]) % 5;
+                        let pawn = player.school.allPawns[index];
+                        console.log(coord[0] + ", " + coord[1]);
+                        console.log(pawn.ownerId);
+                        game.board.currentBoard[coord[0]][coord[1]][6] = pawn;
+                    }
+                }
+            }
+
         } else {
+            
             //Set gameCards with actual data
             let enemyName;
             let enemyCards;
@@ -648,6 +722,23 @@ async function getGame(){
                     element.querySelector('.card-name').textContent = element.querySelector('.card-name').textContent.replace(" (Active)", "");
                 });
             }
+        }
+        if(game.loaded == false){
+            for (let f = 0; f < data.players.length; f++) {
+                const player = data.players[f];
+                for (let i = 0; i < game.board.currentBoard.length; i++) {
+                    for (let k = 0; k < game.board.currentBoard[i].length; k++) {
+                        const coord = [i, k];
+                        let index = ((coord[0] * 5) + coord[1]) % 5;
+                        let pawn = player.school.allPawns[index];
+                        console.log(coord[0] + ", " + coord[1]);
+                        console.log(pawn.ownerId);
+                        game.board.currentBoard[coord[0]][coord[1]][6] = pawn;
+                    }
+                }
+            }
+
+            game.loaded = true;
         }
         //Get game again
         setTimeout(getGame, 500);
