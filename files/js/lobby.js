@@ -5,6 +5,7 @@ const tableButtons = document.querySelectorAll('.table-button-small');
 const classicButton = document.querySelector('.classic-button');
 const topButtonLogin = document.querySelector(".top-button-login");
 const topButtonUser = document.querySelector(".top-button-user");
+localStorage.removeItem("gameId");
 
 if(user === null ){
     window.location.href = "login.html";
