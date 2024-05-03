@@ -587,20 +587,6 @@ async function getGame(){
                     game.board.currentBoard[i][j][2] = item;
                 }
             }
-            for (let f = 0; f < data.players.length; f++) {
-                let player = data.players[f];
-                for (let i = 0; i < game.board.currentBoard.length; i++) {
-                    for (let k = 0; k < game.board.currentBoard[i].length; k++) {
-                        const coord = [i, k];
-                        let index = ((coord[0] * 5) + coord[1]) % 5;
-                        let pawn = player.school.allPawns[index];
-                        console.log(coord[0] + ", " + coord[1]);
-                        console.log(pawn.ownerId);
-                        game.board.currentBoard[coord[0]][coord[1]][6] = pawn;
-                    }
-                }
-            }
-
         } else {
             
             //Set gameCards with actual data
@@ -724,17 +710,52 @@ async function getGame(){
             }
         }
         if(game.loaded == false){
+            let playerNorth;
+            let playerSouth;
+            let playerWest;
+            let playerEast;
             for (let f = 0; f < data.players.length; f++) {
-                const player = data.players[f];
-                for (let i = 0; i < game.board.currentBoard.length; i++) {
-                    for (let k = 0; k < game.board.currentBoard[i].length; k++) {
-                        const coord = [i, k];
-                        let index = ((coord[0] * 5) + coord[1]) % 5;
-                        let pawn = player.school.allPawns[index];
-                        console.log(coord[0] + ", " + coord[1]);
-                        console.log(pawn.ownerId);
-                        game.board.currentBoard[coord[0]][coord[1]][6] = pawn;
+                let player = data.players[f];
+                switch (player.direction) {
+                    case 'North':
+                        playerNorth = player;
+                        break;
+                    case 'South':
+                        playerSouth = player;
+                        break;
+                    case 'West':
+                        playerWest = player;
+                        break;
+                    case 'East':
+                        playerEast = player;
+                        break;
+                
+                    default:
+                        break;
+                }
+            }
+
+            for (let i = 0; i < game.board.currentBoard.length; i++) {
+                for (let k = 0; k < game.board.currentBoard[i].length; k++) {
+                    const coord = [i, k];
+                    let index = ((coord[0] * 5) + coord[1]) % 5;
+                    let count = game.board.currentBoard[i][k][0];
+                    let pawn;
+                    if(count == 0){
+                        break;
                     }
+                    if(count < 6){
+                        pawn = playerNorth.school.allPawns[index];
+                    } else if(count < 11){
+                        pawn = playerSouth.school.allPawns[index];
+                    } else if(count < 16){
+                        pawn = playerWest.school.allPawns[index];
+                    } else {
+                        pawn = playerEast.school.allPawns[index];
+                    }
+                    //console.log(coord[0] + ", " + coord[1]);
+                    //console.log(pawn.ownerId);
+                    game.board.currentBoard[coord[0]][coord[1]][6] = pawn;
                 }
             }
 
