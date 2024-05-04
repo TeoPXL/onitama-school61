@@ -13,6 +13,8 @@ let lastPointerCoords = { x: 0, y: 0 };
 window.hoveredCube = hoveredCube;
 window.hovering = hovering;
 window.clickedCube = clickedCube;
+let allUsers;
+let ownerUser;
 
 class Game {
     scene;
@@ -497,6 +499,34 @@ async function fetchTable(){
         //console.log(data);
 
         const table = data;
+        let usersThatLeft;
+
+        let totalPlayers = data.seatedPlayers;
+        if(allUsers != undefined){
+            if(allUsers.length != totalPlayers.length){
+                //The list of players has changed. Let's check who
+                if(allUsers.length > totalPlayers.length){
+                    //A user has left
+                    for (let i = 0; i < allUsers.length; i++) {
+                        const name = allUsers[i].name;
+                        if(totalPlayers.some(obj => obj.name != name)){
+                            console.log(name + " HAS LEFT");
+                            throw_floating_message(name + ' has left the table.', 'Notice!');
+                        }
+                    }
+                } else {
+                    //A user has joined
+                    for (let i = 0; i < totalPlayers.length; i++) {
+                        const name = totalPlayers[i].name;
+                        if(allUsers.some(obj => obj.name != name)){
+                            console.log(name + " HAS JOINED");
+                            throw_floating_message(name + ' has joined the table!', 'Notice!');
+                        }
+                    }
+                }
+            }
+        }
+        allUsers = totalPlayers;
         if(game.currentPlayer == undefined){
             //console.log("Not undefined");
             const className = "container-"+table.preferences.numberOfPlayers+"-"+table.seatedPlayers.length;
