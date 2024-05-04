@@ -9,6 +9,7 @@ window.perspective = perspective;
 let hoveredCube;
 let clickedCube;
 let openCubes = [];
+window.openCubes = openCubes;
 let hovering = false;
 let lastPointerCoords = { x: 0, y: 0 };
 window.hoveredCube = hoveredCube;
@@ -158,7 +159,7 @@ class Game {
             const material = new THREE.MeshBasicMaterial({
                 color: 0xffffff, //White
                 transparent: true, // Transparent
-                opacity: 0.1, // Opacity to 0.1
+                opacity: 0, // Opacity to 0.1
             });
 
             const cubeGeometry = new THREE.BoxGeometry(1.25, 0.05, 1.25);
@@ -318,7 +319,7 @@ function animate() {
     }
     openCubes.forEach(cube => {
         if(cube.onitamaType == 'open'){
-            cube.material.opacity = 0.1;
+            cube.material.opacity = 0;
         }
     });
     const clock = game.clock;
@@ -417,6 +418,13 @@ function onClick(){
     if(hovering == true){
         console.log(hoveredCube.name); //Click detected!
         clickedCube = hoveredCube;
+        if(hoveredCube.onitamaType == "closed"){
+            openCubes.forEach(cube => {
+                cube.onitamaType = "open";
+            });
+            simulatePointerMove();
+            return;
+        }
         //Check if a card has been selected. If not, pick the first card.
         let cardSelected = false;
         const playerCardElements = document.querySelectorAll('.player-card');
@@ -482,12 +490,12 @@ function onClick(){
                                     console.log(game.board.currentBoard[newCoord[0]][newCoord[1]][6].ownerId);
                                     game.board.currentBoard[newCoord[0]][newCoord[1]][5].onitamaType = "closed";
                                     game.board.currentBoard[newCoord[0]][newCoord[1]][5].material.opacity = 0.8;
-                                    //game.board.currentBoard[newCoord[0]][newCoord[1]][5].material.color = clickedCube.material.color;
+                                    game.board.currentBoard[newCoord[0]][newCoord[1]][5].material.color = clickedCube.material.color;
                                 }
                             } else {
                                 game.board.currentBoard[newCoord[0]][newCoord[1]][5].onitamaType = "closed";
                                 game.board.currentBoard[newCoord[0]][newCoord[1]][5].material.opacity = 0.8;
-                                //game.board.currentBoard[newCoord[0]][newCoord[1]][5].material.opacity = clickedCube.material.color;
+                                game.board.currentBoard[newCoord[0]][newCoord[1]][5].material.color = clickedCube.material.color;
                             }
                             
                         }
