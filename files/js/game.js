@@ -20,6 +20,7 @@ let ownerUser;
 let selectedPawn;
 let pawnCoords;
 let selectionCoords;
+let previousBoard;
 
 class Game {
     scene;
@@ -945,6 +946,16 @@ async function getGame(){
             }
 
             game.loaded = true;
+        } else {
+            // The game has loaded. Let's compare boards
+            let grid = data.playMat.grid;
+            if(previousBoard != undefined){
+                if(previousBoard != grid){
+                    //Board has changed, do something
+                    console.log("The board has changed!");
+                }
+            }
+            previousBoard = grid;
         }
         //Get game again
         setTimeout(getGame, 500);
