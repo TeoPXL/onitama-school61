@@ -8,6 +8,7 @@ let perspective = 1;
 window.perspective = perspective;
 let hoveredCube;
 let clickedCube;
+let openCubes = [];
 let hovering = false;
 let lastPointerCoords = { x: 0, y: 0 };
 window.hoveredCube = hoveredCube;
@@ -145,6 +146,8 @@ class Game {
             cube.position.z = coord[0] * 2 - 4;
             this.board.currentBoard[coord[0]][coord[1]][5] = cube;
             this.scene.add(cube);
+            cube.onitamaType = "open";
+            openCubes.push(cube);
             return;
         }
 
@@ -283,6 +286,11 @@ function animate() {
     if(game == undefined){
         return;
     }
+    openCubes.forEach(cube => {
+        if(cube.onitamaType == 'open'){
+            cube.material.opacity = 0.1;
+        }
+    });
     const clock = game.clock;
     const board = game.board;
     const controls = game.controls;
@@ -338,7 +346,7 @@ function onPointerMove(event) {
     if (intersects.length > 0) {
         intersects.forEach(element => {
             let object = element.object;
-            if(object.name.includes(game.currentPlayer+"hover")){
+            if(object.name.includes(game.currentPlayer+"hover") || object.onitamaType == "closed"){
                 document.body.style.cursor = 'pointer';
                 if(game.playerToPlay != user.warriorName){
                     return;
@@ -420,6 +428,10 @@ function onClick(){
                 selectedCard = card;
             }
         }
+
+        openCubes.forEach(cube => {
+            cube.onitamaType = "open";
+        });
         if(startCoords != undefined && selectedCard != undefined){
             console.log(startCoords);
             const offset = [startCoords[0] - 2, startCoords[1] - 2];
@@ -438,10 +450,14 @@ function onClick(){
                             if(game.board.currentBoard[newCoord[0]][newCoord[1]][6] != undefined){
                                 if(game.board.currentBoard[newCoord[0]][newCoord[1]][6].ownerId != user.id){
                                     console.log(game.board.currentBoard[newCoord[0]][newCoord[1]][6].ownerId);
-                                    game.board.currentBoard[newCoord[0]][newCoord[1]][5].material.opacity = 1;
+                                    game.board.currentBoard[newCoord[0]][newCoord[1]][5].onitamaType = "closed";
+                                    game.board.currentBoard[newCoord[0]][newCoord[1]][5].material.opacity = 0.8;
+                                    //game.board.currentBoard[newCoord[0]][newCoord[1]][5].material.color = clickedCube.material.color;
                                 }
                             } else {
-                                game.board.currentBoard[newCoord[0]][newCoord[1]][5].material.opacity = 1;
+                                game.board.currentBoard[newCoord[0]][newCoord[1]][5].onitamaType = "closed";
+                                game.board.currentBoard[newCoord[0]][newCoord[1]][5].material.opacity = 0.8;
+                                //game.board.currentBoard[newCoord[0]][newCoord[1]][5].material.opacity = clickedCube.material.color;
                             }
                             
                         }

@@ -232,7 +232,8 @@ canvas {
     }
 }
 @media screen and (min-width: 750px) {
-    #container {
-        
+    .toast {
+        margin-top: 12px;
+        font-size: 115%;
     }
 }
