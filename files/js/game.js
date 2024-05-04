@@ -46,11 +46,13 @@ class Game {
         this.clock = new THREE.Clock();
         this.mouse = new THREE.Vector2();
         this.scene.background = new THREE.Color(0x87ceeb);
-        this.scene.fog = new THREE.Fog( 0xcccccc, 15, 25 );
+        this.scene.fog = new THREE.Fog( 0xcccccc, 22, 32 );
         this.containerWidth = container.clientWidth;
         this.containerHeight = container.clientHeight;
         this.camera = new THREE.PerspectiveCamera(75, this.containerWidth / this.containerHeight, 0.1, 1000);
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
+        this.renderer.shadowMap.enabled = true;
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         const onWindowResize = () => {
             // Update container dimensions
             const containerWidth = container.clientWidth;
@@ -70,12 +72,26 @@ class Game {
         this.pixelRatio = window.devicePixelRatio || 1; // Get device pixel ratio
         this.renderer.setPixelRatio(this.pixelRatio);
         this.renderer.setSize(this.containerWidth, this.containerHeight, false);
-        this.ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        this.ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
         this.scene.add(this.ambientLight);
         this.sunColor = 0xF7EACD; // A warm, yellowish-orange color (Like the sun)
-        this.sunLight = new THREE.PointLight(this.sunColor, 60, 0, 1);
-        this.sunLight.position.set(10, 10, 0);
+        this.sunLight = new THREE.DirectionalLight(this.sunColor, 5);
+        this.sunLight.position.set(14, 14, 0);
+        this.sunLight.target.position.set(0, 0, 10);
+        this.scene.add( this.sunLight.target ); 
+        this.sunLight.castShadow = true;
         this.scene.add(this.sunLight);
+        //Set up shadow properties for the light
+        this.sunLight.shadow.camera.top = 20;
+        this.sunLight.shadow.camera.bottom = - 20;
+        this.sunLight.shadow.camera.left = - 20;
+        this.sunLight.shadow.camera.right = 20;
+        this.sunLight.shadow.bias = -0.005;
+        this.sunLight.shadow.mapSize.width = 2048; // default
+        this.sunLight.shadow.mapSize.height = 2048; // default
+        this.sunLight.shadow.camera.near = 0.1; // default
+        this.sunLight.shadow.camera.far = 50; // default
+        //this.scene.add( new THREE.CameraHelper( this.sunLight.shadow.camera ) );
         container.appendChild(this.renderer.domElement);
 
         //Orbit Controls
@@ -99,6 +115,14 @@ class Game {
             self.boardObject = gltf.scene;
             self.boardObject.rotation.y = 1.5708;
             self.boardObject.position.y = -0.15;
+            self.boardObject.receiveShadow = true;
+            self.boardObject.castShadow = true;
+            gltf.scene.traverse(function (child) {
+                if (child.isMesh) {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                }
+            });
             self.scene.add(gltf.scene);  
 
         }, undefined, function (error) {
@@ -168,6 +192,12 @@ class Game {
             const modelObject = gltf.scene;
             const mixer = new THREE.AnimationMixer(modelObject);
             const action = mixer.clipAction( gltf.animations[0] );
+            gltf.scene.traverse(function (child) {
+                if (child.isMesh) {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                }
+            });
             self.scene.add(gltf.scene);
             modelObject.rotation.y = orient * 1.57 * 2;
             modelObject.position.z = coord[0] * 2 - 4;
