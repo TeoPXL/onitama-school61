@@ -28,6 +28,17 @@ function throw_floating_error(error, code, color){
     floatingError.querySelector('.floating-error-subtitle').textContent = error;
     floatingError.classList.remove('floating-error-hidden');
 }
+
+function throw_floating_message(error, code){
+    if(!floatingError.classList.contains('floating-error-hidden')){
+        return;
+    }
+    console.log(error);
+    floatingError.style.background = 'var(--color-background-gradient)';
+    floatingError.querySelector('.floating-error-title').textContent = code;
+    floatingError.querySelector('.floating-error-subtitle').textContent = error;
+    floatingError.classList.remove('floating-error-hidden');
+}
 //window.throw_floating_error = throw_floating_error;
 
 floatingError.querySelector('.floating-error-button').addEventListener('click', () => {
