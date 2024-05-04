@@ -433,10 +433,15 @@ function onClick(){
                         const newCoord = [startCoords[0] - 2 + i, startCoords[1] - 2 + j];
                         console.log(newCoord + " : " + item);
                         if(newCoord[0] >= 0 && newCoord[1] >= 0 && newCoord[0] < 5 && newCoord[1] < 5){
-                            if(game.board.currentBoard[newCoord[0]][newCoord[1]][6].ownerId != user.id){
-                                console.log(game.board.currentBoard[newCoord[0]][newCoord[1]][6].ownerId);
+                            if(game.board.currentBoard[newCoord[0]][newCoord[1]][6] != undefined){
+                                if(game.board.currentBoard[newCoord[0]][newCoord[1]][6].ownerId != user.id){
+                                    console.log(game.board.currentBoard[newCoord[0]][newCoord[1]][6].ownerId);
+                                    game.board.currentBoard[newCoord[0]][newCoord[1]][5].material.opacity = 1;
+                                }
+                            } else {
                                 game.board.currentBoard[newCoord[0]][newCoord[1]][5].material.opacity = 1;
                             }
+                            
                         }
                     }
                 }
