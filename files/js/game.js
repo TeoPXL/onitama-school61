@@ -734,6 +734,7 @@ async function getGame(){
                     element.classList.add('player-card-pointer');
                 });
                 game.playerToPlay = user.warriorName;
+                document.querySelector('.toast').textContent = "Your turn";
             } else {
                 //Someone else's turn
                 for (let i = 0; i < data.players.length; i++) {
@@ -748,6 +749,7 @@ async function getGame(){
                     element.classList.remove('player-card-selected');
                     element.querySelector('.card-name').textContent = element.querySelector('.card-name').textContent.replace(" (Active)", "");
                 });
+                document.querySelector('.toast').textContent = game.playerToPlay + "'s turn";
             }
         }
         if(game.loaded == false){
