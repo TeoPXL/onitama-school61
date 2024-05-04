@@ -39,6 +39,7 @@ class Game {
     playerToPlay;
     playerCards;
     selectedCard;
+    currentPlayerObject;
 
     constructor(playercount){
         this.board = new Board(playercount + 3);
@@ -241,6 +242,11 @@ class Game {
         let x = coords[0];
         let y = coords[1];
 
+        console.log(x);
+        console.log(y);
+
+        console.log(game.currentPlayerObject.direction)
+
         console.log(id);
         console.log(cardName);
         console.log(x); //row
@@ -264,10 +270,13 @@ class Game {
             return response.json();
         }).then(data => {
             console.log(data);
+            console.log("Available row " + data.to.row + " and col " + data.to.col);
         }).catch(error => {
             console.log(error);
             //throw_floating_error(error, '500', "#c60025");
         });
+
+        console.log("We are trying to move pawn to row " + x + " and col " + y);
 
         //Then try to do the move
 
@@ -505,6 +514,8 @@ function onClick(){
             let pawn = game.board.currentBoard[pawnCoords[0]][pawnCoords[1]][6];
             console.log(pawn.id + " : " + pawn.ownerId);
             let cardName = game.selectedCard;
+
+
             game.movePawn(pawn.id, cardName, selectionCoords);
             return;
         }
@@ -563,15 +574,15 @@ function onClick(){
             //console.log(startCoords);
             const offset = [startCoords[0] - 2, startCoords[1] - 2];
             let grid = selectedCard.grid;
-            if(game.currentPlayer == 1){
-                grid = game.rotate180(grid);
+            if(game.currentPlayerObject.direction == "North"){
+                //grid = game.rotate180(grid);
             }
             for (let i = 0; i < grid.length; i++) {
                 for (let j = 0; j < grid[i].length; j++) {
                     let coord = [i, j];
                     let item = grid[i][j];
                     if(item == 1){
-                        const newCoord = [startCoords[0] - 2 + i, startCoords[1] - 2 + j];
+                        let newCoord = [startCoords[0] - 2 + i, startCoords[1] - 2 + j];
                         //console.log(newCoord + " : " + item);
                         if(newCoord[0] >= 0 && newCoord[1] >= 0 && newCoord[0] < 5 && newCoord[1] < 5){
                             if(game.board.currentBoard[newCoord[0]][newCoord[1]][6] != undefined){
@@ -694,6 +705,7 @@ async function fetchTable(){
                         game.team1 = player;
                         if(user.id == player.id){
                             game.currentPlayer = 1;
+                            game.currentPlayerObject = player;
                         }
                     } else if (player.direction == "South"){
                         player.facing = 0;
@@ -701,6 +713,7 @@ async function fetchTable(){
                         game.team2 = player;
                         if(user.id == player.id){
                             game.currentPlayer = 2;
+                            game.currentPlayerObject = player;
                             game.camera.position.set(0, 4.5, 12); // Move the camera along the negative z-axis
                             game.camera.lookAt(0, 0, 0); // Look back towards the origin
 
@@ -952,7 +965,20 @@ async function getGame(){
             if(previousBoard != undefined){
                 if(previousBoard != grid){
                     //Board has changed, do something
-                    console.log("The board has changed!");
+                    //console.log("The board has changed!");
+                    for (let i = 0; i < previousBoard.length; i++) {
+                        for (let j = 0; j < previousBoard[i].length; j++) {
+                            const item = previousBoard[i][j];
+                            for (let k = 0; k < grid.length; k++) {
+                                for (let l = 0; l < grid[k].length; l++) {
+                                    const gridItem = grid[k][l];
+                                    if(item != gridItem){
+                                        //console.log(item);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
             previousBoard = grid;
