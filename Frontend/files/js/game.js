@@ -17,6 +17,9 @@ window.hovering = hovering;
 window.clickedCube = clickedCube;
 let allUsers;
 let ownerUser;
+let selectedPawn;
+let pawnCoords;
+let selectionCoords;
 
 class Game {
     scene;
@@ -233,6 +236,63 @@ class Game {
         return rotatedArray;
     }
 
+    movePawn(id, cardName, coords){
+        let x = coords[0];
+        let y = coords[1];
+
+        console.log(id);
+        console.log(cardName);
+        console.log(x); //row
+        console.log(y); //col
+
+        //First get possible moves
+
+        fetch(currentApi + "/api/Games/" + game.id + "/possible-moves-of/" + id + "/for-card/" + cardName, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        }).then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw_floating_error(errorData.message, '405', "#c60025");
+                });
+            }
+            return response.json();
+        }).then(data => {
+            console.log(data);
+        }).catch(error => {
+            console.log(error);
+            //throw_floating_error(error, '500', "#c60025");
+        });
+
+        //Then try to do the move
+
+        const response = fetch(currentApi + "/api/games/" + game.id + "/move-pawn", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }, 
+            body: JSON.stringify({ pawnId: id, moveCardName: cardName, to: {row: x, column: y} })
+        }).then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw_floating_error(errorData.message, '405', "#c60025");
+                });
+            }
+            //return response.json();
+        }).then(data => {
+            //console.log(data);
+        }).catch(error => {
+            console.log(error);
+            //throw_floating_error(error, '500', "#c60025");
+        });
+    }
+
     start(){
         game.started = true;
         //Something needs to happen here to assign the pawns properly.
@@ -419,13 +479,32 @@ function onClick(){
     if(hovering == true){
         console.log(hoveredCube.name); //Click detected!
         clickedCube = hoveredCube;
-        if(hoveredCube.onitamaType == "closed"){
+        if(clickedCube.onitamaType == "closed"){
             openCubes.forEach(cube => {
                 cube.onitamaType = "open";
             });
             simulatePointerMove();
 
             //Now we need to actually do the move
+            let pawnCube = selectedPawn;
+            let selectCube;
+            let selectedPosition;
+            for (let i = 0; i < game.board.currentBoard.length; i++) {
+                for (let j = 0; j < game.board.currentBoard[i].length; j++) {
+                    let item = game.board.currentBoard[i][j][5];
+                    if(item == clickedCube){
+                        selectCube = item;
+                        selectedPosition = [i, j];
+                    }
+                }
+            }
+            selectionCoords = selectedPosition;
+            console.log(pawnCoords);
+            console.log(selectionCoords);
+            let pawn = game.board.currentBoard[pawnCoords[0]][pawnCoords[1]][6];
+            console.log(pawn.id + " : " + pawn.ownerId);
+            let cardName = game.selectedCard;
+            game.movePawn(pawn.id, cardName, selectionCoords);
             return;
         }
         //Check if a card has been selected. If not, pick the first card.
@@ -472,6 +551,8 @@ function onClick(){
 
         if(hoveredCube.onitamaType == "pawn"){
             console.log(startCoords);
+            selectedPawn = hoveredCube;
+            pawnCoords = startCoords;
         }
 
         openCubes.forEach(cube => {
