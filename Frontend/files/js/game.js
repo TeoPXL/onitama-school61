@@ -216,6 +216,7 @@ class Game {
             const cubeGeometry = new THREE.BoxGeometry(1.25, 0.05, 1.25);
             const cube = new THREE.Mesh(cubeGeometry, material);
             cube.name = team.number + "hover"+identity;
+            cube.onitamaType = "pawn";
             modelObject.add(cube);
             self.board.currentBoard[coord[0]][coord[1]] = [identity, type, modelObject, mixer, gltf, cube];
         }, undefined, function (error) {
@@ -423,6 +424,8 @@ function onClick(){
                 cube.onitamaType = "open";
             });
             simulatePointerMove();
+
+            //Now we need to actually do the move
             return;
         }
         //Check if a card has been selected. If not, pick the first card.
@@ -467,11 +470,15 @@ function onClick(){
             }
         }
 
+        if(hoveredCube.onitamaType == "pawn"){
+            console.log(startCoords);
+        }
+
         openCubes.forEach(cube => {
             cube.onitamaType = "open";
         });
         if(startCoords != undefined && selectedCard != undefined){
-            console.log(startCoords);
+            //console.log(startCoords);
             const offset = [startCoords[0] - 2, startCoords[1] - 2];
             let grid = selectedCard.grid;
             if(game.currentPlayer == 1){
@@ -483,11 +490,11 @@ function onClick(){
                     let item = grid[i][j];
                     if(item == 1){
                         const newCoord = [startCoords[0] - 2 + i, startCoords[1] - 2 + j];
-                        console.log(newCoord + " : " + item);
+                        //console.log(newCoord + " : " + item);
                         if(newCoord[0] >= 0 && newCoord[1] >= 0 && newCoord[0] < 5 && newCoord[1] < 5){
                             if(game.board.currentBoard[newCoord[0]][newCoord[1]][6] != undefined){
                                 if(game.board.currentBoard[newCoord[0]][newCoord[1]][6].ownerId != user.id){
-                                    console.log(game.board.currentBoard[newCoord[0]][newCoord[1]][6].ownerId);
+                                    //console.log(game.board.currentBoard[newCoord[0]][newCoord[1]][6].ownerId);
                                     game.board.currentBoard[newCoord[0]][newCoord[1]][5].onitamaType = "closed";
                                     game.board.currentBoard[newCoord[0]][newCoord[1]][5].material.opacity = 0.8;
                                     game.board.currentBoard[newCoord[0]][newCoord[1]][5].material.color = clickedCube.material.color;
