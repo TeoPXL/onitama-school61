@@ -298,8 +298,11 @@ internal class Game : IGame
                 WinnerPlayerId = playerId;
                 WinnerMethod = "Way of the stone";
             }
-                
+
         }
+
+        player.MoveCards.Remove(moveCard);
+        player.MoveCards.Add(ExtraMoveCard);
         ExtraMoveCard = moveCard;
         PlayerToPlayId = this.GetNextOpponent(playerId).Id;
     }
