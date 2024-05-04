@@ -501,6 +501,12 @@ async function fetchTable(){
         const table = data;
         let usersThatLeft;
 
+        if(table.ownerPlayerId != user.id){
+            document.querySelector('.game-button-start').classList.add('game-button-hidden');
+        } else {
+            document.querySelector('.game-button-start').classList.remove('game-button-hidden');
+        }
+
         let totalPlayers = data.seatedPlayers;
         if(allUsers != undefined){
             if(allUsers.length != totalPlayers.length){
