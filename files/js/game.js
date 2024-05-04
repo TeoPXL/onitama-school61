@@ -270,7 +270,7 @@ class Game {
             return response.json();
         }).then(data => {
             console.log(data);
-            console.log("Available row " + data.to.row + " and col " + data.to.col);
+            console.log("Available row " + data[0].to.row + " and col " + data[0].to.col);
         }).catch(error => {
             console.log(error);
             //throw_floating_error(error, '500', "#c60025");
@@ -963,7 +963,7 @@ async function getGame(){
             // The game has loaded. Let's compare boards
             let grid = data.playMat.grid;
             if(previousBoard != undefined){
-                if(previousBoard != grid){
+                if(previousBoard != grid && 1 == 2){ //Disabled this
                     //Board has changed, do something
                     //console.log("The board has changed!");
                     for (let i = 0; i < previousBoard.length; i++) {
