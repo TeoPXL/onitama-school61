@@ -238,6 +238,30 @@ class Game {
         return rotatedArray;
     }
 
+    async getPossibleCoordinate(pawnId){
+        await fetch(currentApi + "/api/Games/" + game.id + "/possible-moves-of/" + pawnId + "/for-card/" + this.selectedCard, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        }).then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw_floating_error(errorData.message, '405', "#c60025");
+                });
+            }
+            return response.json();
+        }).then(data => {
+            console.log(data);
+            console.log("Available row " + data[0].to.row + " and col " + data[0].to.column);
+        }).catch(error => {
+            console.log(error);
+            //throw_floating_error(error, '500', "#c60025");
+        });
+    }
+
     movePawn(id, cardName, coords){
         let x = coords[0];
         let y = coords[1];
@@ -540,7 +564,7 @@ function onClick(){
         }
         resetHighlightedObjects();
         simulatePointerMove();
-        //We need to how possible moves. Luckily for us, we don't need to rotate anything here.
+        //We need to know possible moves. Luckily for us, we don't need to rotate anything here.
         //When we send the move to the API though, we probably will have to rotate the data.
         let startCoords;
         let board = game.board.currentBoard;
@@ -562,7 +586,8 @@ function onClick(){
         }
 
         if(hoveredCube.onitamaType == "pawn"){
-            console.log(startCoords);
+            console.log(startCoords[0]);
+            console.log(4 - startCoords[1]);
             selectedPawn = hoveredCube;
             pawnCoords = startCoords;
         }
@@ -571,37 +596,10 @@ function onClick(){
             cube.onitamaType = "open";
         });
         if(startCoords != undefined && selectedCard != undefined){
-            //console.log(startCoords);
-            const offset = [startCoords[0] - 2, startCoords[1] - 2];
-            let grid = selectedCard.grid;
-            if(game.currentPlayerObject.direction == "North"){
-                //grid = game.rotate180(grid);
-            }
-            for (let i = 0; i < grid.length; i++) {
-                for (let j = 0; j < grid[i].length; j++) {
-                    let coord = [i, j];
-                    let item = grid[i][j];
-                    if(item == 1){
-                        let newCoord = [startCoords[0] - 2 + i, startCoords[1] - 2 + j];
-                        //console.log(newCoord + " : " + item);
-                        if(newCoord[0] >= 0 && newCoord[1] >= 0 && newCoord[0] < 5 && newCoord[1] < 5){
-                            if(game.board.currentBoard[newCoord[0]][newCoord[1]][6] != undefined){
-                                if(game.board.currentBoard[newCoord[0]][newCoord[1]][6].ownerId != user.id){
-                                    //console.log(game.board.currentBoard[newCoord[0]][newCoord[1]][6].ownerId);
-                                    game.board.currentBoard[newCoord[0]][newCoord[1]][5].onitamaType = "closed";
-                                    game.board.currentBoard[newCoord[0]][newCoord[1]][5].material.opacity = 0.8;
-                                    game.board.currentBoard[newCoord[0]][newCoord[1]][5].material.color = clickedCube.material.color;
-                                }
-                            } else {
-                                game.board.currentBoard[newCoord[0]][newCoord[1]][5].onitamaType = "closed";
-                                game.board.currentBoard[newCoord[0]][newCoord[1]][5].material.opacity = 0.8;
-                                game.board.currentBoard[newCoord[0]][newCoord[1]][5].material.color = clickedCube.material.color;
-                            }
-                            
-                        }
-                    }
-                }
-            }
+            const pawnId = board[startCoords[0]][startCoords[1]][6].id;
+            console.log(pawnId);
+            const coordinates = game.getPossibleCoordinate(pawnId);
+            console.log(coordinates);
         }
     }
 }
@@ -824,14 +822,15 @@ async function getGame(){
                 let count = 0;
                 for (let i = 0; i < enemyCards.length; i++) {
                     const card = enemyCards[i];
+                    const grid = enemyCards[i].grid.reverse();
                     document.querySelectorAll('.enemy-card-name')[i].textContent = card.name;
-                    for (let j = 0; j < card.grid.length; j++) {
-                        for (let k = 0; k < card.grid[j].length; k++) {
+                    for (let j = 0; j < grid.length; j++) {
+                        for (let k = 0; k < grid[j].length; k++) {
                             let block = enemyCardElements[count];
                             count++;
-                            if(card.grid[j][k] == "0"){
+                            if(grid[j][k] == "0"){
                                 block.style.background = "#37383c";
-                            } else if(card.grid[j][k] == "1"){
+                            } else if(grid[j][k] == "1"){
                                 block.style.background = enemyCards[i].stampColor;
                             } else {
                                 block.style.background = "black";
@@ -844,18 +843,19 @@ async function getGame(){
                 let count = 0;
                 for (let i = 0; i < playerCards.length; i++) {
                     const card = playerCards[i];
+                    const grid = playerCards[i].grid.reverse();
                     if(document.querySelectorAll('.player-card')[i].classList.contains('player-card-selected')){
                         document.querySelectorAll('.player-card-name')[i].textContent = card.name + " (Active)";
                     } else {
                         document.querySelectorAll('.player-card-name')[i].textContent = card.name;
                     }
-                    for (let j = 0; j < card.grid.length; j++) {
-                        for (let k = 0; k < card.grid[j].length; k++) {
+                    for (let j = 0; j < grid.length; j++) {
+                        for (let k = 0; k < grid[j].length; k++) {
                             let block = playerCardElements[count];
                             count++;
-                            if(card.grid[j][k] == "0"){
+                            if(grid[j][k] == "0"){
                                 block.style.background = "#37383c";
-                            } else if(card.grid[j][k] == "1"){
+                            } else if(grid[j][k] == "1"){
                                 block.style.background = playerCards[i].stampColor;
                             } else {
                                 block.style.background = "black";
@@ -866,15 +866,16 @@ async function getGame(){
             }
             if(extraCard != undefined){
                 const card = extraCard;
+                const grid = extraCard.grid.reverse();
                 document.querySelector('.extra-card-name').textContent = card.name;
                 let count = 0;
-                for (let j = 0; j < card.grid.length; j++) {
-                    for (let k = 0; k < card.grid[j].length; k++) {
+                for (let j = 0; j < grid.length; j++) {
+                    for (let k = 0; k < grid[j].length; k++) {
                         let block = extraCardElements[count];
                         count++;
-                        if(card.grid[j][k] == "0"){
+                        if(grid[j][k] == "0"){
                             block.style.background = "#37383c";
-                        } else if(card.grid[j][k] == "1"){
+                        } else if(grid[j][k] == "1"){
                             block.style.background = extraCard.stampColor;
                         } else {
                             block.style.background = "black";
@@ -954,7 +955,7 @@ async function getGame(){
                     }
                     //console.log(coord[0] + ", " + coord[1]);
                     //console.log(pawn.ownerId);
-                    game.board.currentBoard[coord[0]][coord[1]][6] = pawn;
+                    game.board.currentBoard[coord[0]][4 - coord[1]][6] = pawn;
                 }
             }
 
