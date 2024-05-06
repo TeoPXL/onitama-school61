@@ -951,20 +951,14 @@ async function getGame(){
             // The game has loaded. Let's compare boards
             let grid = data.playMat.grid;
             if(previousBoard != undefined){
-                if(previousBoard != grid && 1 == 2){ //Disabled this
-                    //Board has changed, do something
-                    //console.log("The board has changed!");
-                    for (let i = 0; i < previousBoard.length; i++) {
-                        for (let j = 0; j < previousBoard[i].length; j++) {
-                            const item = previousBoard[i][j];
-                            for (let k = 0; k < grid.length; k++) {
-                                for (let l = 0; l < grid[k].length; l++) {
-                                    const gridItem = grid[k][l];
-                                    if(item != gridItem){
-                                        //console.log(item);
-                                    }
-                                }
-                            }
+                const changes = detectChanges(previousBoard, grid);
+                if(changes.length > 0){
+                    console.log(changes);
+                    //Now do changes
+                    for (let i = 0; i < changes.length; i++) {
+                        const change = changes[i];
+                        if(change.type = "moved"){
+                            //Move the pawn
                         }
                     }
                 }
@@ -981,3 +975,40 @@ async function getGame(){
 
 }
 window.fetchTable = fetchTable;
+
+function detectChanges(oldArray, newArray) {
+    const changes = [];
+
+    // Iterate through each element in the arrays
+    for (let i = 0; i < oldArray.length; i++) {
+        for (let j = 0; j < oldArray[i].length; j++) {
+            // If there's no object in the old array but there is one in the new array
+            if (!oldArray[i][j] && newArray[i][j]) {
+                changes.push({
+                    type: 'added',
+                    object: newArray[i][j],
+                    to: { row: i, column: j }
+                });
+            }
+            // If there's an object in the old array but not in the new array
+            else if (oldArray[i][j] && !newArray[i][j]) {
+                changes.push({
+                    type: 'removed',
+                    object: oldArray[i][j],
+                    from: { row: i, column: j }
+                });
+            }
+            // If there's an object in both arrays but with different properties
+            else if (oldArray[i][j] && newArray[i][j] && JSON.stringify(oldArray[i][j]) !== JSON.stringify(newArray[i][j])) {
+                changes.push({
+                    type: 'moved',
+                    object: newArray[i][j],
+                    from: { row: i, column: j },
+                    to: { row: newArray[i][j].Position.Row, column: newArray[i][j].Position.Column }
+                });
+            }
+        }
+    }
+
+    return changes;
+}
