@@ -239,6 +239,7 @@ class Game {
     }
 
     async getPossibleCoordinate(pawnId){
+        let coordinates;
         await fetch(currentApi + "/api/Games/" + game.id + "/possible-moves-of/" + pawnId + "/for-card/" + this.selectedCard, {
             method: 'GET',
             headers: {
@@ -256,10 +257,13 @@ class Game {
         }).then(data => {
             console.log(data);
             console.log("Available row " + data[0].to.row + " and col " + data[0].to.column);
+            coordinates = data;
         }).catch(error => {
             console.log(error);
             //throw_floating_error(error, '500', "#c60025");
         });
+
+        return coordinates;
     }
 
     movePawn(id, cardName, coords){
@@ -275,30 +279,6 @@ class Game {
         console.log(cardName);
         console.log(x); //row
         console.log(y); //col
-
-        //First get possible moves
-
-        fetch(currentApi + "/api/Games/" + game.id + "/possible-moves-of/" + id + "/for-card/" + cardName, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
-            }
-        }).then(response => {
-            if (!response.ok) {
-                return response.json().then(errorData => {
-                    throw_floating_error(errorData.message, '405', "#c60025");
-                });
-            }
-            return response.json();
-        }).then(data => {
-            console.log(data);
-            console.log("Available row " + data[0].to.row + " and col " + data[0].to.col);
-        }).catch(error => {
-            console.log(error);
-            //throw_floating_error(error, '500', "#c60025");
-        });
 
         console.log("We are trying to move pawn to row " + x + " and col " + y);
 
@@ -506,7 +486,7 @@ function resetHighlightedObjects() {
     hovering = false;
 }
 
-function onClick(){
+async function onClick(){
     if(game.playerToPlay != user.warriorName){
         return;
     }
@@ -532,14 +512,14 @@ function onClick(){
                     }
                 }
             }
-            selectionCoords = selectedPosition;
+            selectionCoords = [selectedPosition[0], 4 - selectedPosition[1]];
             console.log(pawnCoords);
             console.log(selectionCoords);
             let pawn = game.board.currentBoard[pawnCoords[0]][pawnCoords[1]][6];
             console.log(pawn.id + " : " + pawn.ownerId);
             let cardName = game.selectedCard;
 
-
+            console.log(selectionCoords);
             game.movePawn(pawn.id, cardName, selectionCoords);
             return;
         }
@@ -598,8 +578,15 @@ function onClick(){
         if(startCoords != undefined && selectedCard != undefined){
             const pawnId = board[startCoords[0]][startCoords[1]][6].id;
             console.log(pawnId);
-            const coordinates = game.getPossibleCoordinate(pawnId);
-            console.log(coordinates);
+            const coordinates = await game.getPossibleCoordinate(pawnId);
+            coordinates.forEach(el => {
+                let row = el.to.row;
+                let column = el.to.column;
+                console.log(row + " : " + column);
+                board[row][4 - column][5].onitamaType = "closed";
+                board[row][4 - column][5].material.color = hoveredCube.material.color;
+                board[row][4 - column][5].material.opacity = 0.8;
+            });
         }
     }
 }
