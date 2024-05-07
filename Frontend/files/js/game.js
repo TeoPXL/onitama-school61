@@ -4,6 +4,7 @@ import { GLTFLoader } from 'https://unpkg.com/three@0.163.0/examples/jsm/loaders
 import { OrbitControls } from 'https://unpkg.com/three@0.163.0/examples/jsm/controls/OrbitControls.js';
 const container = document.getElementById('container');
 const gameId = localStorage.getItem("gameId");
+let previousBoard;
 let perspective = 1;
 window.perspective = perspective;
 let hoveredCube;
@@ -20,9 +21,6 @@ let ownerUser;
 let selectedPawn;
 let pawnCoords;
 let selectionCoords;
-let previousBoard = [
-    [], [], [], [], []
-];
 
 class Game {
     scene;
@@ -934,6 +932,14 @@ async function getGame(){
             }
         }
         if(game.loaded == false){
+
+
+            if(localStorage.getItem("previousBoard"+data.id) == null){
+                localStorage.setItem("previousBoard"+data.id, JSON.stringify(data.playMat.grid));
+            } else {
+                previousBoard = JSON.parse(localStorage.getItem("previousBoard"+data.id));
+            }
+
             let playerNorth;
             let playerSouth;
             let playerWest;
