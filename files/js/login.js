@@ -53,6 +53,8 @@ loginButton.addEventListener('click', () => {
         window.location.href = "lobby.html";
     }).catch(error => {
         console.log(error);
+        console.log("error");
+        throw_error("Your login details were incorrect.");
     });
 
 });
