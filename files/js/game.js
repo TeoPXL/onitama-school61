@@ -325,14 +325,62 @@ class Game {
                     if(el[6].id == pawnId){
                         console.log("Pawn found at " + i + ", " + j);
                         console.log(el[2].position);
-                        el[2].position.x = ((to[0]) - 2) * 2;
-                        el[2].position.z = ((to[1]) - 2) * 2;
+                        let x = ((to[0]) - 2) * 2;
+                        let z = ((to[1]) - 2) * 2;
+                        let mixer = el[3];
+                        let action = mixer.clipAction(el[4].animations[1]);
+                        mixer.timeScale = 1.4; //Speed up the jump animation. It's a little slow
+                        action.setLoop(THREE.LoopOnce); //Only jump one time
+                        action.clampWhenFinished = true;
+                        action.setDuration(el[4].animations[1].duration);
+                        action.play();
+
+                        setTimeout(game.smoothTransition.bind(null, el[2], x, 0, z, 650), 420); //Transition to new position
+                        // Listen for when the animation finishes
+                        mixer.addEventListener('finished', function(){
+                            let loopAction = mixer.clipAction(el[4].animations[0]);
+                            // Set animation to loop
+                            loopAction.setLoop(THREE.LoopRepeat);
+                            // Start playing idle animation
+                            loopAction.play();
+                        });
                     }
                 }
                 
             }
         }
 
+    }
+
+    smoothTransition(object, endX, endY, endZ, duration) {
+        const startX = object.position.x;
+        const startY = object.position.y;
+        const startZ = object.position.z;
+        const startTime = performance.now();
+    
+        function updatePosition() {
+            const elapsed = performance.now() - startTime;
+            const progress = elapsed / duration;
+    
+            if (progress >= 1) {
+                object.position.x = endX;
+                object.position.y = endY;
+                object.position.z = endZ;
+                return;
+            }
+    
+            object.position.x = game.lerp(startX, endX, progress);
+            object.position.y = game.lerp(startY, endY, progress);
+            object.position.z = game.lerp(startZ, endZ, progress);
+    
+            requestAnimationFrame(updatePosition);
+        }
+    
+        updatePosition();
+    }
+    
+    lerp(start, end, progress) {
+        return start + (end - start) * progress;
     }
 
     start(){
