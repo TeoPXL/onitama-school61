@@ -307,6 +307,33 @@ class Game {
         });
     }
 
+    movePawn3D(change){
+        let from = [change.from.row, 4 - change.from.column]; //Starting coordinates
+        console.log(from);
+        let to = [4 - change.to.column, change.to.row]; //Ending coordinates
+        let pawnId = change.object.Id;
+        console.log("POSITION")
+        const board = this.board.currentBoard;
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board[i].length; j++) {
+                const el = board[i][j];
+                if(el[6] != undefined){
+                    if(el[6].id == pawnId){
+                        console.log("Pawn found at " + i + ", " + j);
+                        console.log(el[2].position);
+                        el[2].position.x = ((to[0]) - 2) * 2;
+                        el[2].position.z = ((to[1]) - 2) * 2;
+                        el[2].position.y = 0.01;
+                        el[5].scale.x = 1.01;
+                        el[5].scale.z = 1.01;
+                    }
+                }
+                
+            }
+        }
+
+    }
+
     start(){
         game.started = true;
         //Something needs to happen here to assign the pawns properly.
@@ -959,6 +986,7 @@ async function getGame(){
                         const change = changes[i];
                         if(change.type = "moved"){
                             //Move the pawn
+                            game.movePawn3D(change);
                         }
                     }
                 }
