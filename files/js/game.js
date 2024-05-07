@@ -20,7 +20,9 @@ let ownerUser;
 let selectedPawn;
 let pawnCoords;
 let selectionCoords;
-let previousBoard;
+let previousBoard = [
+    [], [], [], [], []
+];
 
 class Game {
     scene;
@@ -222,6 +224,10 @@ class Game {
             const cube = new THREE.Mesh(cubeGeometry, material);
             cube.name = team.number + "hover"+identity;
             cube.onitamaType = "pawn";
+
+            cube.scale.y = 1.01;
+            cube.scale.x = 1.01;
+            cube.scale.z = 1.01;
             modelObject.add(cube);
             self.board.currentBoard[coord[0]][coord[1]] = [identity, type, modelObject, mixer, gltf, cube];
         }, undefined, function (error) {
@@ -323,9 +329,6 @@ class Game {
                         console.log(el[2].position);
                         el[2].position.x = ((to[0]) - 2) * 2;
                         el[2].position.z = ((to[1]) - 2) * 2;
-                        el[2].position.y = 0.01;
-                        el[5].scale.x = 1.01;
-                        el[5].scale.z = 1.01;
                     }
                 }
                 
@@ -337,6 +340,7 @@ class Game {
     start(){
         game.started = true;
         //Something needs to happen here to assign the pawns properly.
+        //We're going to check the pawns' position and assign them a value.
         container.classList.remove('container-waiting');
         if(document.querySelector('.loading')){
             document.querySelector('.loading').remove();
