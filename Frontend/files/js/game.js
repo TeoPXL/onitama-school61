@@ -805,7 +805,9 @@ async function getGame(){
             //Set gameCards with actual data
             let enemyName;
             let enemyCards;
+            let enemyColor;
             let playerCards;
+            let playerColor;
             let extraCard = data.extraMoveCard;
             const enemyCardElements = document.querySelectorAll('.enemy-card-blocks .block');
             const playerCardElements = document.querySelectorAll('.player-card-blocks .block');
@@ -815,6 +817,7 @@ async function getGame(){
                     //Set enemy name
                     enemyName = player.name;
                     enemyCards = player.moveCards;
+                    enemyColor = player.color;
                 } else {
                     //Enemy is the one after us.
                     for (let i = 0; i < data.players.length; i++) {
@@ -826,16 +829,19 @@ async function getGame(){
                             }
                             enemyName = data.players[num].name;
                             enemyCards = data.players[num].moveCards;
+                            enemyColor = data.players[num].color;
                         }
                     }
                 }
                 if(player.id == user.id){
                     playerCards = player.moveCards;
+                    playerColor = player.color;
                     game.playerCards = playerCards;
                 }
             });
             document.querySelector('.enemy-name').textContent = enemyName;
-            
+            document.querySelector('.enemy-name').style.background = enemyColor;
+            document.querySelector('.player-name').style.background = playerColor;
             if(enemyCards != undefined){
                 let count = 0;
                 for (let i = 0; i < enemyCards.length; i++) {
