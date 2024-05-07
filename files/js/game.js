@@ -328,22 +328,25 @@ class Game {
                         let x = ((to[0]) - 2) * 2;
                         let z = ((to[1]) - 2) * 2;
                         let mixer = el[3];
+                        console.log(el[4]);
                         let action = mixer.clipAction(el[4].animations[1]);
                         mixer.timeScale = 1.4; //Speed up the jump animation. It's a little slow
                         action.setLoop(THREE.LoopOnce); //Only jump one time
                         action.clampWhenFinished = true;
                         action.setDuration(el[4].animations[1].duration);
                         action.play();
-
+                        //Maybe do it a bit short of the position if we need to attack
                         setTimeout(game.smoothTransition.bind(null, el[2], x, 0, z, 650), 420); //Transition to new position
                         // Listen for when the animation finishes
                         mixer.addEventListener('finished', function(){
+                            //If we need to do an attack, we should probably do it here.
                             let loopAction = mixer.clipAction(el[4].animations[0]);
                             // Set animation to loop
                             loopAction.setLoop(THREE.LoopRepeat);
                             // Start playing idle animation
                             loopAction.play();
                         });
+                        //After the attack, we can move the remaining space
                     }
                 }
                 
