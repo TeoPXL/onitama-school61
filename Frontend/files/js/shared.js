@@ -67,7 +67,7 @@ async function checkApis(){
 
         const remoteResponse = await pingApi(remoteApi);
         if(remoteResponse == true){
-            remoteApiExists = true;
+            remoteApiExists = true; //Enable
         } else {
             console.log("RESPONSE: "+remoteResponse);
         }
