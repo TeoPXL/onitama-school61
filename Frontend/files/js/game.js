@@ -672,7 +672,7 @@ async function onClick(){
 }
 function simulatePointerMove() {
     // Create a new MouseEvent object
-    var event = new MouseEvent('pointermove', {
+    let event = new MouseEvent('pointermove', {
         bubbles: true,
         cancelable: true,
         clientX: lastPointerCoords.x,
