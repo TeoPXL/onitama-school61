@@ -56,7 +56,7 @@ a {
     padding-right: 10px;
 }
 
-.top-button {
+.top-button, .top-button-logout {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -71,7 +71,8 @@ a {
     transition: 0.2s;
 }
 
-.top-button:hover {
+
+.top-button:hover, .top-button-logout:hover {
     filter: brightness(0.5);
 }
 
