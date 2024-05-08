@@ -6,13 +6,14 @@ const confirmPasswordInput = document.getElementById('confirm-password-input');
 const errorMessage = document.querySelector('.error-message');
 const errorSubtitle = document.querySelector('.error-subtitle');
 const errorButton = document.querySelector('.error-button');
+let success = false;
 
 function throw_error(error) {
     errorSubtitle.textContent = error;
     errorMessage.classList.remove('invisible');
 }
 
-loginButton.addEventListener('click', () => { 
+loginButton.addEventListener('click', async () => { 
     const email = emailInput.value;
     const password = passwordInput.value;
     const confirmPassword = confirmPasswordInput.value;
@@ -40,7 +41,7 @@ loginButton.addEventListener('click', () => {
         return;
     }
 
-    const response = fetch(currentApi + "/api/Authentication/register", {
+    const response = await fetch(currentApi + "/api/Authentication/register", {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -52,15 +53,21 @@ loginButton.addEventListener('click', () => {
             return response.json().then(errorData => {
                 throw_error(errorData.message);
             });
+        } else {
+            success = true;
         }
     }).then(() => {
-        localStorage.setItem("email", email);
-        window.location.href = "login.html";
     }).catch(error => {
         console.log(error);
     });
 
 
+    
+    console.log(success);
+    if(success == true){
+        localStorage.setItem("email", email);
+        window.location.href = "login.html";
+    }
 });
 
 errorButton.addEventListener('click', () => {
