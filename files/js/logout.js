@@ -1,7 +1,6 @@
 const logoutButton = document.querySelector('.top-button-logout');
 
-function logout(event) {
-
+logoutButton.addEventListener('click', (event) => {
     event.preventDefault();
 
     localStorage.removeItem('user');
@@ -9,6 +8,7 @@ function logout(event) {
     localStorage.removeItem('email'); 
 
     window.location.href = "index.html";
-}
-logoutButton.addEventListener('click', logout);
+});
+
+
 
