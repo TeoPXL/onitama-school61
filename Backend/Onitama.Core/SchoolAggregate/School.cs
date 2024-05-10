@@ -90,23 +90,16 @@ internal class School : ISchool
 
     public void RemovePawn(IPawn pawnToRemove)
     {
-        // Find the index of the pawn to remove
-        int indexToRemove = Array.IndexOf(_allPawns, pawnToRemove);
-
-        // If the pawn is found, remove it
-        if (indexToRemove != -1)
+        int index = Array.IndexOf(AllPawns, pawnToRemove);
+        if (index != -1)
         {
-            // Create a new array with one less element
-            IPawn[] newArray = new IPawn[_allPawns.Length - 1];
+            AllPawns[index] = null;
+        }
 
-            // Copy elements before the index
-            Array.Copy(_allPawns, 0, newArray, 0, indexToRemove);
-
-            // Copy elements after the index
-            Array.Copy(_allPawns, indexToRemove + 1, newArray, indexToRemove, _allPawns.Length - indexToRemove - 1);
-
-            // Update the AllPawns property
-            _allPawns = newArray;
+        index = Array.IndexOf(Students, pawnToRemove);
+        if (index != -1)
+        {
+            Students[index] = null;
         }
     }
 }

@@ -143,7 +143,7 @@ internal class Game : IGame
 
         for (int i = 0; i < player.School.AllPawns.Length; i++)
         {
-            if (player.School.AllPawns[i].Id == pawnId)
+            if (player.School.AllPawns[i] != null && player.School.AllPawns[i].Id == pawnId)
             {
                 pawn = player.School.AllPawns[i];
             }
@@ -297,26 +297,18 @@ internal class Game : IGame
             {
                 WinnerPlayerId = playerId;
                 WinnerMethod = "Way of the stone";
-            } //Remove a pawn if it is taken
+            }
             else if (capturedPawn.Type == PawnType.Student)
             {
+                //Remove pawn
                 var capturedPlayerId = capturedPawn.OwnerId;
-
                 for (int i = 0; i < _players.Length; i++)
                 {
                     if (_players[i].Id == capturedPlayerId)
                     {
-                        for (int j = 0; j < _players[i].School.AllPawns.Length; j++)
-                        {
-                            if (_players[i].School.AllPawns[j].Id == capturedPawn.Id)
-                            {
-                                _players[i].School.RemovePawn(_players[i].School.AllPawns[j]);
-                            }
-                        }
-
+                        _players[i].School.RemovePawn(capturedPawn);
                     }
                 }
-
             }
 
 
