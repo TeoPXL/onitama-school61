@@ -9,6 +9,7 @@ const floatingError = document.querySelector('.floating-error');
 //User settings
 const userSettings = {
     "force-remote-api": localStorage.getItem('force-remote-api'),
+    "force-dev-api": localStorage.getItem('force-dev-api'),
     "simulate-offline-mode": localStorage.getItem('simulate-offline-mode'),
     "suppress-api-errors": localStorage.getItem('suppress-api-errors'),
 };
@@ -77,10 +78,10 @@ async function checkApis(){
             devApiExists = true;
         }
 
-        if(localApiExists == true && userSettings['force-remote-api'] != 'true'){
+        if(localApiExists == true && userSettings['force-remote-api'] != 'true' && userSettings['force-dev-api'] != 'true'){
             currentApi = localApi;
             console.log('%cUsing local api', 'font-size: 24px; font-weight: bold;');
-        } else if(remoteApiExists) {
+        } else if(remoteApiExists == true && userSettings['force-dev-api'] != 'true') {
             currentApi = remoteApi;
             console.log('%cUsing remote api', 'font-size: 24px; font-weight: bold;');
         } else if(devApiExists) {
