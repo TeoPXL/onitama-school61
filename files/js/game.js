@@ -884,6 +884,19 @@ async function getGame(){
         }
         return response.json();
     }).then(data => {
+        if(data.winnerPlayerId != "00000000-0000-0000-0000-000000000000" && data.winnerPlayerId != undefined){
+            console.log("The game has been won!");
+            console.log(data.winnerPlayerId);
+            console.log(data.winnerMethod);
+            let winnerName;
+            data.players.forEach(player => {
+                if(player.id == data.winnerPlayerId){
+                    winnerName = player.name;
+                }
+            });
+            document.querySelector('.game-over-subtitle').textContent = "The game has been won by " + winnerName + " by " + data.winnerMethod + ".";
+            document.querySelector('.game-over').classList.remove('game-over-hidden');
+        }
         if(game.started == false){
             localStorage.setItem("gameId", data.id);
             //Set game board with actual data
