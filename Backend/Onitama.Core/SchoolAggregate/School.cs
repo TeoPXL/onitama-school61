@@ -93,13 +93,13 @@ internal class School : ISchool
         int index = Array.IndexOf(AllPawns, pawnToRemove);
         if (index != -1)
         {
-            AllPawns[index] = null;
+            AllPawns[index].Position = null;
         }
 
         index = Array.IndexOf(Students, pawnToRemove);
         if (index != -1)
         {
-            Students[index] = null;
+            Students[index].Position = null;
         }
     }
 }

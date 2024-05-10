@@ -110,7 +110,7 @@ namespace Onitama.Core.PlayMatAggregate
          
         public void ExecuteMove(IMove move, out IPawn capturedPawn)
         {
-            capturedPawn = _grid[move.To.Row, move.To.Column];
+            capturedPawn = null;
             for (int i = 0; i < _grid.GetLength(0); i++)
             {
                 for (int j = 0; j < _grid.GetLength(1); j++)
