@@ -355,6 +355,50 @@ class Game {
 
     }
 
+    removePawn3D(change){
+        let from = [change.from.row, 4 - change.from.column]; //Starting coordinates
+        console.log(from);
+        console.log("REMOVED POSITION")
+        const board = this.board.currentBoard;
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board[i].length; j++) {
+                const el = board[i][j];
+                if(el[1] != undefined){
+                    if(el[6] == null){
+                        console.log("Removed Pawn found at " + i + ", " + j);
+                        console.log(el[2].position);
+                        let x = el[2].position.x;
+                        let z = el[2].position.z;
+                        let mixer = el[3];
+                        console.log(el[4]);
+                        let action = mixer.clipAction(el[4].animations[0]);
+                        mixer.timeScale = 1.4; //Speed up the jump animation. It's a little slow
+                        action.setLoop(THREE.LoopOnce); //Only jump one time
+                        action.clampWhenFinished = true;
+                        action.setDuration(el[4].animations[0].duration);
+                        action.play();
+                        //Maybe do it a bit short of the position if we need to attack
+                        setTimeout(game.smoothTransition.bind(null, el[2], x, -3, z, 650), 420); //Transition to new position
+                        // Listen for when the animation finishes
+                        mixer.addEventListener('finished', function(){
+                            //If we need to do an attack, we should probably do it here.
+                            let loopAction = mixer.clipAction(el[4].animations[0]);
+                            // Set animation to loop
+                            loopAction.setLoop(THREE.LoopRepeat);
+                            // Start playing idle animation
+                            loopAction.play();
+                        });
+                        //After the attack, we can move the remaining space
+                    }
+                }
+                
+            }
+        }
+
+        console.log(board);
+
+    }
+
     smoothTransition(object, endX, endY, endZ, duration) {
         const startX = object.position.x;
         const startY = object.position.y;
@@ -1051,9 +1095,12 @@ async function getGame(){
                     //Now do changes
                     for (let i = 0; i < changes.length; i++) {
                         const change = changes[i];
-                        if(change.type = "moved"){
+                        if(change.type == "moved"){
                             //Move the pawn
                             game.movePawn3D(change);
+                        } else if (change.type = "removed"){
+                            console.log("Pawn Removed!");
+                            game.removePawn3D(change);
                         }
                     }
                 }
@@ -1086,7 +1133,7 @@ function detectChanges(oldArray, newArray) {
                 });
             }
             // If there's an object in the old array but not in the new array
-            else if (oldArray[i][j] && !newArray[i][j]) {
+            else if (oldArray[i][j] && newArray[i][j] == null) {
                 changes.push({
                     type: 'removed',
                     object: oldArray[i][j],
