@@ -6,6 +6,12 @@ settingInputs.forEach(element => {
                 element.checked = true;
             }
             break;
+
+        case 'force-dev-api':
+            if(userSettings['force-dev-api'] == 'true'){
+                element.checked = true;
+            }
+            break;
         
         case 'simulate-offline-mode':
             if(userSettings['simulate-offline-mode'] == 'true'){
