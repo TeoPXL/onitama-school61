@@ -358,13 +358,14 @@ class Game {
     removePawn3D(change){
         let from = [change.from.row, 4 - change.from.column]; //Starting coordinates
         console.log(from);
+        let pawnId = change.object.Id;
         console.log("REMOVED POSITION")
         const board = this.board.currentBoard;
         for (let i = 0; i < board.length; i++) {
             for (let j = 0; j < board[i].length; j++) {
                 const el = board[i][j];
                 if(el[1] != undefined){
-                    if(el[6] == null){
+                    if(el[6] == null || el[6].id == pawnId){
                         console.log("Removed Pawn found at " + i + ", " + j);
                         console.log(el[2].position);
                         let x = el[2].position.x;
