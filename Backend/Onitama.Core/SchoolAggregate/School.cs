@@ -15,6 +15,10 @@ internal class School : ISchool
 
     public ICoordinate _archPos;
 
+    public IPawn[] _allPawns; 
+
+    public IPawn[] _students;
+
     public IPawn Master 
     {
         get { return _master; }
@@ -24,9 +28,13 @@ internal class School : ISchool
         }
     }
 
-    public IPawn[] Students { get; }
+    public IPawn[] Students {
+        get { return _students; }
+    }
 
-    public IPawn[] AllPawns { get; }
+    public IPawn[] AllPawns {
+        get { return _allPawns; }
+    }
     /// <summary>
     /// Creates a school that is a copy of another school.
     /// </summary>
@@ -42,19 +50,19 @@ internal class School : ISchool
     public School(IPawn[] pawns)
     {
         //4 for now
-        this.AllPawns = new Pawn[5];
-        this.AllPawns[0] = pawns[0];
-        this.AllPawns[1] = pawns[1];
-        this.AllPawns[2] = pawns[2];
-        this.AllPawns[3] = pawns[3];
-        this.AllPawns[4] = pawns[4];
+        this._allPawns = new Pawn[5];
+        this._allPawns[0] = pawns[0];
+        this._allPawns[1] = pawns[1];
+        this._allPawns[2] = pawns[2];
+        this._allPawns[3] = pawns[3];
+        this._allPawns[4] = pawns[4];
 
-        this.Students = new Pawn[4];
+        this._students = new Pawn[4];
 
-        Students[0] = AllPawns[0];
-        Students[1] = AllPawns[1];
-        Students[2] = AllPawns[2];
-        Students[3] = AllPawns[3];
+        _students[0] = _allPawns[0];
+        _students[1] = _allPawns[1];
+        _students[2] = _allPawns[2];
+        _students[3] = _allPawns[3];
 
         SetMaster(AllPawns[2]);
     }
@@ -78,5 +86,27 @@ internal class School : ISchool
     public void SetStudent(IPawn student, int i)
     {
         this.Students[i] = student;
+    }
+
+    public void RemovePawn(IPawn pawnToRemove)
+    {
+        // Find the index of the pawn to remove
+        int indexToRemove = Array.IndexOf(_allPawns, pawnToRemove);
+
+        // If the pawn is found, remove it
+        if (indexToRemove != -1)
+        {
+            // Create a new array with one less element
+            IPawn[] newArray = new IPawn[_allPawns.Length - 1];
+
+            // Copy elements before the index
+            Array.Copy(_allPawns, 0, newArray, 0, indexToRemove);
+
+            // Copy elements after the index
+            Array.Copy(_allPawns, indexToRemove + 1, newArray, indexToRemove, _allPawns.Length - indexToRemove - 1);
+
+            // Update the AllPawns property
+            _allPawns = newArray;
+        }
     }
 }

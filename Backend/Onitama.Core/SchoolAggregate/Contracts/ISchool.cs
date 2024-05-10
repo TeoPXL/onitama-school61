@@ -38,4 +38,6 @@ public interface ISchool
     public void SetMaster(IPawn master);
 
     public void SetStudent(IPawn student, int i);
+
+    public void RemovePawn(IPawn pawnToRemove);
 }
