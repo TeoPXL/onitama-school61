@@ -46,99 +46,89 @@ floatingError.querySelector('.floating-error-button').addEventListener('click', 
     floatingError.classList.add('floating-error-hidden');
 });
 
-async function pingApi(api) {
+async function pingApi(api, timeout = 750) {
     try {
-        const response = await fetch(api + "/ping");
+        const response = await Promise.race([
+            fetch(api + "/ping"),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), timeout))
+        ]);
         if (!response.ok) {
-            return false; // or throw new Error("API Error: " + response.status);
+            throw new Error("API Error: " + response.status);
         }
         return true;
     } catch (error) {
-        // Handle network errors or other exceptions
+        console.error("Error while pinging API:", error);
         return false;
     }
 }
-
 async function checkApis(){
     try {
-        const localResponse = await pingApi(localApi);
-        if(localResponse == true){
-            localApiExists = true;
-        }
+        const [localResponse, remoteResponse, devResponse] = await Promise.all([
+            pingApi(localApi),
+            pingApi(remoteApi),
+            pingApi(devApi)
+        ]);
 
-        const remoteResponse = await pingApi(remoteApi);
-        if(remoteResponse == true){
-            remoteApiExists = true; //Enable
-        } else {
-            console.log("RESPONSE: "+remoteResponse);
-        }
-
-        const devResponse = await pingApi(devApi);
-        if(devResponse == true){
-            devApiExists = true;
-        }
-
-        if(localApiExists == true && userSettings['force-remote-api'] != 'true' && userSettings['force-dev-api'] != 'true'){
+        if (localResponse === true && userSettings['force-remote-api'] != 'true' && userSettings['force-dev-api'] != 'true') {
             currentApi = localApi;
             console.log('%cUsing local api', 'font-size: 24px; font-weight: bold;');
-        } else if(remoteApiExists == true && userSettings['force-dev-api'] != 'true') {
+        } else if (remoteResponse === true && userSettings['force-dev-api'] != 'true') {
             currentApi = remoteApi;
             console.log('%cUsing remote api', 'font-size: 24px; font-weight: bold;');
-        } else if(devApiExists) {
-            //REMOVE THIS IN PRODUCTION
+        } else if (devResponse === true) {
             currentApi = devApi;
             console.log('%cUsing DEV api', 'font-size: 24px; font-weight: bold;');
             console.log("Do not use this during production!");
         } else {
             throw new Error("Both the local and remote APIs are not accessible. This could be due to the remote API having a cold start. Try waiting.");
         }
+
         await refreshToken();
         if(window.loadClassicTables){
             loadClassicTables();
+        }
+        if(window.showApi){
+            showApi();
         }
         if(window.fetchTable){
             fetchTable();
         }
 
     } catch(error) {
-        console.error("Error while trying to reach local API:", error);
-        if(userSettings['suppress-api-errors'] != 'true'){
+        console.error("Error while trying to reach APIs:", error);
+        if(userSettings['suppress-api-errors'] !== 'true'){
             setTimeout(() => {
                 throw_floating_error(error.message, '504', '#303031');
             }, 2000);
         }
-    };
-    
+    }
 }
 
 checkApis();
 
 //Refresh user token
 async function refreshToken(){
-    await fetch(currentApi + "/api/Authentication/refresh", {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-        },
-        body: JSON.stringify({})
-    }).then(response => {
+    try {
+        const response = await fetch(currentApi + "/api/Authentication/refresh", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({})
+        });
+        
         if (!response.ok) {
-            return response.json().then(errorData => {
-                throw new Error("Your token has expired already!");
-            });
+            const errorData = await response.json();
+            throw new Error("Your token has expired already!");
         }
-        return response.json();
-    }).then(data => {
+        
+        const data = await response.json();
         console.log(data);
         localStorage.setItem('token', data.token);
-    }).catch(error => {
+    } catch(error) {
         //console.log(error);
-    });
+    }
     setTimeout(refreshToken, 30 * 60 * 1000);
 }
-
-    
-
-

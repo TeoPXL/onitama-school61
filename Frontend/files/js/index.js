@@ -1,5 +1,6 @@
 const topButtonLogin = document.querySelector(".top-button-login");
 const topButtonUser = document.querySelector(".top-button-user");
+const logoElement = document.querySelector(".logo");
 const linkElements = document.querySelectorAll("a");
 const compElements = document.querySelectorAll(".comp-item-loading");
 //Temporary example of API json response
@@ -59,3 +60,24 @@ linkElements.forEach((element) => {
         }
     });
 });
+
+function showApi(){
+    switch (currentApi) {
+        case localApi:
+            logoElement.textContent = 'Onitama 61 (Local)';
+            break;
+    
+        case remoteApi:
+            logoElement.textContent = 'Onitama 61 (Remote)';
+            break;
+    
+        case devApi:
+            logoElement.textContent = 'Onitama 61 (Dev)';
+            break;
+    
+        default:
+            logoElement.textContent = 'Onitama 61 (None)';
+            break;
+    }
+}
+
