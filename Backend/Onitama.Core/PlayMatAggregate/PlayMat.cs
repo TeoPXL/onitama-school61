@@ -111,7 +111,33 @@ namespace Onitama.Core.PlayMatAggregate
         public void ExecuteMove(IMove move, out IPawn capturedPawn)
         {
             capturedPawn = _grid[move.To.Row, move.To.Column];
+            for (int i = 0; i < _grid.GetLength(0); i++)
+            {
+                for (int j = 0; j < _grid.GetLength(1); j++)
+                {
+                    if (_grid[i, j] != null && _grid[i, j].Position.Row == move.To.Row && _grid[i, j].Position.Column == move.To.Column)
+                    {
+                        capturedPawn = _grid[i, j];
+                        break;
+                    }
+                }
+            }
             move.Pawn.Position = move.To;
+        }
+
+        public void RemovePawn(IPawn pawn)
+        {
+            for (int i = 0; i < _grid.GetLength(0); i++)
+            {
+                for (int j = 0; j < _grid.GetLength(1); j++)
+                {
+                    if (_grid[i, j] != null && _grid[i, j].Id == pawn.Id)
+                    {
+                        _grid[i, j] = null;
+                        return;
+                    }
+                }
+            }
         }
     }
 }

@@ -52,4 +52,5 @@ public interface IPlayMat
     /// </remarks>
     void ExecuteMove(IMove move, out IPawn capturedPawn);
 
+    void RemovePawn(IPawn pawn);
 }

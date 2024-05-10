@@ -226,7 +226,7 @@ internal class Game : IGame
 
         for (int i = 0; i < player.School.AllPawns.Length; i++)
         {
-            if (player.School.AllPawns[i].Id == pawnId)
+            if (player.School.AllPawns[i] != null && player.School.AllPawns[i].Id == pawnId)
             {
                 pawn = player.School.AllPawns[i];
             }
@@ -307,6 +307,7 @@ internal class Game : IGame
                     if (_players[i].Id == capturedPlayerId)
                     {
                         _players[i].School.RemovePawn(capturedPawn);
+                        PlayMat.RemovePawn(capturedPawn);
                     }
                 }
             }
