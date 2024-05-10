@@ -232,6 +232,49 @@ canvas {
     padding-right: 18px;
     margin-top: 5px;
 }
+.game-over {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    background: #000000a6;
+    opacity: 1;
+    transition: 0.5s;
+}
+.game-over-title {
+    font-weight: 600;
+    font-size: 300%;
+}
+.game-over-subtitle {
+    background: var(--color-background-fade);
+    width: calc(90% - 20px);
+    padding: 10px;
+    border-radius: 0.5em;
+}
+.game-over-button {
+    background: var(--color-main);
+    color: var(--color-text-2);
+    padding: 3px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 2em;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.game-over-button:hover {
+    filter: brightness(0.5);
+}
+.game-over-hidden {
+    opacity: 0;
+    pointer-events: none;
+}
 @media screen and (min-width: 600px) {
     .main {
         flex-flow: row;
