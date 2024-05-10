@@ -21,6 +21,8 @@ let ownerUser;
 let selectedPawn;
 let pawnCoords;
 let selectionCoords;
+let allCubes = [];
+window.allCubes = allCubes;
 
 class Game {
     scene;
@@ -160,6 +162,7 @@ class Game {
     placeObject(team, coord, identity, type){
         console.log("placing object")
         if(identity == 0){
+            return;
             console.log("Identity: 0")
             const material = new THREE.MeshBasicMaterial({
                 color: 0xffffff, //White
@@ -178,7 +181,6 @@ class Game {
             this.scene.add(cube);
             cube.onitamaType = "open";
             openCubes.push(cube);
-            return;
         }
 
         const colorMap = {
@@ -577,7 +579,7 @@ function onPointerMove(event) {
     if (intersects.length > 0) {
         intersects.forEach(element => {
             let object = element.object;
-            if(object.name.includes(game.currentPlayer+"hover") || object.onitamaType == "closed"){
+            if(object.name.includes(game.currentPlayer+"hover") || object.onitamaType == "selectable"){
                 document.body.style.cursor = 'pointer';
                 if(game.playerToPlay != user.warriorName){
                     return;
@@ -618,9 +620,9 @@ async function onClick(){
     if(hovering == true){
         console.log(hoveredCube.name); //Click detected!
         clickedCube = hoveredCube;
-        if(clickedCube.onitamaType == "closed"){
-            openCubes.forEach(cube => {
-                cube.onitamaType = "open";
+        if(clickedCube.onitamaType == "selectable"){
+            allCubes.forEach(cube => {
+                game.scene.remove(cube);
             });
             simulatePointerMove();
 
@@ -628,15 +630,14 @@ async function onClick(){
             let pawnCube = selectedPawn;
             let selectCube;
             let selectedPosition;
-            for (let i = 0; i < game.board.currentBoard.length; i++) {
-                for (let j = 0; j < game.board.currentBoard[i].length; j++) {
-                    let item = game.board.currentBoard[i][j][5];
-                    if(item == clickedCube){
-                        selectCube = item;
-                        selectedPosition = [i, j];
-                    }
+            allCubes.forEach(cube => {
+                if(cube == clickedCube){
+                    selectCube = cube;
+                    const column = 4 - ((4 - cube.position.x) / 2);
+                    const row = ((cube.position.z + 4) / 2);
+                    selectedPosition = [row, column];
                 }
-            }
+            });
             selectionCoords = [selectedPosition[0], 4 - selectedPosition[1]];
             console.log(pawnCoords);
             console.log(selectionCoords);
@@ -677,8 +678,10 @@ async function onClick(){
             for (let j = 0; j < board[i].length; j++) {
                 const coord = [i, j];
                 const cube = board[i][j][5];
-                if(clickedCube.name == cube.name){
-                    startCoords = [i, j];
+                if(cube != undefined){
+                    if(clickedCube.name == cube.name){
+                        startCoords = [i, j];
+                    }
                 }
             }
         }
@@ -704,14 +707,33 @@ async function onClick(){
             const pawnId = board[startCoords[0]][startCoords[1]][6].id;
             console.log(pawnId);
             const coordinates = await game.getPossibleCoordinate(pawnId);
-            coordinates.forEach(el => {
-                let row = el.to.row;
-                let column = el.to.column;
-                console.log(row + " : " + column);
-                board[row][4 - column][5].onitamaType = "closed";
-                board[row][4 - column][5].material.color = hoveredCube.material.color;
-                board[row][4 - column][5].material.opacity = 0.8;
+            allCubes.forEach(cube => {
+                    game.scene.remove(cube);
             });
+            if(coordinates != undefined){
+                coordinates.forEach(el => {
+                    let row = el.to.row;
+                    let column = el.to.column;
+                    console.log(row + " : " + column);
+                    console.log("Identity: 0")
+                    const material = new THREE.MeshBasicMaterial({
+                        color: hoveredCube.material.color, //White
+                        transparent: true, // Transparent
+                        opacity: 0.8, // Opacity to 0.1
+                    });
+    
+                    const cubeGeometry = new THREE.BoxGeometry(1.25, 0.05, 1.25);
+    
+                    // Create a mesh using the geometry and material
+                    const cube = new THREE.Mesh(cubeGeometry, material);
+                    cube.name = "selectable";
+                    cube.position.x = 4 - (column * 2);
+                    cube.position.z = row * 2 - 4;
+                    game.scene.add(cube);
+                    cube.onitamaType = "selectable";
+                    allCubes.push(cube);
+                });
+            }
         }
     }
 }
