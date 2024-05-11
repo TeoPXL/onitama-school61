@@ -25,4 +25,11 @@ public class TablePreferences
     /// </summary>
     [DefaultValue(MoveCardSet.Original)]
     public MoveCardSet MoveCardSet { get; set; } = MoveCardSet.Original;
+
+    /// <summary>
+    /// Game type
+    /// The default value is classic.
+    /// </summary>
+    [DefaultValue("classic")]
+    public string TableType { get; set; } = "classic";
 }

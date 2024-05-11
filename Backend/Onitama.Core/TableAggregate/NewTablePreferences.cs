@@ -28,9 +28,9 @@ public class NewTablePreferences : TablePreferences
 
 
     /// <summary>
-    /// Number of players that can take part in the game.
-    /// The default value is 2.
+    /// Game type
+    /// The default value is classic.
     /// </summary>
-    [DefaultValue("classic")]
-    public string TableType { get; set; } = "classic";
+    [DefaultValue("competitive")]
+    public string TableType { get; set; } = "competitive";
 }

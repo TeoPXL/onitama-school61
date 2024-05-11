@@ -45,6 +45,12 @@ namespace Onitama.Core.GameAggregate.Contracts
         /// If no player has won yet, this is an empty string. 
         /// </summary>
         public string WinnerMethod { get; }
+        /// <summary>
+        /// The type of the game.
+        /// If none is specified, "classic" is default
+        /// </summary>
+        public string Gametype { get; }
+
 
         /// <summary>
         /// Returns all the moves a player can make for a specific pawn and move card.

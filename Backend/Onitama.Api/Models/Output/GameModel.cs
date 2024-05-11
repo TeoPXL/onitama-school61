@@ -16,6 +16,7 @@ public class GameModel
     public Guid WinnerPlayerId { get; set; }
 
     public string WinnerMethod { get; set; }
+    public string Gametype { get; set; }
 
     private class MappingProfile : Profile
     {

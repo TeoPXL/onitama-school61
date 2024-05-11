@@ -64,7 +64,7 @@ internal class Game : IGame
         set { this._winnerPlayerId = value; }
     }
 
-    public string GameType
+    public string Gametype
     {
         get { return this._gameType; }
         set { this._gameType = value; }
@@ -89,7 +89,7 @@ internal class Game : IGame
     /// </param>
     /// <param name="gameType"></param>
     /// The type of the game (WayOfTheStone or WayOfTheWind)
-    public Game(Guid id, IPlayMat playMat, IPlayer[] players, IMoveCard extraMoveCard)
+    public Game(Guid id, IPlayMat playMat, IPlayer[] players, IMoveCard extraMoveCard, string gameType = "classic")
     {
         this._players = new IPlayer[players.Count()];
         for (int i = 0; i < _players.Length; i++)
@@ -102,6 +102,7 @@ internal class Game : IGame
         this._gameType = "WayOfTheStone";
         this.PlayerToPlayId = players[0].Id;
         this.PlayerToPlayId = players.FirstOrDefault(player => player.Color == _extraMoveCard.StampColor).Id;
+        this._gameType = gameType;
     }
 
     /// <summary>

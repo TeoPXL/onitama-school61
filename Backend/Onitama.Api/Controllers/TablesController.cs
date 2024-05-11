@@ -93,13 +93,13 @@ public class TablesController : ApiControllerBase
 
 
     /// <summary>
-    /// Adds a new table to the system. The user that creates the table is automatically seated.
+    /// Adds a new competitive table to the system. The user that creates the table is automatically seated.
     /// </summary>
     /// <param name="preferences">
     /// Contains info about the type of game you want to play.
     /// </param>
     /// <remarks>Tables are automatically removed from the system after 15 minutes.</remarks>
-    [HttpPost("create")]
+    [HttpPost("competitive")]
     [ProducesResponseType(typeof(TableModel), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> AddNew([FromBody]  NewTablePreferences preferences)

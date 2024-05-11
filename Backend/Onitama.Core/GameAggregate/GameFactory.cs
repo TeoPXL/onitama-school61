@@ -37,7 +37,8 @@ internal class GameFactory : IGameFactory
         table.SeatedPlayers[1].MoveCards.Add(moveCards[3]);
         var players = new IPlayer[table.SeatedPlayers.Count];
         table.SeatedPlayers.CopyTo(players, 0);
-        Game game = new Game(Guid.NewGuid(), playMat, players, moveCards.ElementAt(moveCards.Length - 1));
+        string gameType = table.Preferences.TableType;
+        Game game = new Game(Guid.NewGuid(), playMat, players, moveCards.ElementAt(moveCards.Length - 1), gameType);
         foreach (var player in players)
         {
             var pawns = new IPawn[5];
