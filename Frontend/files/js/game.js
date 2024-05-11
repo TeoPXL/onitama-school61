@@ -23,6 +23,8 @@ let pawnCoords;
 let selectionCoords;
 let allCubes = [];
 window.allCubes = allCubes;
+let tableFetchInterval;
+let getGameInterval;
 
 class Game {
     scene;
@@ -163,24 +165,6 @@ class Game {
         console.log("placing object")
         if(identity == 0){
             return;
-            console.log("Identity: 0")
-            const material = new THREE.MeshBasicMaterial({
-                color: 0xffffff, //White
-                transparent: true, // Transparent
-                opacity: 0, // Opacity to 0.1
-            });
-
-            const cubeGeometry = new THREE.BoxGeometry(1.25, 0.05, 1.25);
-
-            // Create a mesh using the geometry and material
-            const cube = new THREE.Mesh(cubeGeometry, material);
-            cube.name = "emptyslot"+identity;
-            cube.position.x = coord[1] * 2 - 4;
-            cube.position.z = coord[0] * 2 - 4;
-            this.board.currentBoard[coord[0]][coord[1]][5] = cube;
-            this.scene.add(cube);
-            cube.onitamaType = "open";
-            openCubes.push(cube);
         }
 
         const colorMap = {
@@ -729,6 +713,9 @@ async function onClick(){
                     cube.name = "selectable";
                     cube.position.x = 4 - (column * 2);
                     cube.position.z = row * 2 - 4;
+                    cube.scale.x = 1.05;
+                    cube.scale.z = 1.05;
+                    cube.scale.y = 1.05;
                     game.scene.add(cube);
                     cube.onitamaType = "selectable";
                     allCubes.push(cube);
@@ -757,16 +744,19 @@ window.addEventListener('touchend', resetHighlightedObjects, false);
 window.addEventListener('click', onClick, false);
 
 async function fetchTable(){
+    clearInterval(tableFetchInterval);
     if(game.started == true){
         return;
     }
     if(gameId != undefined && gameId != "null"){
+        clearInterval(tableFetchInterval);
         game.id = gameId;
         console.log(game.id);
         await getGame();
         game.start();
         return;
     }
+    tableFetchInterval = setInterval(async () => {
     const response = await fetch(currentApi + "/api/Tables/" + game.tableId, {
         method: 'GET',
         headers: {
@@ -876,8 +866,9 @@ async function fetchTable(){
         } else if(game.id == undefined || game.id == "00000000-0000-0000-0000-000000000000") {
             game.id = table.gameId;
             console.log(game.id);
-            setTimeout(fetchTable, 500);
+            //setTimeout(fetchTable, 500);
         } else {
+            clearInterval(tableFetchInterval);
             console.log(game.id);
             getGame();
             game.start();
@@ -887,9 +878,12 @@ async function fetchTable(){
         console.log(error);
         throw_floating_error(error, '500', "#c60025");
     });
+}, 500);
 }
-
+fetchTable();
 async function getGame(){
+    clearInterval(getGameInterval);
+    getGameInterval = setInterval(async () => {
     const response = await fetch(currentApi + "/api/Games/" + game.id, {
         method: 'GET',
         headers: {
@@ -1144,13 +1138,13 @@ async function getGame(){
             previousBoard = grid;
         }
         //Get game again
-        setTimeout(getGame, 500);
+        //setTimeout(getGame, 500);
     }).catch(error => {
         console.log(error);
         throw_floating_error(error, '500', "#c60025");
     });
 
-
+}, 500);
 }
 window.fetchTable = fetchTable;
 

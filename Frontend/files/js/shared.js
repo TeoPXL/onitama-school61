@@ -90,9 +90,6 @@ async function checkApis(){
         if(window.showApi){
             showApi();
         }
-        if(window.fetchTable){
-            fetchTable();
-        }
 
     } catch(error) {
         console.error("Error while trying to reach APIs:", error);
