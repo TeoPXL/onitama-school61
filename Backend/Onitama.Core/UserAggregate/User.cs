@@ -8,4 +8,6 @@ public class User : IdentityUser<Guid>
 {
     [Required]
     public string WarriorName { get; set; }
+    [Required]
+    public int Elo { get; set; }
 }

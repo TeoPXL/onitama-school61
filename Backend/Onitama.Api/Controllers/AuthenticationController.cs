@@ -48,7 +48,8 @@ public class AuthenticationController : ApiControllerBase
             {
                 UserName = model.Email,
                 Email = model.Email,
-                WarriorName = model.WariorName
+                WarriorName = model.WariorName,
+                Elo = 1000
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);

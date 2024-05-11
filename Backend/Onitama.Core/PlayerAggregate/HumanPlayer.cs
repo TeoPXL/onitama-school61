@@ -15,13 +15,15 @@ internal class HumanPlayer : PlayerBase
     private Direction _direction;
     private ISchool _school;
     private IList<IMoveCard> _moveCards;
+    private int _elo;
 
-    public HumanPlayer(Guid userId, string name, Color color, Direction direction): base(userId, name, color, direction)
+    public HumanPlayer(Guid userId, string name, Color color, Direction direction, int elo): base(userId, name, color, direction)
     {
         _id = userId;
         _name = name;
         _color = color;
         _direction = direction;
+        _elo = elo;
     }
 
     public Guid Id
@@ -57,5 +59,11 @@ internal class HumanPlayer : PlayerBase
     {
         get { return _moveCards; }
         set { this._moveCards = value; }
+    }
+
+    public int Elo
+    {
+        get { return _elo; }
+        set { this._elo = value; }
     }
 }

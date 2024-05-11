@@ -9,6 +9,7 @@ public class PlayerModel
     public string Name { get; set; }
     public string Color { get; set; }
     public string Direction { get; set; }
+    public int Elo { get; set; }
 
     public SchoolModel School { get; set; }
 

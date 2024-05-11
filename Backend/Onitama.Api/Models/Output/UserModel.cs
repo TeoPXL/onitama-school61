@@ -10,6 +10,7 @@ public class UserModel
 
     public string Email { get; set; }
     public string WarriorName { get; set; }
+    public int Elo { get; set; }
 
     private class MappingProfile : Profile
     {

@@ -121,7 +121,7 @@ internal class Table : ITable
         var number = _random.Next(0, _availableColors.Count);
         var color = _availableColors[number];
 
-        var player = new HumanPlayer(user.Id, user.WarriorName, color, _availableDirections[0]);
+        var player = new HumanPlayer(user.Id, user.WarriorName, color, _availableDirections[0], user.Elo);
         _availableDirections.RemoveAt(0);
         _availableColors.RemoveAt(number);
         if(_seatedPlayers.Count == 0)

@@ -30,7 +30,7 @@ Content-Type: application/json
 
 ###
 
-POT {{Onitama.Api_HostAddress}}/api/authentication/refresh
+POST {{Onitama.Api_HostAddress}}/api/authentication/refresh
 Content-Type: application/json
 
 {
