@@ -3,6 +3,7 @@ using Onitama.Core.PlayerAggregate.Contracts;
 using Onitama.Core.SchoolAggregate.Contracts;
 using Onitama.Core.Util;
 using Onitama.Core.Util.Contracts;
+using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Numerics;
 

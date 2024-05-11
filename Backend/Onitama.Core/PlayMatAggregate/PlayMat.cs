@@ -79,6 +79,11 @@ namespace Onitama.Core.PlayMatAggregate
 
                 pawns[i].Position = coordinate;
                 _grid[pawns[i].Position.Row, pawns[i].Position.Column] = pawns[i];
+                if (pawns[i].Type == PawnType.Master)
+                {
+                    Coordinate copiedCoordinate = new Coordinate(coordinate.Row, coordinate.Column);
+                    player.School.TempleArchPosition = copiedCoordinate;
+                }
             }
         }
 

@@ -8,6 +8,7 @@ using Onitama.Core.PlayMatAggregate.Contracts;
 using Onitama.Core.SchoolAggregate.Contracts;
 using Onitama.Core.Util;
 using Onitama.Core.Util.Contracts;
+using System.Drawing;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Security.AccessControl;
@@ -278,14 +279,18 @@ internal class Game : IGame
 
         IPawn capturedPawn;
         IList<ICoordinate> coordinates = new List<ICoordinate>();
-        PlayMat.ExecuteMove(move, out capturedPawn); 
+        PlayMat.ExecuteMove(move, out capturedPawn);
+        bool wayOfStream = false;
 
         for (int i = 0; i < Players.Length; i++)
         {
-            coordinates.Add(Players[i].School.TempleArchPosition);
+            if (Players[i].School.TempleArchPosition.Row == move.To.Row && Players[i].School.TempleArchPosition.Column == move.To.Column)
+            {
+                wayOfStream = true;
+            }
         }
 
-        if (coordinates.Contains(pawn.Position)) //There might be an issue here
+        if (wayOfStream == true) //There might be an issue here
         {
             //Won by way of the wind, but for some reason we need to say "stream"... This inconsistency is very confusing
             WinnerPlayerId = playerId;
