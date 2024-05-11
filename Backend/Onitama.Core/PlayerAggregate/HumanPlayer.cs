@@ -2,6 +2,7 @@
 using Onitama.Core.MoveCardAggregate.Contracts;
 using Onitama.Core.PlayerAggregate.Contracts;
 using Onitama.Core.SchoolAggregate.Contracts;
+using Onitama.Core.UserAggregate;
 using Onitama.Core.Util;
 
 namespace Onitama.Core.PlayerAggregate;
@@ -16,6 +17,7 @@ internal class HumanPlayer : PlayerBase
     private ISchool _school;
     private IList<IMoveCard> _moveCards;
     private int _elo;
+    private User _user;
 
     public HumanPlayer(Guid userId, string name, Color color, Direction direction, int elo): base(userId, name, color, direction)
     {
@@ -24,6 +26,16 @@ internal class HumanPlayer : PlayerBase
         _color = color;
         _direction = direction;
         _elo = elo;
+    }
+
+    public HumanPlayer(Guid userId, string name, Color color, Direction direction, int elo, User user) : base(userId, name, color, direction)
+    {
+        _id = userId;
+        _name = name;
+        _color = color;
+        _direction = direction;
+        _elo = elo;
+        _user = user;
     }
 
     public Guid Id
@@ -47,7 +59,7 @@ internal class HumanPlayer : PlayerBase
     public Direction Direction
     {
         get { return _direction; }
-        set { this.Direction = value; }
+        set { this._direction = value; }
     }
 
     public ISchool School
@@ -65,5 +77,11 @@ internal class HumanPlayer : PlayerBase
     {
         get { return _elo; }
         set { this._elo = value; }
+    }
+
+    public User User
+    {
+        get { return _user; }
+        set { this._user = value; }
     }
 }

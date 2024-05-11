@@ -6,6 +6,7 @@ using Onitama.Core.PlayerAggregate.Contracts;
 using Onitama.Core.PlayMatAggregate;
 using Onitama.Core.PlayMatAggregate.Contracts;
 using Onitama.Core.SchoolAggregate.Contracts;
+using Onitama.Core.UserAggregate;
 using Onitama.Core.Util;
 using Onitama.Core.Util.Contracts;
 using System.Drawing;
@@ -296,6 +297,7 @@ internal class Game : IGame
             //Won by way of the wind, but for some reason we need to say "stream"... This inconsistency is very confusing
             WinnerPlayerId = playerId;
             WinnerMethod = "Way of the stream";
+            calculateElo();
 
         } else if (capturedPawn != null)
         {
@@ -313,6 +315,7 @@ internal class Game : IGame
                 }
                 WinnerPlayerId = playerId;
                 WinnerMethod = "Way of the stone";
+                calculateElo();
             }
             else if (capturedPawn.Type == PawnType.Student)
             {
@@ -338,6 +341,99 @@ internal class Game : IGame
         PlayerToPlayId = this.GetNextOpponent(playerId).Id;
     }
 
+    public void calculateElo()
+    {
+        int K = 64;
+        int RA = 0;
+        int RB = 0;
+        int RC = 0;
+        int RD = 0;
+        double EA = 0;
+        double EB = 0;
+        double EC = 0;
+        double ED = 0;
+        RA = _players[0].Elo;
+        RB = _players[1].Elo;
+        if(_players.Length > 2)
+        {
+            RC= _players[0].Elo;
+            RD = _players[0].Elo;
+            // Calculate expected scores for each player (4 players)
+            EA = 1 / (1 + Math.Pow(10, (RB - (RA + RC + RD) / 3.0) / 400.0));
+            EB = 1 / (1 + Math.Pow(10, (RA - (RB + RC + RD) / 3.0) / 400.0));
+            EC = 1 / (1 + Math.Pow(10, (RD - (RA + RB + RC) / 3.0) / 400.0));
+            ED = 1 / (1 + Math.Pow(10, (RC - (RA + RB + RD) / 3.0) / 400.0));
+        } else
+        {
+            // Calculate expected scores for each player (2 players)
+            EA = 1 / (1 + Math.Pow(10, (RB - RA) / 400.0));
+            EB = 1 / (1 + Math.Pow(10, (RA - RB) / 400.0));
+        }
+        int winningPlayer = 0;
+
+        for (int i = 0; i < _players.Length; i++)
+        {
+            if (_players[i].Id == WinnerPlayerId)
+            {
+                winningPlayer = i;
+                break;
+            }
+        }
+        
+
+        // Initialize score variables
+        double scoreA, scoreB, scoreC, scoreD;
+
+        // Determine scores based on winning player
+        switch (winningPlayer)
+        {
+            case 0:
+                scoreA = 1;
+                scoreB = 0;
+                scoreC = 0;
+                scoreD = 0;
+                break;
+            case 1:
+                scoreA = 0;
+                scoreB = 1;
+                scoreC = 0;
+                scoreD = 0;
+                break;
+            case 2:
+                scoreA = 0;
+                scoreB = 0;
+                scoreC = 1;
+                scoreD = 0;
+                break;
+            case 3:
+                scoreA = 0;
+                scoreB = 0;
+                scoreC = 0;
+                scoreD = 1;
+                break;
+            default:
+                throw new ArgumentException("Invalid winning player");
+        }
+        // Update Elo ratings for each player
+        if (_players.Length > 2)
+        {
+            double newRA = RA + K * (scoreA - EA);
+            double newRB = RB + K * (scoreB - EB);
+            double newRC = RC + K * (scoreC - EC);
+            double newRD = RD + K * (scoreD - ED);
+            //_players[0].SetElo(Convert.ToInt32(newRA));
+            //_players[1].SetElo(Convert.ToInt32(newRB));
+            //_players[2].SetElo(Convert.ToInt32(newRC));
+            //_players[3].SetElo(Convert.ToInt32(newRD));
+        } else
+        {
+            double newRA = RA + K * (scoreA - EA);
+            double newRB = RB + K * (scoreB - EB);
+            //_players[0].SetElo(Convert.ToInt32(newRA));
+           // _players[1].SetElo(Convert.ToInt32(newRB));
+        }
+            
+    }
     public void SkipMovementAndExchangeCard(Guid playerId, string moveCardName)
     {
         IPlayer player = null;
