@@ -90,18 +90,41 @@ namespace Onitama.Core.PlayMatAggregate
             {
                 var x = possibleMoves[i].Column;
                 var y = possibleMoves[i].Row;
+                bool isAvailable = true;
+
+                for (int j = 0; j < _grid.GetLength(0); j++)
+                {
+                    for (int k = 0; k < _grid.GetLength(1); k++)
+                    {
+                        var item = _grid[j, k];
+                        if(item is IPawn)
+                        {
+                            if (item.Position.Row == y && item.Position.Column == x && item.OwnerId == pawn.OwnerId)
+                            {
+                                isAvailable = false;
+                            }
+                        }
+                        
+                    }
+                }
+
+                if(isAvailable == true)
+                {
+                    var move = new Move(card, pawn, playerDirection, possibleMoves[i]);
+                    moves.Add(move);
+                }
                 if (_grid[y, x] is IPawn)
                 {
                     if (_grid[y, x].OwnerId != pawn.OwnerId)
                     {
                         //There is a pawn here and it is not ours?
                         var move = new Move(card, pawn, playerDirection, possibleMoves[i]);
-                        moves.Add(move);
+                        //moves.Add(move);
                     }
                 } else
                 {
                     var move = new Move(card, pawn, playerDirection, possibleMoves[i]);
-                    moves.Add(move);
+                    //moves.Add(move);
                 }
                 
             }

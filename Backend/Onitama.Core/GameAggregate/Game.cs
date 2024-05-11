@@ -285,7 +285,7 @@ internal class Game : IGame
             coordinates.Add(Players[i].School.TempleArchPosition);
         }
 
-        if (coordinates.Contains(pawn.Position))
+        if (coordinates.Contains(pawn.Position)) //There might be an issue here
         {
             //Won by way of the wind, but for some reason we need to say "stream"... This inconsistency is very confusing
             WinnerPlayerId = playerId;
@@ -295,6 +295,16 @@ internal class Game : IGame
         {
             if (capturedPawn.Type == PawnType.Master)
             {
+                //Also kill the master!
+                var capturedPlayerId = capturedPawn.OwnerId;
+                for (int i = 0; i < _players.Length; i++)
+                {
+                    if (_players[i].Id == capturedPlayerId)
+                    {
+                        _players[i].School.RemovePawn(capturedPawn);
+                        PlayMat.RemovePawn(capturedPawn);
+                    }
+                }
                 WinnerPlayerId = playerId;
                 WinnerMethod = "Way of the stone";
             }
