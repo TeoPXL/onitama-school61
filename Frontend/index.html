@@ -221,6 +221,14 @@
     <div class="floating-error-subtitle">Subtitle text</div>
     <div class="floating-error-button">Dismiss</div>
   </div>
+  <script>
+    for (let i = 0; i < localStorage.length; i++) {
+      let key = localStorage.key(i);
+      if (key.includes("previousBoard")) {
+          localStorage.removeItem(key);
+      }
+  }
+  </script>
   <script src="files/js/shared.js"></script>
   <script src="files/js/index.js"></script>
 </body>

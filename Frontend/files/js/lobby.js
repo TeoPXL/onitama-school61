@@ -1,8 +1,9 @@
 let classicTableElements = document.querySelectorAll(".classic-table");
-let blitzTableElements = document.querySelectorAll(".blitz-table");
+let compTableElements = document.querySelectorAll(".comp-table");
 let alreadyJoinedTable;
 const tableButtons = document.querySelectorAll('.table-button-small');
 const classicButton = document.querySelector('.classic-button');
+const compButton = document.querySelector('.comp-button');
 const topButtonLogin = document.querySelector(".top-button-login");
 const topButtonUser = document.querySelector(".top-button-user");
 localStorage.removeItem("gameId");
@@ -37,19 +38,29 @@ function loadClassicTables (){
         return response.json();
     }).then(data => {
         console.log(data);
-        const tablesToRemove = 3 - data.length; 
-        for (let i = 1; i <= tablesToRemove; i++) {
+        let classicTableResults = [];
+        let competitiveTableResults = [];
+        data.forEach(table => {
+            if(table.preferences.tableType == "classic"){
+                classicTableResults.push(table);
+            } else if(table.preferences.tableType == "competitive"){
+                competitiveTableResults.push(table);
+            }
+        });
+        const classicTablesToRemove = 3 - classicTableResults.length; 
+        for (let i = 1; i <= classicTablesToRemove; i++) {
             const classicTables = classicTableElements[3 - i];
             classicTables.classList.add('table-item-hidden');
         }
-        //Currently the value "3" is a placeholder until we figure out how to distinguish game types.
-        for (let i = 1; i <= 3; i++) {
-            const blitzTables = blitzTableElements[3 - i];
-            blitzTables.classList.add('table-item-hidden');
+        //Now do competitive tables
+        const competitiveTablesToRemove = 3 - competitiveTableResults.length; 
+        for (let i = 1; i <= competitiveTablesToRemove; i++) {
+            const competitiveTables = compTableElements[3 - i];
+            competitiveTables.classList.add('table-item-hidden');
         }
-    
-        for (let i = 0; i < Math.min(data.length, 3); i++) {
-            const table = data[i];
+        //Classic tables
+        for (let i = 0; i < Math.min(classicTableResults.length, 3); i++) {
+            const table = classicTableResults[i];
             console.log(i);
             const element = classicTableElements[i];
             const maxPlayers = table.preferences.numberOfPlayers;
@@ -67,6 +78,25 @@ function loadClassicTables (){
             element.querySelector('.table-button').setAttribute("table-id", table.id);
             console.log(owner);
             
+        }
+
+        for (let i = 0; i < Math.min(competitiveTableResults.length, 3); i++) {
+            const table = competitiveTableResults[i];
+            console.log(i);
+            const element = compTableElements[i];
+            const maxPlayers = table.preferences.numberOfPlayers;
+            const seatedPlayers = table.seatedPlayers.length;
+            const ownerId = table.ownerId;
+            let owner;
+            for (let k = 0; k < table.seatedPlayers.length; k++) {
+                owner = table.seatedPlayers[k].name;
+            }
+            element.classList.remove('table-item-loading');
+            element.querySelector('.table-title').textContent = owner;
+            element.querySelector('.table-players').textContent = seatedPlayers + "/" + maxPlayers + " players";
+            element.querySelector('.table-button').textContent = "Join table";
+            element.querySelector('.table-button').setAttribute("table-id", table.id);
+            console.log(owner);
         }
     }).catch(error => {
         console.log(error);
@@ -132,6 +162,34 @@ classicButton.addEventListener('click', () => {
             'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify({ numberOfPlayers: 2, playMatSize: 5, moveCardSet: 0 })
+    }).then(response => {
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw_floating_error(errorData.message, '500', "#c60025");
+            });
+        }
+        return response.json();
+    }).then(data => {
+        console.log(data);
+        localStorage.setItem("tableId", data.id);
+        setTimeout(() => {
+            window.location.href = "game/play.html";
+        }, 250);
+    }).catch(error => {
+        console.log(error);
+        throw_floating_error(error, '500', "#c60025");
+    });
+});
+
+compButton.addEventListener('click', () => {
+    const response = fetch(currentApi + "/api/Tables/competitive", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ numberOfPlayers: 2, playMatSize: 5, moveCardSet: 0, tableType: "competitive" })
     }).then(response => {
         if (!response.ok) {
             return response.json().then(errorData => {
@@ -220,6 +278,6 @@ document.querySelector('.button-join').addEventListener('click', () => {
     setTimeout(() => {
         document.querySelector('.floating-message').classList.add('floating-message-hidden');
         document.querySelector('.main').classList.remove('no-pointer');
-        window.location.href = "game/classic.html";
+        window.location.href = "game/play.html";
     }, 250);
 });
