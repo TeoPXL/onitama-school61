@@ -4,7 +4,7 @@ using Onitama.Core.TableAggregate.Contracts;
 
 namespace Onitama.Core.TableAggregate;
 
-public class TablePreferences : ITablePreferences
+public class CompTablePreferences : ITablePreferences
 {
     /// <summary>
     /// Number of players that can take part in the game.
@@ -31,6 +31,6 @@ public class TablePreferences : ITablePreferences
     /// Game type
     /// The default value is classic.
     /// </summary>
-    [DefaultValue("classic")]
-    public string TableType { get; set; } = "classic";
+    [DefaultValue("competitive")]
+    public string TableType { get; set; } = "competitive";
 }

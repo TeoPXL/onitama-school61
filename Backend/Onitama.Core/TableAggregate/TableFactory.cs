@@ -12,4 +12,18 @@ internal class TableFactory : ITableFactory
         table.Join(user);
         return table;
     }
+
+    public ITable CreateCompForUser(User user, CompTablePreferences preferences)
+    {
+        var table = new Table(Guid.NewGuid(), preferences);
+        table.Join(user);
+        return table;
+    }
+
+    public ITable CreateBlitzForUser(User user, BlitzTablePreferences preferences)
+    {
+        var table = new Table(Guid.NewGuid(), preferences);
+        table.Join(user);
+        return table;
+    }
 }

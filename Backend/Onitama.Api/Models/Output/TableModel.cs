@@ -7,7 +7,7 @@ namespace Onitama.Api.Models.Output
     public class TableModel
     {
         public Guid Id { get; set; }
-        public TablePreferences Preferences { get; set; } = new TablePreferences();
+        public ITablePreferences Preferences { get; set; } = new TablePreferences();
         public Guid OwnerPlayerId { get; set; }
         public List<PlayerModel> SeatedPlayers { get; set; } = new List<PlayerModel>();
         public bool HasAvailableSeat { get; set; }

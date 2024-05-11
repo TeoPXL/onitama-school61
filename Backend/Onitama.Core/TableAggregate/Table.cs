@@ -13,7 +13,7 @@ namespace Onitama.Core.TableAggregate;
 internal class Table : ITable
 {
     private Guid _id;
-    private TablePreferences _preferences;
+    private ITablePreferences _preferences;
     private Guid _ownerPlayerId;
     private IList<IPlayer> _seatedPlayers = new List<IPlayer>();
     private bool _hasAvailableSeat;
@@ -26,7 +26,7 @@ internal class Table : ITable
     private static readonly Color[] PossibleColors =
         new[] { Color.Red, Color.Blue, Color.Green, Color.Yellow, Color.Orange };
 
-    public Table(Guid id, TablePreferences preferences)
+    public Table(Guid id, ITablePreferences preferences)
     {
         this._id = id;
         this._preferences = preferences;
@@ -44,7 +44,7 @@ internal class Table : ITable
         set { this._id = value; }
     }
 
-    public TablePreferences Preferences
+    public ITablePreferences Preferences
     {
         get { return this._preferences; }
         set { this._preferences = value; }

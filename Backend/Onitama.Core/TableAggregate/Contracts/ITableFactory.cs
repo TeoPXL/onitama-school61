@@ -14,4 +14,7 @@ public interface ITableFactory
     /// <param name="user">The user</param>
     /// <param name="preferences">Determine the game options (e.g. play mat size, number of players, ...)</param>
     ITable CreateNewForUser(User user, TablePreferences preferences);
+
+    ITable CreateCompForUser(User user, CompTablePreferences preferences);
+    ITable CreateBlitzForUser(User user, BlitzTablePreferences preferences);
 }

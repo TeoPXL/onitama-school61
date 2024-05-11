@@ -18,7 +18,7 @@ public interface ITable
     /// <summary>
     /// The preferences of the table. This determines game play options like the number of players and the play mat size.
     /// </summary>
-    TablePreferences Preferences { get; }
+    ITablePreferences Preferences { get; }
 
     /// <summary>
     /// The unique identifier of the player who created the table.

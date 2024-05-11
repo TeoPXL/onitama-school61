@@ -14,6 +14,16 @@ namespace Onitama.Core.TableAggregate.Contracts
         ITable AddNewTableForUser(User user, TablePreferences preferences);
 
         /// <summary>
+        /// Creates a competitive table for a user with the given preferences.
+        /// </summary>
+        ITable AddCompTableForUser(User user, CompTablePreferences preferences);
+
+        /// <summary>
+        /// Creates a blitz table for a user with the given preferences.
+        /// </summary>
+        ITable AddBlitzTableForUser(User user, BlitzTablePreferences preferences);
+
+        /// <summary>
         /// Joins a user to a table.
         /// </summary>
         void JoinTable(Guid tableId, User user);

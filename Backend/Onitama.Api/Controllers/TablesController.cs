@@ -102,10 +102,30 @@ public class TablesController : ApiControllerBase
     [HttpPost("competitive")]
     [ProducesResponseType(typeof(TableModel), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> AddNew([FromBody]  NewTablePreferences preferences)
+    public async Task<IActionResult> AddComp([FromBody]  CompTablePreferences preferences)
     {
         User currentUser = (await _userManager.GetUserAsync(User))!;
-        ITable createdTable = _tableManager.AddNewTableForUser(currentUser, preferences);
+        ITable createdTable = _tableManager.AddCompTableForUser(currentUser, preferences);
+
+        TableModel createdTableModel = _mapper.Map<TableModel>(createdTable);
+
+        return CreatedAtAction(nameof(GetTableById), new { id = createdTable.Id }, createdTableModel);
+    }
+
+    /// <summary>
+    /// Adds a new competitive table to the system. The user that creates the table is automatically seated.
+    /// </summary>
+    /// <param name="preferences">
+    /// Contains info about the type of game you want to play.
+    /// </param>
+    /// <remarks>Tables are automatically removed from the system after 15 minutes.</remarks>
+    [HttpPost("blitz")]
+    [ProducesResponseType(typeof(TableModel), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> AddBlitz([FromBody] BlitzTablePreferences preferences)
+    {
+        User currentUser = (await _userManager.GetUserAsync(User))!;
+        ITable createdTable = _tableManager.AddBlitzTableForUser(currentUser, preferences);
 
         TableModel createdTableModel = _mapper.Map<TableModel>(createdTable);
 

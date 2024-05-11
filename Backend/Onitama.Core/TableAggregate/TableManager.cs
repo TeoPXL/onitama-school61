@@ -36,6 +36,20 @@ internal class TableManager : ITableManager
         return table;
     }
 
+    public ITable AddCompTableForUser(User user, CompTablePreferences preferences)
+    {
+        var table = _tableFactory.CreateCompForUser(user, preferences);
+        _tableRepository.Add(table);
+        return table;
+    }
+
+    public ITable AddBlitzTableForUser(User user, BlitzTablePreferences preferences)
+    {
+        var table = _tableFactory.CreateBlitzForUser(user, preferences);
+        _tableRepository.Add(table);
+        return table;
+    }
+
     public void JoinTable(Guid tableId, User user)
     {
         var table = _tableRepository.Get(tableId);
