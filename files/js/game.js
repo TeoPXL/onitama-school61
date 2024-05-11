@@ -713,6 +713,9 @@ async function onClick(){
                     cube.name = "selectable";
                     cube.position.x = 4 - (column * 2);
                     cube.position.z = row * 2 - 4;
+                    cube.scale.x = 1.05;
+                    cube.scale.z = 1.05;
+                    cube.scale.y = 1.05;
                     game.scene.add(cube);
                     cube.onitamaType = "selectable";
                     allCubes.push(cube);
