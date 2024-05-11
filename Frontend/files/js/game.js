@@ -744,6 +744,9 @@ window.addEventListener('touchend', resetHighlightedObjects, false);
 window.addEventListener('click', onClick, false);
 
 async function fetchTable(){
+    if(currentApi == ""){
+        return;
+    }
     clearInterval(tableFetchInterval);
     if(game.started == true){
         return;
