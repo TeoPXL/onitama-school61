@@ -113,19 +113,6 @@ namespace Onitama.Core.PlayMatAggregate
                     var move = new Move(card, pawn, playerDirection, possibleMoves[i]);
                     moves.Add(move);
                 }
-                if (_grid[y, x] is IPawn)
-                {
-                    if (_grid[y, x].OwnerId != pawn.OwnerId)
-                    {
-                        //There is a pawn here and it is not ours?
-                        var move = new Move(card, pawn, playerDirection, possibleMoves[i]);
-                        //moves.Add(move);
-                    }
-                } else
-                {
-                    var move = new Move(card, pawn, playerDirection, possibleMoves[i]);
-                    //moves.Add(move);
-                }
                 
             }
             return moves;
