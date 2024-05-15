@@ -7,7 +7,7 @@ using Onitama.Core.UserAggregate;
 namespace Onitama.Infrastructure;
 
 //DO NOT TOUCH THIS FILE!!
-internal class OnitamaDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
+public class OnitamaDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
     public OnitamaDbContext(DbContextOptions options) : base(options) { }
 
@@ -22,5 +22,12 @@ internal class OnitamaDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gu
         builder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoles");
         builder.Entity<IdentityUserLogin<Guid>>().ToTable("ExternalLogins");
         builder.Entity<IdentityUserToken<Guid>>().ToTable("UserTokens");
+    }
+
+    public override int SaveChanges()
+    {
+        // Perform any additional logic before saving changes
+        ChangeTracker.DetectChanges();
+        return base.SaveChanges(); // Save changes to the database
     }
 }

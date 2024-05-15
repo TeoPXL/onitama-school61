@@ -1,8 +1,10 @@
-﻿using Onitama.Core.GameAggregate.Contracts;
+﻿using Microsoft.AspNetCore.Identity;
+using Onitama.Core.GameAggregate.Contracts;
 using Onitama.Core.PlayerAggregate;
 using Onitama.Core.PlayerAggregate.Contracts;
 using Onitama.Core.SchoolAggregate.Contracts;
 using Onitama.Core.Util;
+using Onitama.Core.UserAggregate;
 using Onitama.Core.Util.Contracts;
 
 namespace Onitama.Core.GameAggregate;
@@ -28,6 +30,11 @@ internal class GameService : IGameService
     public void MovePawn(Guid gameId, Guid playerId, Guid pawnId, string moveCardName, ICoordinate to)
     {
         _gameRepository.GetById(gameId).MovePawn(playerId, pawnId, moveCardName, to);
+    }
+
+    public void UpdateUsers(Guid gameId, UserManager<User> userManager)
+    {
+        _gameRepository.GetById(gameId).UpdateUsersAsync(userManager);
     }
 
     public void SkipMovementAndExchangeCard(Guid gameId, Guid playerId, string moveCardName)

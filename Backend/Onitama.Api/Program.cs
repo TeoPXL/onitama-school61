@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Onitama.Api.Controllers;
 using Onitama.Api.Models;
 using Onitama.Api.Models.Output;
 using Onitama.Api.Services;
@@ -47,7 +48,7 @@ namespace Onitama.Api
             ///////////////////////////////////
             // Dependency injection container//
             ///////////////////////////////////
-
+            builder.Services.AddScoped<UserEditor>();
             builder.Services.AddSingleton(provider =>
                 new OnitamaExceptionFilterAttribute(provider.GetRequiredService<ILogger<Program>>()));
 

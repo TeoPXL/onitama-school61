@@ -1,13 +1,18 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Onitama.Api.Models;
 using Onitama.Api.Models.Input;
 using Onitama.Api.Models.Output;
+using Onitama.Core.GameAggregate;
 using Onitama.Core.GameAggregate.Contracts;
+using Onitama.Core.UserAggregate;
 using Onitama.Core.SchoolAggregate;
 using Onitama.Core.SchoolAggregate.Contracts;
+using Onitama.Core.TableAggregate.Contracts;
 using Onitama.Core.Util;
 using Onitama.Core.Util.Contracts;
+using Onitama.Infrastructure;
 
 namespace Onitama.Api.Controllers
 {
@@ -20,12 +25,16 @@ namespace Onitama.Api.Controllers
         private readonly IGameService _gameService;
         private readonly ICoordinateFactory _coordinateFactory;
         private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
+        private readonly OnitamaDbContext _dbContext;
 
-        public GamesController(IGameService gameService, ICoordinateFactory coordinateFactory, IMapper mapper)
+        public GamesController(IGameService gameService, ICoordinateFactory coordinateFactory, IMapper mapper, [FromBody] UserManager<User> userManager, OnitamaDbContext dbContext)
         {
             _gameService = gameService;
             _coordinateFactory = coordinateFactory;
             _mapper = mapper;
+            _userManager = userManager;
+            _dbContext = dbContext;
         }
 
         /// <summary>
@@ -75,6 +84,8 @@ namespace Onitama.Api.Controllers
         {
             ICoordinate to = _coordinateFactory.Create(inputModel.To.Row, inputModel.To.Column);
             _gameService.MovePawn(id, UserId, inputModel.PawnId, inputModel.MoveCardName, to);
+            _gameService.UpdateUsers(id, _userManager);
+            _dbContext.SaveChanges();
             return Ok();
         }
 

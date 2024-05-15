@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Drawing;
+using Microsoft.AspNetCore.Identity;
 using Onitama.Core.GameAggregate.Contracts;
 using Onitama.Core.MoveCardAggregate.Contracts;
 using Onitama.Core.PlayerAggregate.Contracts;
@@ -8,6 +9,7 @@ using Onitama.Core.PlayMatAggregate.Contracts;
 using Onitama.Core.SchoolAggregate;
 using Onitama.Core.SchoolAggregate.Contracts;
 using Onitama.Core.TableAggregate.Contracts;
+using Onitama.Core.UserAggregate;
 using Onitama.Core.Util;
 using static Onitama.Core.TableAggregate.Table;
 
@@ -17,9 +19,10 @@ internal class GameFactory : IGameFactory
 {
     private IMoveCardRepository _moveCardRepository;
     private static Random _random = new Random();
+
     public GameFactory(IMoveCardRepository moveCardRepository)
     {
-       this._moveCardRepository = moveCardRepository;
+        this._moveCardRepository = moveCardRepository;
     }
 
     public IGame CreateNewForTable(ITable table)

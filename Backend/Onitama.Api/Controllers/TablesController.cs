@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Onitama.Api.Models;
 using Onitama.Api.Models.Output;
 using Onitama.Core;
+using Onitama.Core.GameAggregate;
 using Onitama.Core.TableAggregate;
 using Onitama.Core.TableAggregate.Contracts;
 using Onitama.Core.UserAggregate;

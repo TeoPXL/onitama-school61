@@ -1,4 +1,6 @@
-﻿using Onitama.Core.GameAggregate.Contracts;
+﻿using Microsoft.AspNetCore.Identity;
+using Onitama.Core.GameAggregate;
+using Onitama.Core.GameAggregate.Contracts;
 using Onitama.Core.UserAggregate;
 
 namespace Onitama.Core.TableAggregate.Contracts
@@ -8,6 +10,7 @@ namespace Onitama.Core.TableAggregate.Contracts
     /// </summary>
     public interface ITableManager
     {
+
         /// <summary>
         /// Creates a new table for a user with the given preferences.
         /// </summary>

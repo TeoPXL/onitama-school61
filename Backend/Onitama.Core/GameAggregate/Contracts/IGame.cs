@@ -1,8 +1,10 @@
-﻿using Onitama.Core.MoveCardAggregate.Contracts;
+﻿using Microsoft.AspNetCore.Identity;
+using Onitama.Core.MoveCardAggregate.Contracts;
 using Onitama.Core.PlayerAggregate.Contracts;
 using Onitama.Core.PlayMatAggregate.Contracts;
 using Onitama.Core.SchoolAggregate.Contracts;
 using Onitama.Core.Util.Contracts;
+using Onitama.Core.UserAggregate;
 using System;
 
 namespace Onitama.Core.GameAggregate.Contracts
@@ -51,6 +53,8 @@ namespace Onitama.Core.GameAggregate.Contracts
         /// </summary>
         public string Gametype { get; }
 
+        public UserEditor UserEditor { get; set; }
+
 
         /// <summary>
         /// Returns all the moves a player can make for a specific pawn and move card.
@@ -75,6 +79,7 @@ namespace Onitama.Core.GameAggregate.Contracts
         /// <param name="to">Target coordinate on the play mat</param>
         void MovePawn(Guid playerId, Guid pawnId, string moveCardName, ICoordinate to);
 
+        Task UpdateUsersAsync(UserManager<User> userManager);
         /// <summary>
         /// When a player cannot move any of his pawns, he can skip his movement,
         /// but he must exchange one of his move cards.

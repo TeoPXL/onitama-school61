@@ -1,4 +1,6 @@
-﻿using Onitama.Core.GameAggregate.Contracts;
+﻿using Microsoft.AspNetCore.Identity;
+using Onitama.Core.GameAggregate;
+using Onitama.Core.GameAggregate.Contracts;
 using Onitama.Core.PlayerAggregate.Contracts;
 using Onitama.Core.TableAggregate.Contracts;
 using Onitama.Core.UserAggregate;

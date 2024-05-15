@@ -1,4 +1,5 @@
-﻿using Onitama.Core.GameAggregate.Contracts;
+﻿using Microsoft.AspNetCore.Identity;
+using Onitama.Core.GameAggregate.Contracts;
 using Onitama.Core.MoveCardAggregate;
 using Onitama.Core.MoveCardAggregate.Contracts;
 using Onitama.Core.PlayerAggregate;
@@ -29,6 +30,8 @@ internal class Game : IGame
     private string _gameType;
     private Timer _timer;
     private bool _isRunning;
+
+    public UserEditor UserEditor { get; set; }
 
     public Guid Id
     {
@@ -91,6 +94,7 @@ internal class Game : IGame
     /// The fifth card used to exchange cards after the first move
     /// </param>
     /// <param name="gameType"></param>
+    /// <param name="userEditor"></param>
     /// The type of the game (WayOfTheStone or WayOfTheWind)
     public Game(Guid id, IPlayMat playMat, IPlayer[] players, IMoveCard extraMoveCard, string gameType = "classic")
     {
@@ -484,14 +488,32 @@ internal class Game : IGame
             _players[1].User.Elo = (Convert.ToInt32(newRB));
             _players[2].User.Elo = (Convert.ToInt32(newRC));
             _players[3].User.Elo = (Convert.ToInt32(newRD));
+            //userEditor.UpdateUser(_players[0].User);
+            //userEditor.UpdateUser(_players[1].User);
+            //userEditor.UpdateUser(_players[2].User);
+            //userEditor.UpdateUser(_players[3].User);
         } else
         {
             double newRA = RA + K * (scoreA - EA);
             double newRB = RB + K * (scoreB - EB);
             _players[0].User.Elo = (Convert.ToInt32(newRA));
             _players[1].User.Elo = (Convert.ToInt32(newRB));
+            //userEditor.UpdateUser(_players[0].User);
+            //userEditor.UpdateUser(_players[1].User);
         }
             
+    }
+    public async Task UpdateUsersAsync(UserManager<User> userManager)
+    {
+        foreach (var player in _players)
+        {
+            var result = await userManager.UpdateAsync(player.User);
+            if (!result.Succeeded)
+            {
+                // Handle the case where the update operation failed
+                throw new Exception("Could not update the database");
+            }
+        }
     }
     public void SkipMovementAndExchangeCard(Guid playerId, string moveCardName)
     {
