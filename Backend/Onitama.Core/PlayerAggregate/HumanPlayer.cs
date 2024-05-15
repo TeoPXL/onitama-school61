@@ -20,6 +20,12 @@ internal class HumanPlayer : PlayerBase
     private User _user;
     private int _time = 180;
 
+    public int Time
+    {
+        get { return _time; }
+        set { _time = value; }
+    }
+
     public HumanPlayer(Guid userId, string name, Color color, Direction direction, int elo): base(userId, name, color, direction)
     {
         _id = userId;

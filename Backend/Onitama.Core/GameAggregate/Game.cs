@@ -111,7 +111,7 @@ internal class Game : IGame
         if (gameType == "blitz")
         {
             _timer = new Timer(UpdateTime, null, Timeout.Infinite, Timeout.Infinite);
-
+            StartTimer();
         }
     }
 
@@ -136,7 +136,14 @@ internal class Game : IGame
 
     public void UpdateTime(object state)
     {
+        for (int i = 0; i < _players.Length; i++)
+        {
+            if (_players[i].Id == _playerToPlayId)
+            {
+                _players[i].Time--;
 
+            }
+        }
     }
 
     public void Disposs()

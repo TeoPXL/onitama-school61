@@ -18,6 +18,7 @@ internal class PlayerBase : IPlayer
     public Direction Direction { get; }
 
     public int Elo { get; set; }
+    public int Time { get; set; }
     public ISchool School
     {
         get { return _school; }
