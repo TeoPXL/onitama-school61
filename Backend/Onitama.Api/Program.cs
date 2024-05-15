@@ -47,6 +47,7 @@ namespace Onitama.Api
             ///////////////////////////////////
             // Dependency injection container//
             ///////////////////////////////////
+            builder.Services.AddScoped<IUserService, UserService>();
 
             builder.Services.AddSingleton(provider =>
                 new OnitamaExceptionFilterAttribute(provider.GetRequiredService<ILogger<Program>>()));
