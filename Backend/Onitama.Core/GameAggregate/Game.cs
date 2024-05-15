@@ -144,6 +144,19 @@ internal class Game : IGame
             {
                 _players[i].Time--;
 
+                if (_players[i].Time <= 0)
+                {
+                    _players[i].Time = 0;
+                    for (int j = 0; j < _players.Length; j++)
+                    {
+                        if (_players[j].Id != _players[i].Id)
+                        {
+                            _winnerPlayerId = _players[j].Id;
+                            WinnerMethod = "timer.";
+                        }
+                    }
+                }
+
             }
         }
     }
