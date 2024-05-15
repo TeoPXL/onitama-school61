@@ -48,7 +48,7 @@ internal class HumanPlayer : PlayerBase
         _user = user;
         _time = 180;
         this.Time = 180;
-        this.Elo = _elo;
+        this.Elo = elo;
     }
 
     public Guid Id
@@ -89,7 +89,7 @@ internal class HumanPlayer : PlayerBase
     public int Elo
     {
         get { return _elo; }
-        set { this._elo = value; }
+        set { _elo = value; }
     }
 
     public User User
