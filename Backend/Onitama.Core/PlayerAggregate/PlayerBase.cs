@@ -20,7 +20,10 @@ internal class PlayerBase : IPlayer
     public int Elo { get; set; }
 
     private int _time = 180;
-    public int Time { get; set; }
+    public int Time {
+        get { return _time; }
+        set { _time = value; }
+    }
     public ISchool School
     {
         get { return _school; }
