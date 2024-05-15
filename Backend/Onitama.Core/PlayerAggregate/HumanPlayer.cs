@@ -35,6 +35,7 @@ internal class HumanPlayer : PlayerBase
         _elo = elo;
         _time = 180;
         this.Time = 180;
+        this.Elo = elo;
     }
 
     public HumanPlayer(Guid userId, string name, Color color, Direction direction, int elo, User user) : base(userId, name, color, direction)
@@ -47,6 +48,7 @@ internal class HumanPlayer : PlayerBase
         _user = user;
         _time = 180;
         this.Time = 180;
+        this.Elo = _elo;
     }
 
     public Guid Id

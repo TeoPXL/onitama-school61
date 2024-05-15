@@ -17,7 +17,12 @@ internal class PlayerBase : IPlayer
     public Color Color { get; }
     public Direction Direction { get; }
 
-    public int Elo { get; set; }
+    private int _elo;
+
+    public int Elo {
+        get { return _elo; }
+        set { _elo = value; }
+    }
 
     private int _time = 180;
     public int Time {
