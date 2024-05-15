@@ -96,9 +96,11 @@ internal class Game : IGame
     public Game(Guid id, IPlayMat playMat, IPlayer[] players, IMoveCard extraMoveCard, string gameType = "classic")
     {
         this._players = new IPlayer[players.Count()];
+
         for (int i = 0; i < _players.Length; i++)
         {
             _players[i] = players.ElementAt(i);
+            _players[i].Time = 180;
         }
         this._id = id;  
         this._playMat = playMat;

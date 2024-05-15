@@ -22,7 +22,11 @@ public interface IPlayer
     /// </summary>
     string Name { get; }
 
+    
+
     public int Time { get; set; }
+
+
 
     /// <summary>
     /// Color of the player
