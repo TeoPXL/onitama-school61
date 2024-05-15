@@ -33,6 +33,7 @@ internal class HumanPlayer : PlayerBase
         _color = color;
         _direction = direction;
         _elo = elo;
+        _time = 180;
     }
 
     public HumanPlayer(Guid userId, string name, Color color, Direction direction, int elo, User user) : base(userId, name, color, direction)
@@ -43,6 +44,7 @@ internal class HumanPlayer : PlayerBase
         _direction = direction;
         _elo = elo;
         _user = user;
+        _time = 180;
     }
 
     public Guid Id
