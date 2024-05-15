@@ -3,6 +3,7 @@ using Onitama.Core.MoveCardAggregate;
 using Onitama.Core.MoveCardAggregate.Contracts;
 using Onitama.Core.PlayerAggregate.Contracts;
 using Onitama.Core.SchoolAggregate;
+using Onitama.Core.UserAggregate;
 using Onitama.Core.SchoolAggregate.Contracts;
 using Onitama.Core.Util;
 
@@ -18,10 +19,17 @@ internal class PlayerBase : IPlayer
     public Direction Direction { get; }
 
     private int _elo;
+    private User _user;
 
     public virtual int Elo {
         get { return _elo; }
         set { _elo = value; }
+    }
+
+    public virtual User User
+    {
+        get { return _user; }
+        set { _user = value; }
     }
 
     private int _time = 180;

@@ -481,16 +481,16 @@ internal class Game : IGame
             double newRB = RB + K * (scoreB - EB);
             double newRC = RC + K * (scoreC - EC);
             double newRD = RD + K * (scoreD - ED);
-            //_players[0].SetElo(Convert.ToInt32(newRA));
-            //_players[1].SetElo(Convert.ToInt32(newRB));
-            //_players[2].SetElo(Convert.ToInt32(newRC));
-            //_players[3].SetElo(Convert.ToInt32(newRD));
+            _players[0].User.Elo = (Convert.ToInt32(newRA));
+            _players[1].User.Elo = (Convert.ToInt32(newRB));
+            _players[2].User.Elo = (Convert.ToInt32(newRC));
+            _players[3].User.Elo = (Convert.ToInt32(newRD));
         } else
         {
             double newRA = RA + K * (scoreA - EA);
             double newRB = RB + K * (scoreB - EB);
-            //_players[0].SetElo(Convert.ToInt32(newRA));
-           // _players[1].SetElo(Convert.ToInt32(newRB));
+            _players[0].User.Elo = (Convert.ToInt32(newRA));
+            _players[1].User.Elo = (Convert.ToInt32(newRB));
         }
             
     }

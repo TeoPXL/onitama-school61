@@ -26,6 +26,12 @@ internal class HumanPlayer : PlayerBase
         set { _time = value; }
     }
 
+    public override User User
+    {
+        get { return _user; }
+        set { _user = value; }
+    }
+
     public HumanPlayer(Guid userId, string name, Color color, Direction direction, int elo): base(userId, name, color, direction)
     {
         _id = userId;
@@ -46,6 +52,7 @@ internal class HumanPlayer : PlayerBase
         _direction = direction;
         _elo = elo;
         _user = user;
+        this.User = user;
         _time = 180;
         this.Time = 180;
         this.Elo = elo;
@@ -90,11 +97,5 @@ internal class HumanPlayer : PlayerBase
     {
         get { return _elo; }
         set { _elo = value; }
-    }
-
-    public User User
-    {
-        get { return _user; }
-        set { this._user = value; }
     }
 }

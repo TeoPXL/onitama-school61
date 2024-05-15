@@ -45,6 +45,8 @@ public interface IPlayer
 
     int Elo { get; set; }
 
+    User User { get; set; }
+
     /// <summary>
     /// The move cards that the player can use to play its next move (2 of the 5 available)
     /// </summary>
