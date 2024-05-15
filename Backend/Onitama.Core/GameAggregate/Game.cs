@@ -152,7 +152,7 @@ internal class Game : IGame
                         if (_players[j].Id != _players[i].Id)
                         {
                             _winnerPlayerId = _players[j].Id;
-                            WinnerMethod = "timer.";
+                            WinnerMethod = "timer";
                         }
                     }
                 }
