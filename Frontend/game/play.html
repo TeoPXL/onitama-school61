@@ -34,6 +34,9 @@
 <body>
     <div class="toast-container">
         <div class="toast">Loading...</div>
+        <div class="loading-bar">
+            <div class="loading-bar-background"></div>
+        </div>
     </div>
     
     <div class="floating-error floating-error-hidden">
@@ -214,7 +217,7 @@
             });
         });
 
-
+        document.querySelector('.loading-bar-background').classList.add('loading-bar-full');
         setTimeout(() => {
             fetchTable();
             console.log("Fetching table...");
