@@ -1187,3 +1187,4 @@ function detectChanges(oldArray, newArray) {
 
     return changes;
 }
+
