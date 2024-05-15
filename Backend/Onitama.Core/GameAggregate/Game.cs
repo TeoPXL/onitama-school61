@@ -13,6 +13,7 @@ using System.Drawing;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Security.AccessControl;
+using System.Threading;
 
 namespace Onitama.Core.GameAggregate;
 
@@ -26,6 +27,8 @@ internal class Game : IGame
     private Guid _playerToPlayId;
     private Guid _winnerPlayerId;
     private string _gameType;
+    private Timer _timer;
+    private bool _isRunning;
 
 
     public Guid Id
@@ -104,6 +107,41 @@ internal class Game : IGame
         this.PlayerToPlayId = players[0].Id;
         this.PlayerToPlayId = players.FirstOrDefault(player => player.Color == _extraMoveCard.StampColor).Id;
         this._gameType = gameType;
+
+        if (gameType == "blitz")
+        {
+            _timer = new Timer(UpdateTime, null, Timeout.Infinite, Timeout.Infinite);
+
+        }
+    }
+
+    public void StartTimer()
+    {
+        if (!_isRunning)
+        {
+            _timer.Change(TimeSpan.Zero, TimeSpan.FromSeconds(1));
+            _isRunning = true;
+        }
+    }
+
+    public void StopTimer()
+    {
+        if (_isRunning)
+        {
+            _timer.Change(Timeout.Infinite, Timeout.Infinite);     
+            _isRunning = false;
+
+        }
+    }
+
+    public void UpdateTime(object state)
+    {
+
+    }
+
+    public void Disposs()
+    {
+        _timer?.Dispose();
     }
 
     /// <summary>

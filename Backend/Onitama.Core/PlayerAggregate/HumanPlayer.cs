@@ -18,6 +18,7 @@ internal class HumanPlayer : PlayerBase
     private IList<IMoveCard> _moveCards;
     private int _elo;
     private User _user;
+    private int _time = 180;
 
     public HumanPlayer(Guid userId, string name, Color color, Direction direction, int elo): base(userId, name, color, direction)
     {
