@@ -66,13 +66,17 @@
     justify-content: flex-end;
     overflow-x: hidden;
 }
+.game-cards-name-container {
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
 .game-cards-name {
     margin-bottom: 5px;
     width: max-content;
     display: flex;
     text-align: center;
-    margin-left: auto;
-    margin-right: auto;
     padding: 2px;
     padding-left: 12px;
     padding-right: 12px;
