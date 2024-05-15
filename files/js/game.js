@@ -965,12 +965,14 @@ async function getGame(){
                     }
                 }
                 //console.log("Enemy time: " + enemyTime);
+                document.querySelector('.enemy-time').textContent = "(" + enemyTime +  "s)"
                 if(player.id == user.id){
                     playerCards = player.moveCards;
                     playerColor = player.color;
                     game.playerCards = playerCards;
                     playerTime = player.time;
                     //console.log("Your time: " + playerTime);
+                    document.querySelector('.player-time').textContent = "(" + playerTime +  "s)"
                 }
             });
             document.querySelector('.enemy-name').textContent = enemyName;
