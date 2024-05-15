@@ -29,7 +29,6 @@ internal class Game : IGame
     private string _gameType;
     private Timer _timer;
     private bool _isRunning;
-    private readonly IUserService _userService;
 
     public Guid Id
     {
@@ -93,7 +92,7 @@ internal class Game : IGame
     /// </param>
     /// <param name="gameType"></param>
     /// The type of the game (WayOfTheStone or WayOfTheWind)
-    public Game(Guid id, IPlayMat playMat, IPlayer[] players, IMoveCard extraMoveCard, string gameType = "classic", IUserService userService = null)
+    public Game(Guid id, IPlayMat playMat, IPlayer[] players, IMoveCard extraMoveCard, string gameType = "classic")
     {
         this._players = new IPlayer[players.Count()];
 
@@ -109,7 +108,6 @@ internal class Game : IGame
         this.PlayerToPlayId = players[0].Id;
         this.PlayerToPlayId = players.FirstOrDefault(player => player.Color == _extraMoveCard.StampColor).Id;
         this._gameType = gameType;
-        this._userService = userService;
 
         if (gameType == "blitz")
         {
@@ -486,18 +484,12 @@ internal class Game : IGame
             _players[1].User.Elo = (Convert.ToInt32(newRB));
             _players[2].User.Elo = (Convert.ToInt32(newRC));
             _players[3].User.Elo = (Convert.ToInt32(newRD));
-            await _userService.UpdateUserAsync(_players[0].User);
-            await _userService.UpdateUserAsync(_players[1].User);
-            await _userService.UpdateUserAsync(_players[2].User);
-            await _userService.UpdateUserAsync(_players[3].User);
         } else
         {
             double newRA = RA + K * (scoreA - EA);
             double newRB = RB + K * (scoreB - EB);
             _players[0].User.Elo = (Convert.ToInt32(newRA));
             _players[1].User.Elo = (Convert.ToInt32(newRB));
-            await _userService.UpdateUserAsync(_players[0].User);
-            await _userService.UpdateUserAsync(_players[1].User);
         }
             
     }
