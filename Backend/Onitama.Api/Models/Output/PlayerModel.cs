@@ -11,7 +11,7 @@ public class PlayerModel
     public string Direction { get; set; }
     public int Elo { get; set; }
 
-    public int Timer { get; set; }
+    public int Time { get; set; }
 
     public SchoolModel School { get; set; }
 
