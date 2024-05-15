@@ -86,7 +86,7 @@ internal class HumanPlayer : PlayerBase
         set { this._moveCards = value; }
     }
 
-    public int Elo
+    public override int Elo
     {
         get { return _elo; }
         set { _elo = value; }

@@ -19,7 +19,7 @@ internal class PlayerBase : IPlayer
 
     private int _elo;
 
-    public int Elo {
+    public virtual int Elo {
         get { return _elo; }
         set { _elo = value; }
     }
