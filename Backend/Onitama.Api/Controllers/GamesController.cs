@@ -13,6 +13,7 @@ using Onitama.Core.TableAggregate.Contracts;
 using Onitama.Core.Util;
 using Onitama.Core.Util.Contracts;
 using Onitama.Infrastructure;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Onitama.Api.Controllers
 {
@@ -80,12 +81,17 @@ namespace Onitama.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
-        public IActionResult MovePawn(Guid id, [FromBody] MovePawnModel inputModel)
+        public async Task<IActionResult> MovePawn(Guid id, [FromBody] MovePawnModel inputModel)
         {
             ICoordinate to = _coordinateFactory.Create(inputModel.To.Row, inputModel.To.Column);
             _gameService.MovePawn(id, UserId, inputModel.PawnId, inputModel.MoveCardName, to);
-            _gameService.UpdateUsers(id, _userManager);
-            _dbContext.SaveChanges();
+            await _gameService.UpdateUsers(id, _userManager); // Await the async method
+            var players = _gameService.GetGame(id).Players;
+            for (int i = 0; i < players.Length; i++)
+            {
+                _dbContext.Entry(players[i].User).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            }
+            await _dbContext.SaveChangesAsync(); // Await the SaveChangesAsync method
             return Ok();
         }
 

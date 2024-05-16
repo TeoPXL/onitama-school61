@@ -27,7 +27,7 @@ public class OnitamaDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid
     public override int SaveChanges()
     {
         // Perform any additional logic before saving changes
-        ChangeTracker.DetectChanges();
+        //ChangeTracker.DetectChanges();
         return base.SaveChanges(); // Save changes to the database
     }
 }

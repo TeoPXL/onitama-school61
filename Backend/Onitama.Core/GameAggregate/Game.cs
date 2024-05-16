@@ -164,7 +164,7 @@ internal class Game : IGame
         }
     }
 
-    public void Disposs()
+    public void Dispose()
     {
         _timer?.Dispose();
     }
@@ -507,12 +507,12 @@ internal class Game : IGame
     {
         foreach (var player in _players)
         {
-            var result = await userManager.UpdateAsync(player.User);
-            if (!result.Succeeded)
-            {
+            //var result = await userManager.UpdateAsync(player.User);
+            //if (!result.Succeeded)
+            //{
                 // Handle the case where the update operation failed
-                throw new Exception("Could not update the database");
-            }
+                //throw new Exception("Could not update the database");
+            //}
         }
     }
     public void SkipMovementAndExchangeCard(Guid playerId, string moveCardName)
