@@ -68,9 +68,9 @@
 }
 .game-cards-name-container {
     display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
 }
 .game-cards-name {
     margin-bottom: 5px;
@@ -262,6 +262,16 @@ canvas {
     width: calc(90% - 20px);
     padding: 10px;
     border-radius: 0.5em;
+}
+.game-over-elo {
+    background: var(--color-background-fade);
+    width: calc(90% - 20px);
+    padding: 10px;
+    border-radius: 0.5em;
+    margin-top: 10px;
+}
+.game-over-elo-hidden {
+    display: none;
 }
 .game-over-button {
     background: var(--color-main);

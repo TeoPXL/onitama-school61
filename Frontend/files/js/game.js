@@ -25,6 +25,7 @@ let allCubes = [];
 window.allCubes = allCubes;
 let tableFetchInterval;
 let getGameInterval;
+let oldElo;
 
 class Game {
     scene;
@@ -904,6 +905,11 @@ async function getGame(){
         }
         return response.json();
     }).then(data => {
+        data.players.forEach(player => {
+            if(player.id == user.id){
+                compareElo(player.elo);
+            }
+        });
         if(data.winnerPlayerId != "00000000-0000-0000-0000-000000000000" && data.winnerPlayerId != undefined){
             console.log("The game has been won!");
             console.log(data.winnerPlayerId);
@@ -1196,5 +1202,27 @@ function detectChanges(oldArray, newArray) {
     }
 
     return changes;
+}
+
+function compareElo(newElo){
+    if(oldElo < newElo){
+        let diff = newElo - oldElo;
+        console.log("DIFFERENCE: " + diff);
+        let string = "Your ELO has been increased by " + diff + " points, which sets it at " + newElo + " points total.";
+        document.querySelector('.game-over-elo').textContent = string;
+        document.querySelector('.game-over-elo').classList.remove("game-over-elo-hidden");
+    } else if (oldElo > newElo){
+        let diff = newElo - oldElo;
+        console.log("DIFFERENCE: " + diff);
+        let string = "Your ELO has been reduced by " + diff + " points, which sets it at " + newElo + " points total.";
+        document.querySelector('.game-over-elo').textContent = string;
+        document.querySelector('.game-over-elo').classList.remove("game-over-elo-hidden");
+    } else {
+        //let string = "Your ELO has not changed, it remains at " + newElo + " points total.";
+        //document.querySelector('.game-over-elo').textContent = string;
+    }
+
+    
+    oldElo = newElo;
 }
 
