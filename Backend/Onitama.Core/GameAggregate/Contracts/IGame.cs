@@ -53,8 +53,6 @@ namespace Onitama.Core.GameAggregate.Contracts
         /// </summary>
         public string Gametype { get; }
 
-        public UserEditor UserEditor { get; set; }
-
 
         /// <summary>
         /// Returns all the moves a player can make for a specific pawn and move card.

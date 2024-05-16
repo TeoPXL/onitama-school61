@@ -31,8 +31,6 @@ internal class Game : IGame
     private Timer _timer;
     private bool _isRunning;
 
-    public UserEditor UserEditor { get; set; }
-
     public Guid Id
     {
         get { return _id; }
