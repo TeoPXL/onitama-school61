@@ -139,6 +139,9 @@
     border-width: 1px;
     transition: 0.2s;
 }
+.game-cards-time-hidden {
+    display: none;
+}
 canvas {
     width: 100%;
     height: 100%;

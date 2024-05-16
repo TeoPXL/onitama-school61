@@ -912,6 +912,10 @@ async function getGame(){
         return response.json();
     }).then(data => {
         game.gameType = data.gametype;
+        if(data.gameType != "blitz"){
+            document.querySelector('.player-time').classList.add('game-cards-time-hidden');
+            document.querySelector('.enemy-time').classList.add('game-cards-time-hidden');
+        }
         if(data.winnerPlayerId != "00000000-0000-0000-0000-000000000000" && data.winnerPlayerId != undefined){
             console.log("The game has been won!");
             console.log(data.winnerPlayerId);
