@@ -25,7 +25,6 @@ let allCubes = [];
 window.allCubes = allCubes;
 let tableFetchInterval;
 let getGameInterval;
-let oldElo;
 
 class Game {
     scene;
@@ -46,6 +45,7 @@ class Game {
     selectedCard;
     currentPlayerObject;
     gameType;
+    oldElo = user.elo;
 
     constructor(playercount){
         this.board = new Board(playercount + 3);
@@ -912,11 +912,6 @@ async function getGame(){
         return response.json();
     }).then(data => {
         game.gameType = data.gametype;
-        data.players.forEach(player => {
-            if(player.id == user.id){
-                compareElo(player.elo);
-            }
-        });
         if(data.winnerPlayerId != "00000000-0000-0000-0000-000000000000" && data.winnerPlayerId != undefined){
             console.log("The game has been won!");
             console.log(data.winnerPlayerId);
@@ -925,6 +920,12 @@ async function getGame(){
             data.players.forEach(player => {
                 if(player.id == data.winnerPlayerId){
                     winnerName = player.name;
+                }
+                if(player.id == user.id){
+                    //console.log("id matches");
+                    if(game.gameType == "competitive"){
+                        getUser();
+                    }
                 }
             });
             document.querySelector('.game-over-subtitle').textContent = "The game has been won by " + winnerName + " by " + data.winnerMethod + ".";
@@ -1212,6 +1213,10 @@ function detectChanges(oldArray, newArray) {
 }
 
 function compareElo(newElo){
+    if(game.oldElo == undefined || game.oldElo == null){
+        game.oldElo = newElo;
+    }
+    let oldElo = game.oldElo;
     if(oldElo < newElo){
         let diff = newElo - oldElo;
         console.log("DIFFERENCE: " + diff);
@@ -1219,17 +1224,37 @@ function compareElo(newElo){
         document.querySelector('.game-over-elo').textContent = string;
         document.querySelector('.game-over-elo').classList.remove("game-over-elo-hidden");
     } else if (oldElo > newElo){
-        let diff = newElo - oldElo;
+        let diff = oldElo - newElo;
         console.log("DIFFERENCE: " + diff);
         let string = "Your ELO has been reduced by " + diff + " points, which sets it at " + newElo + " points total.";
         document.querySelector('.game-over-elo').textContent = string;
         document.querySelector('.game-over-elo').classList.remove("game-over-elo-hidden");
     } else {
-        //let string = "Your ELO has not changed, it remains at " + newElo + " points total.";
-        //document.querySelector('.game-over-elo').textContent = string;
     }
+}
 
-    
-    oldElo = newElo;
+async function getUser(){
+    try {
+        const response = await fetch(currentApi + "/api/Authentication/refresh", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({})
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error("Your token has expired already!");
+        }
+        
+        const data = await response.json();
+        console.log(data);
+        compareElo(data.user.elo)
+    } catch(error) {
+        //console.log(error);
+    }
 }
 
