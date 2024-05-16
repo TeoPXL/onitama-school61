@@ -96,8 +96,9 @@ namespace Onitama.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> MovePawnCompetitive(Guid id, [FromBody] MovePawnModel inputModel, OnitamaDbContext dbContext)
+        public async Task<IActionResult> MovePawnCompetitive(Guid id, [FromBody] MovePawnModel inputModel, [FromServices] IServiceProvider serviceProvider)
         {
+            var dbContext = serviceProvider.GetRequiredService<OnitamaDbContext>();
             ICoordinate to = _coordinateFactory.Create(inputModel.To.Row, inputModel.To.Column);
             _gameService.MovePawn(id, UserId, inputModel.PawnId, inputModel.MoveCardName, to);
             var players = _gameService.GetGame(id).Players;
