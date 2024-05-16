@@ -25,6 +25,7 @@ using Onitama.Core.MoveCardAggregate.Contracts;
 using Onitama.Core.TableAggregate;
 using Onitama.Core.TableAggregate.Contracts;
 using Onitama.Core.UserAggregate;
+using Onitama.Infrastructure;
 
 namespace Onitama.Api
 {
@@ -48,6 +49,7 @@ namespace Onitama.Api
             ///////////////////////////////////
             // Dependency injection container//
             ///////////////////////////////////
+            builder.Services.AddScoped<OnitamaDbHelper>();
             builder.Services.AddSingleton(provider =>
                 new OnitamaExceptionFilterAttribute(provider.GetRequiredService<ILogger<Program>>()));
 

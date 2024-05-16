@@ -14,6 +14,7 @@ using Onitama.Core.Util;
 using Onitama.Core.Util.Contracts;
 using Onitama.Infrastructure;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Onitama.Api.Controllers
 {
@@ -26,22 +27,12 @@ namespace Onitama.Api.Controllers
         private readonly IGameService _gameService;
         private readonly ICoordinateFactory _coordinateFactory;
         private readonly IMapper _mapper;
-        private readonly OnitamaDbContext _dbContext;
 
         public GamesController(IGameService gameService, ICoordinateFactory coordinateFactory, IMapper mapper)
         {
             _gameService = gameService;
             _coordinateFactory = coordinateFactory;
             _mapper = mapper;
-            _dbContext = null;
-        }
-
-        public GamesController(IGameService gameService, ICoordinateFactory coordinateFactory, IMapper mapper, OnitamaDbContext dbContext)
-        {
-            _gameService = gameService;
-            _coordinateFactory = coordinateFactory;
-            _mapper = mapper;
-            _dbContext = dbContext;
         }
 
         /// <summary>
@@ -87,18 +78,36 @@ namespace Onitama.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> MovePawn(Guid id, [FromBody] MovePawnModel inputModel)
+        public IActionResult MovePawn(Guid id, [FromBody] MovePawnModel inputModel)
+        {
+            ICoordinate to = _coordinateFactory.Create(inputModel.To.Row, inputModel.To.Column);
+            _gameService.MovePawn(id, UserId, inputModel.PawnId, inputModel.MoveCardName, to);
+            return Ok();
+        }
+
+        /// <summary>
+        /// Moves a pawn for the player associated with the authenticated user.
+        /// </summary>
+        /// <param name="id">Id (guid) of the game</param>
+        /// <param name="inputModel">
+        /// Information about the move the player wants to make.
+        /// </param>
+        [HttpPost("{id}/move-pawn-competitive")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> MovePawnCompetitive(Guid id, [FromBody] MovePawnModel inputModel, OnitamaDbContext dbContext)
         {
             ICoordinate to = _coordinateFactory.Create(inputModel.To.Row, inputModel.To.Column);
             _gameService.MovePawn(id, UserId, inputModel.PawnId, inputModel.MoveCardName, to);
             var players = _gameService.GetGame(id).Players;
-            if(_dbContext != null)
+            if (dbContext != null)
             {
                 for (int i = 0; i < players.Length; i++)
                 {
-                    _dbContext.Entry(players[i].User).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    dbContext.Entry(players[i].User).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 }
-                await _dbContext.SaveChangesAsync();
+                await dbContext.SaveChangesAsync();
             }
             return Ok();
         }

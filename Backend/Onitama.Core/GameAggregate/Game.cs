@@ -482,10 +482,14 @@ internal class Game : IGame
             double newRB = RB + K * (scoreB - EB);
             double newRC = RC + K * (scoreC - EC);
             double newRD = RD + K * (scoreD - ED);
-            _players[0].User.Elo = (Convert.ToInt32(newRA));
-            _players[1].User.Elo = (Convert.ToInt32(newRB));
-            _players[2].User.Elo = (Convert.ToInt32(newRC));
-            _players[3].User.Elo = (Convert.ToInt32(newRD));
+            if (_players[0].User != null)
+            {
+                _players[0].User.Elo = (Convert.ToInt32(newRA));
+                _players[1].User.Elo = (Convert.ToInt32(newRB));
+                _players[2].User.Elo = (Convert.ToInt32(newRC));
+                _players[3].User.Elo = (Convert.ToInt32(newRD));
+            }
+                
             //userEditor.UpdateUser(_players[0].User);
             //userEditor.UpdateUser(_players[1].User);
             //userEditor.UpdateUser(_players[2].User);
@@ -494,8 +498,12 @@ internal class Game : IGame
         {
             double newRA = RA + K * (scoreA - EA);
             double newRB = RB + K * (scoreB - EB);
-            _players[0].User.Elo = (Convert.ToInt32(newRA));
-            _players[1].User.Elo = (Convert.ToInt32(newRB));
+            if(_players[0].User != null)
+            {
+                _players[0].User.Elo = (Convert.ToInt32(newRA));
+                _players[1].User.Elo = (Convert.ToInt32(newRB));
+            }
+            
             //userEditor.UpdateUser(_players[0].User);
             //userEditor.UpdateUser(_players[1].User);
         }
