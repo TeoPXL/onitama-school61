@@ -45,6 +45,7 @@ class Game {
     playerCards;
     selectedCard;
     currentPlayerObject;
+    gameType;
 
     constructor(playercount){
         this.board = new Board(playercount + 3);
@@ -274,8 +275,13 @@ class Game {
         console.log("We are trying to move pawn to row " + x + " and col " + y);
 
         //Then try to do the move
-
-        const response = fetch(currentApi + "/api/games/" + game.id + "/move-pawn", {
+        let action;
+        if(game.gameType == "competitive"){
+            action = "/move-pawn-competitive";
+        } else {
+            action = "/move-pawn";
+        }
+        const response = fetch(currentApi + "/api/games/" + game.id + action, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -905,6 +911,7 @@ async function getGame(){
         }
         return response.json();
     }).then(data => {
+        game.gameType = data.gametype;
         data.players.forEach(player => {
             if(player.id == user.id){
                 compareElo(player.elo);
