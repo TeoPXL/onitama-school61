@@ -501,18 +501,6 @@ internal class Game : IGame
         }
             
     }
-    public async Task UpdateUsersAsync(UserManager<User> userManager)
-    {
-        foreach (var player in _players)
-        {
-            //var result = await userManager.UpdateAsync(player.User);
-            //if (!result.Succeeded)
-            //{
-                // Handle the case where the update operation failed
-                //throw new Exception("Could not update the database");
-            //}
-        }
-    }
     public void SkipMovementAndExchangeCard(Guid playerId, string moveCardName)
     {
         IPlayer player = null;

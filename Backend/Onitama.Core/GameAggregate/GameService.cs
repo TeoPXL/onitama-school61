@@ -32,11 +32,6 @@ internal class GameService : IGameService
         _gameRepository.GetById(gameId).MovePawn(playerId, pawnId, moveCardName, to);
     }
 
-    public async Task UpdateUsers(Guid gameId, UserManager<User> userManager)
-    {
-        await _gameRepository.GetById(gameId).UpdateUsersAsync(userManager);
-    }
-
     public void SkipMovementAndExchangeCard(Guid gameId, Guid playerId, string moveCardName)
     {
         _gameRepository.GetById(gameId).SkipMovementAndExchangeCard(playerId, moveCardName);

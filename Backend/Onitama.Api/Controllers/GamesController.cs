@@ -26,15 +26,21 @@ namespace Onitama.Api.Controllers
         private readonly IGameService _gameService;
         private readonly ICoordinateFactory _coordinateFactory;
         private readonly IMapper _mapper;
-        private readonly UserManager<User> _userManager;
         private readonly OnitamaDbContext _dbContext;
 
-        public GamesController(IGameService gameService, ICoordinateFactory coordinateFactory, IMapper mapper, [FromBody] UserManager<User> userManager, OnitamaDbContext dbContext)
+        public GamesController(IGameService gameService, ICoordinateFactory coordinateFactory, IMapper mapper)
         {
             _gameService = gameService;
             _coordinateFactory = coordinateFactory;
             _mapper = mapper;
-            _userManager = userManager;
+            _dbContext = null;
+        }
+
+        public GamesController(IGameService gameService, ICoordinateFactory coordinateFactory, IMapper mapper, OnitamaDbContext dbContext)
+        {
+            _gameService = gameService;
+            _coordinateFactory = coordinateFactory;
+            _mapper = mapper;
             _dbContext = dbContext;
         }
 
@@ -85,13 +91,15 @@ namespace Onitama.Api.Controllers
         {
             ICoordinate to = _coordinateFactory.Create(inputModel.To.Row, inputModel.To.Column);
             _gameService.MovePawn(id, UserId, inputModel.PawnId, inputModel.MoveCardName, to);
-            await _gameService.UpdateUsers(id, _userManager); // Await the async method
             var players = _gameService.GetGame(id).Players;
-            for (int i = 0; i < players.Length; i++)
+            if(_dbContext != null)
             {
-                _dbContext.Entry(players[i].User).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                for (int i = 0; i < players.Length; i++)
+                {
+                    _dbContext.Entry(players[i].User).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                }
+                await _dbContext.SaveChangesAsync();
             }
-            await _dbContext.SaveChangesAsync(); // Await the SaveChangesAsync method
             return Ok();
         }
 

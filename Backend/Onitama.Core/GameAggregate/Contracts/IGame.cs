@@ -77,7 +77,6 @@ namespace Onitama.Core.GameAggregate.Contracts
         /// <param name="to">Target coordinate on the play mat</param>
         void MovePawn(Guid playerId, Guid pawnId, string moveCardName, ICoordinate to);
 
-        Task UpdateUsersAsync(UserManager<User> userManager);
         /// <summary>
         /// When a player cannot move any of his pawns, he can skip his movement,
         /// but he must exchange one of his move cards.
