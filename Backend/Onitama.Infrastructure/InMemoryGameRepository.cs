@@ -26,5 +26,10 @@ namespace Onitama.Infrastructure
             }
             throw new DataNotFoundException();
         }
+
+        public List<IGame> GetAll()
+        {
+            return _gameDictionary.Values.ToList();
+        }
     }
 }

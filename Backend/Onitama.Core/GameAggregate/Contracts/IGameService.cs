@@ -11,5 +11,7 @@ public interface IGameService
 
     IReadOnlyList<IMove> GetPossibleMovesForPawn(Guid gameId, Guid playerId, Guid pawnId, string moveCardName);
     void MovePawn(Guid gameId, Guid playerId, Guid pawnId, string moveCardName, ICoordinate to);
+
+    List<IGame> GetAllGames();
     void SkipMovementAndExchangeCard(Guid gameId, Guid playerId, string moveCardName);
 }

@@ -32,6 +32,11 @@ internal class GameService : IGameService
         _gameRepository.GetById(gameId).MovePawn(playerId, pawnId, moveCardName, to);
     }
 
+    public List<IGame> GetAllGames()
+    {
+        return _gameRepository.GetAll();
+    }
+
     public void SkipMovementAndExchangeCard(Guid gameId, Guid playerId, string moveCardName)
     {
         _gameRepository.GetById(gameId).SkipMovementAndExchangeCard(playerId, moveCardName);

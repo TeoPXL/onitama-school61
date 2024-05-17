@@ -50,6 +50,23 @@ namespace Onitama.Api.Controllers
         }
 
         /// <summary>
+        /// Gets every active game that does not have a winner
+        /// </summary>
+        [HttpGet("all")]
+        [ProducesResponseType(typeof(IReadOnlyList<IGame>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetAllGames()
+        {
+            List<IGame> games = _gameService.GetAllGames();
+            List<GameModel> models = games
+                .Where(game => game.WinnerPlayerId == Guid.Empty)
+                .Select(game => _mapper.Map<GameModel>(game))
+                .ToList();
+            return Ok(models);
+        }
+
+        /// <summary>
         /// Gets the possible moves of a certain pawn for a certain move card.
         /// The pawn must be owned by the player associated with the authenticated user.
         /// </summary>
