@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom game</title>
+
+    <link rel="icon" type="image/webp" sizes="16x16" href="../files/icons/icon-16.webp">
+    <link rel="icon" type="image/webp" sizes="32x32" href="../files/icons/icon-32.webp">
+    <link rel="icon" type="image/webp" sizes="64x64" href="../files/icons/icon-64.webp.png">
+    <link rel="icon" type="image/webp" sizes="128x128" href="../files/icons/icon-128.webp">
+    <link rel="icon" type="image/webp" sizes="512x512" href="../files/icons/icon-512.webp">
+    <!-- iOS -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../files/icons/icon-180.webp">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../files/css/main.css">
+    <link rel="stylesheet" href="../files/css/custom.css">
+</head>
+
+<body>
+    <header class="top">
+        <a href="../index.html">
+            <div class="top-button menu-button">
+                <div class="top-button-text">Home</div>
+                <div class="top-button-icon">
+                    <i>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
+                            <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
+                        </svg>
+                    </i>
+                </div>
+            </div>
+        </a>
+        <a href="../account.html" class="link-login">
+            <div class="top-button top-button-user hidden">
+                <div class="top-button-text">Username</div>
+                <div class="top-button-icon">
+                    <i>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                            <path fill-rule="evenodd"
+                                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+                        </svg>
+                    </i>
+                </div>
+            </div>
+        </a>
+        <a href="../login.html">
+            <div class="top-button top-button-login hidden">
+                <div class="top-button-text">Login/Register</div>
+                <div class="top-button-icon">
+                    <i>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-box-arrow-in-right"
+                            viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0z" />
+                            <path fill-rule="evenodd"
+                                d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
+                        </svg>
+                    </i>
+                </div>
+            </div>
+        </a>
+    </header>
+
+    <main class="main">
+        
+    </main>
+    <div class="floating-error floating-error-hidden">
+        <div class="floating-error-title">Error: 401</div>
+        <div class="floating-error-subtitle">Subtitle text</div>
+        <div class="floating-error-button">Dismiss</div>
+    </div>
+    <div class="floating-message floating-message-hidden">
+        <div class="floating-message-title">It seems you are still in an active table!</div>
+        <div class="floating-message-subtitle">Would you like to rejoin the table?</div>
+        <div class="floating-message-buttons">
+            <div class="floating-message-button button-leave">Leave</div>
+            <div class="floating-message-button button-join">Join</div>
+        </div>
+    </div>
+    <script src="../files/js/shared.js"></script>
+    <script src="../files/js/lobby-custom.js"></script>
+</body>
+
+</html>
