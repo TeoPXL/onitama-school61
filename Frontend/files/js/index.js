@@ -72,7 +72,7 @@ function loadGames(compItems) {
     for (let i = 0; i < compItems.length; i++) {
         const game = compItems[i];
         let string = game.players[0].name + " vs " + game.players[1].name;
-        let code = game.tableid;
+        let code = game.id;
         compElements[i].querySelector(".comp-item-text").textContent = string;
         compElements[i].classList.remove("comp-item-loading");
         if(game.gametype == "competitive"){
@@ -84,7 +84,7 @@ function loadGames(compItems) {
             <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1.25"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-alarm"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 13m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M12 10l0 3l2 0" /><path d="M7 4l-2.75 2" /><path d="M17 4l2.75 2" /></svg>
             `;
         }
-        compElements[i].setAttribute('onitama-tableid', code);
+        compElements[i].querySelector('.comp-item-spectate').setAttribute('onitama-gameid', code);
     }
     const items = document.querySelectorAll(".comp-item-loading");
     if(items.length == 5){
@@ -96,6 +96,15 @@ function loadGames(compItems) {
     }
     
 }
+
+document.querySelectorAll('.comp-item-spectate').forEach((el) => el.addEventListener("click", () => {
+    const gameId = el.getAttribute('onitama-gameid');
+    console.log(gameId);
+    localStorage.setItem("gameId", gameId);
+    setTimeout(() => {
+        window.location.href = "../game/spectate.html";
+    }, 250);
+}));
 
 linkElements.forEach((element) => {
     element.addEventListener("click", (event) => {

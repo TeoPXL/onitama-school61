@@ -33,7 +33,7 @@ class Game {
     mouse;
     camera;
     renderer;
-    constrols;
+    controls;
     board;
     id;
     started = false;
@@ -359,9 +359,6 @@ class Game {
             document.querySelector('.loading').remove();
         }
         document.querySelector('.loading-bar').classList.add('loading-bar-hidden');
-        document.querySelector('.game-button-start').classList.add('game-button-hidden');
-        document.querySelector('.game-button-leave').classList.add('game-button-hidden');
-        document.querySelector('.game-button-perspective').classList.remove('game-button-hidden');
 
         this.showCoordinates();
     }
@@ -439,14 +436,6 @@ async function fetchTable(){
     if(game.started == true){
         return;
     }
-    if(gameId != undefined && gameId != "null"){
-        clearInterval(tableFetchInterval);
-        game.id = gameId;
-        console.log(game.id);
-        await getGame();
-        game.start();
-        return;
-    }
     tableFetchInterval = setInterval(async () => {
     const response = await fetch(currentApi + "/api/Tables/" + game.tableId, {
         method: 'GET',
@@ -463,6 +452,7 @@ async function fetchTable(){
         }
         return response.json();
     }).then(data => {
+        console.log("trying to start table");
         //console.log(data);
 
         const table = data;
@@ -512,7 +502,7 @@ async function fetchTable(){
                         game.team1 = player;
                         game.currentPlayer = 1;
                         game.currentPlayerObject = player;
-                        game.camera.position.set(0, 4.5, 12); // Move the camera along the negative z-axis
+                        game.camera.position.set(12, 4.5, 0); // Move the camera along the negative z-axis
                         game.camera.lookAt(0, 0, 0); // Look back towards the origin
                     } else if (player.direction == "South"){
                         player.facing = 0;
