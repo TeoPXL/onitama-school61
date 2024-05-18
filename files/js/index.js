@@ -26,13 +26,38 @@ const compItems = {
             warrior2: "Username 8",
             code: "poweitg984w",
         },
-        {
-            warrior1: "Username 9",
-            warrior2: "Username 10",
-            code: "23589hgseg",
-        },
     ],
 };
+
+function loadOpenGames (){
+    fetch(currentApi + "/api/Games/all", {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + token
+        }
+    }).then(response => {
+        if (response.status === 401) {
+            throw_floating_error("Your token expired! Try logging in again.", "401", "#c60025");
+            topButtonLogin.classList.remove("hidden");
+            topButtonUser.classList.add("hidden"); 
+        }
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw_floating_error(errorData.message, "500", "#c60025");
+            });
+        }
+        return response.json();
+    }).then(data => {
+        const games = data;
+        loadGames(games);
+    }).catch(error => {
+        console.log(error);
+        throw_floating_error(error, "500", "#c60025");
+    });
+
+}
 
 if (user !== null) {
     topButtonLogin.classList.add("hidden");
@@ -43,14 +68,25 @@ if (user !== null) {
 
 
 //Temporary artificial delay. This is to show the loading animation.
-setTimeout(() => {
-    compItems.items.forEach((compitem, index) => {
-        let string = compitem.warrior1 + " vs " + compitem.warrior2;
-        let code = compitem.code;
-        compElements[index].querySelector(".comp-item-text").textContent = string;
-        compElements[index].classList.remove("comp-item-loading");
-    });
-}, 1500);
+function loadGames(compItems) {
+    for (let i = 0; i < compItems.length; i++) {
+        const game = compItems[i];
+        let string = game.warrior1 + " vs " + game.warrior2;
+        let code = game.tableid;
+        compElements[i].querySelector(".comp-item-text").textContent = string;
+        compElements[i].classList.remove("comp-item-loading");
+        compElements[i].setAttribute('onitama-tableid', code);
+    }
+    const items = document.querySelectorAll(".comp-item-loading");
+    if(items.length == 5){
+        document.querySelector('.comp-list').classList.add('comp-list-hidden');
+    } else {
+        items.forEach((element) => {
+            element.classList.add('comp-item-hidden');
+        });
+    }
+    
+}
 
 linkElements.forEach((element) => {
     element.addEventListener("click", (event) => {
