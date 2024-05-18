@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spectate</title>
+
+    <link rel="icon" type="image/webp" sizes="16x16" href="../files/icons/icon-16.webp">
+    <link rel="icon" type="image/webp" sizes="32x32" href="../files/icons/icon-32.webp">
+    <link rel="icon" type="image/webp" sizes="64x64" href="../files/icons/icon-64.webp.png">
+    <link rel="icon" type="image/webp" sizes="128x128" href="../files/icons/icon-128.webp">
+    <link rel="icon" type="image/webp" sizes="512x512" href="../files/icons/icon-512.webp">
+    <!-- iOS -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../files/icons/icon-180.webp">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../files/css/main.css">
+    <link rel="stylesheet" href="../files/css/game.css">
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.163.0/build/three.module.js"
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="toast-container">
+        <div class="toast">Loading...</div>
+        <div class="loading-bar">
+            <div class="loading-bar-background"></div>
+        </div>
+    </div>
+    
+    <div class="floating-error floating-error-hidden">
+        <div class="floating-error-title">Error: 401</div>
+        <div class="floating-error-subtitle">Subtitle text</div>
+        <div class="floating-error-button">Dismiss</div>
+    </div>
+    <div class="game-over game-over-hidden">
+        <div class="game-over-title">GAME OVER!</div>
+        <div class="game-over-subtitle">The game has been won by USERNAME by way of the stone.</div>
+        <a href="../lobby.html"><div class="game-over-button">Return to lobby</div></a>
+    </div>
+    <main class="main">
+    <div id="container" class="container-loading">
+
+
+
+        <script src="../files/js/shared.js"></script>
+        <script src="../files/js/spectate.js" type="module"></script>
+    </div>
+    <div class="game-controls">
+        <div class="game-cards">
+            <div class="game-cards-name-container">
+                <div class="game-cards-name enemy-name">Loading...</div>
+                <div class="game-cards-time enemy-time">Loading...</div>
+            </div>
+            
+            <div class="game-cards-top">
+                <div class="game-card enemy-card">
+                    <div class="game-card-blocks enemy-card-blocks">
+                        <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                        <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                        <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                        <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                        <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                    </div>
+                    <div class="card-name enemy-card-name">Loading...</div>
+                </div>
+                <div class="game-card enemy-card">
+                    <div class="game-card-blocks enemy-card-blocks">
+                        <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                        <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                        <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                        <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                        <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                    </div>
+                    <div class="card-name enemy-card-name">Loading...</div>
+                </div>
+            </div>
+            <div class="game-cards-mid">
+                <div class="game-cards-center">
+                    <div class="game-card extra-card">
+                        <div class="game-card-blocks extra-card-blocks">
+                            <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                            <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                            <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                            <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                            <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                        </div>
+                        <div class="card-name extra-card-name">Loading...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="game-cards-name-container">
+                <div class="game-cards-name player-name">Loading...</div>
+                <div class="game-cards-time player-time">Loading...</div>
+            </div>
+            <div class="game-cards-bottom">
+                <div class="game-card player-card">
+                    <div class="game-card-blocks player-card-blocks">
+                        <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                        <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                        <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                        <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                        <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                    </div>
+                    <div class="card-name player-card-name">Loading...</div>
+                </div>
+                <div class="game-card player-card">
+                    <div class="game-card-blocks player-card-blocks">
+                        <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                        <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                        <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                        <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                        <div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div>
+                    </div>
+                    <div class="card-name player-card-name">Loading...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </main>
+
+    <script>
+        document.querySelector('.game-button-start').addEventListener('click', async () => {
+            const response = await fetch(currentApi + "/api/Tables/" + game.tableId + "/start-game", {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ })
+                }).then(response => {
+                    if (!response.ok) {
+                        return response.json().then(errorData => {
+                            throw_floating_error(errorData.message, '400', "#c60025");
+                        });
+                    } else {
+                        fetchTable();
+                    }
+                    return response.json();
+                }).then(data => {
+                }).catch(error => {
+                    console.log(error);
+                    throw_floating_error(error, '500', "#c60025");
+                });
+        });
+
+        document.querySelector('.game-button-leave').addEventListener('click', async () => {
+            const response = await fetch(currentApi + "/api/Tables/" + game.tableId + "/leave", {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ })
+                }).then(response => {
+                    if (!response.ok) {
+                        return response.json().then(errorData => {
+                            //throw_floating_error(errorData.message, '400', "#c60025");
+                        });
+                    } else {
+                        window.location.href = "../lobby.html";
+                        console.log(response);
+                    }
+                }).then({
+                }).catch(error => {
+                    console.log(error);
+                    throw_floating_error(error, '500', "#c60025");
+                });
+        });
+
+        document.querySelector('.game-button-perspective').addEventListener('click', () => {
+            perspective++;
+            if(perspective > 3){
+                perspective = 1;
+            }
+            console.log("Using perspective "+perspective);
+        });
+
+        document.querySelectorAll('.player-card').forEach(element => {
+            if(element.classList.contains('player-card-selected')){
+                return;
+            }
+
+            element.addEventListener('click', function() {
+                document.querySelectorAll('.player-card').forEach(card => {
+                    card.classList.remove('player-card-selected');
+                    card.querySelector('.card-name').textContent = card.querySelector('.card-name').textContent.replace(" (Active)", "");
+                });
+                this.classList.add('player-card-selected');
+                game.selectedCard = this.querySelector('.card-name').textContent;
+                this.querySelector('.card-name').textContent += " (Active)";
+            });
+        });
+
+        document.querySelector('.loading-bar-background').classList.add('loading-bar-full');
+        setTimeout(() => {
+            fetchTable();
+            console.log("Fetching table...");
+        }, 3000);
+    </script>
+</body>
+
+</html>
