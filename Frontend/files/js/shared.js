@@ -12,6 +12,7 @@ const userSettings = {
     "force-dev-api": localStorage.getItem('force-dev-api'),
     "simulate-offline-mode": localStorage.getItem('simulate-offline-mode'),
     "suppress-api-errors": localStorage.getItem('suppress-api-errors'),
+    "suppress-all-errors": localStorage.getItem('suppress-all-errors'),
 };
 
 let currentApi = "";
@@ -20,6 +21,9 @@ let remoteApiExists = false;
 let devApiExists = false;
 
 function throw_floating_error(error, code, color){
+    if(userSettings["suppress-all-errors"] == "true"){
+        return;
+    }
     if(!floatingError.classList.contains('floating-error-hidden')){
         return;
     }

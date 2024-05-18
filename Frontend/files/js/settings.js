@@ -24,6 +24,12 @@ settingInputs.forEach(element => {
                 element.checked = true;
             }
             break;
+
+        case 'suppress-all-errors':
+            if(userSettings['suppress-all-errors'] == 'true'){
+                element.checked = true;
+            }
+            break;
         default:
             break;
     }
