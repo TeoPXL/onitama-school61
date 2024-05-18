@@ -29,6 +29,10 @@ const compItems = {
     ],
 };
 
+function hideCompGames(){
+    document.querySelector('.comp-list').classList.add('comp-list-hidden');
+}
+
 function loadOpenGames (){
     fetch(currentApi + "/api/Games/all", {
         method: 'GET',
@@ -39,6 +43,7 @@ function loadOpenGames (){
         }
     }).then(response => {
         if (response.status === 401) {
+            document.querySelector('.logo').textContent = document.querySelector('.logo').textContent + " E1";
             throw_floating_error("Your token expired! Try logging in again.", "401", "#c60025");
             topButtonLogin.classList.remove("hidden");
             topButtonUser.classList.add("hidden"); 
