@@ -16,6 +16,8 @@
 
 .gamelist-comp {
     margin-bottom: 10px;
+    display: flex;
+    gap: 10px;
 }
 
 .gamelist-left {
@@ -42,6 +44,11 @@
     display: flex;
     flex-flow: column;
     justify-content: space-between;
+}
+
+.gamelist-comp .gamelist-main {
+    height: 100%;
+    width: 50%;
 }
 
 .gamelist-alt {
