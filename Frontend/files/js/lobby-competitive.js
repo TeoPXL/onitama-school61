@@ -37,14 +37,20 @@ function loadClassicTables (){
         return response.json();
     }).then(data => {
         console.log(data);
-        const tablesToRemove = 11 - data.length; 
-        for (let i = 1; i <= tablesToRemove; i++) {
+        let classicTableResults = [];
+        data.forEach(table => {
+            if(table.preferences.tableType == "competitive"){
+                classicTableResults.push(table);
+            }
+        });
+        const classicTablesToRemove = 11 - classicTableResults.length; 
+        for (let i = 1; i <= classicTablesToRemove; i++) {
             const classicTables = classicTableElements[11 - i];
             classicTables.classList.add('table-item-hidden');
         }
-        
-        for (let i = 0; i < Math.min(data.length, 11); i++) {
-            const table = data[i];
+        //Classic tables
+        for (let i = 0; i < Math.min(classicTableResults.length, 11); i++) {
+            const table = classicTableResults[i];
             console.log(i);
             const element = classicTableElements[i];
             const maxPlayers = table.preferences.numberOfPlayers;
@@ -119,7 +125,7 @@ function checkAllTables(){
 }
 
 classicButton.addEventListener('click', () => {
-    const response = fetch(currentApi + "/api/Tables", {
+    const response = fetch(currentApi + "/api/Tables/competitive", {
         method: 'POST',
         headers: {
             'Accept': 'application/json',

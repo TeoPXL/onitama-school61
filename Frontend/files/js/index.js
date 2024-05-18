@@ -75,6 +75,15 @@ function loadGames(compItems) {
         let code = game.tableid;
         compElements[i].querySelector(".comp-item-text").textContent = string;
         compElements[i].classList.remove("comp-item-loading");
+        if(game.gametype == "competitive"){
+            compElements[i].querySelector('.comp-item-icon').innerHTML = `
+            <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1.25"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trophy"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 21l8 0" /><path d="M12 17l0 4" /><path d="M7 4l10 0" /><path d="M17 4v8a5 5 0 0 1 -10 0v-8" /><path d="M5 9m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M19 9m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /></svg>
+            `;
+        } else if(game.gametype == "blitz"){
+            compElements[i].querySelector('.comp-item-icon').innerHTML = `
+            <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1.25"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-alarm"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 13m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M12 10l0 3l2 0" /><path d="M7 4l-2.75 2" /><path d="M17 4l2.75 2" /></svg>
+            `;
+        }
         compElements[i].setAttribute('onitama-tableid', code);
     }
     const items = document.querySelectorAll(".comp-item-loading");
