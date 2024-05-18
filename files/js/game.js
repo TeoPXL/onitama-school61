@@ -889,7 +889,7 @@ async function fetchTable(){
         console.log(error);
         throw_floating_error(error, '500', "#c60025");
     });
-}, 500);
+}, 1500);
 }
 fetchTable();
 async function getGame(){
@@ -1175,7 +1175,7 @@ async function getGame(){
         throw_floating_error(error, '500', "#c60025");
     });
 
-}, 500);
+}, 1000);
 }
 window.fetchTable = fetchTable;
 
