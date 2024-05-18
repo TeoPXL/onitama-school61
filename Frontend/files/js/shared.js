@@ -87,6 +87,9 @@ async function checkApis(){
         if(window.loadClassicTables){
             loadClassicTables();
         }
+        if(window.loadOpenGames){
+            loadOpenGames();
+        }
         if(window.showApi){
             showApi();
         }

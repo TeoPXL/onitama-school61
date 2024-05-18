@@ -1,5 +1,6 @@
 let classicTableElements = document.querySelectorAll(".comp-table");
 let alreadyJoinedTable;
+let alreadyJoinedTableType = "";
 const tableButtons = document.querySelectorAll('.table-button-small');
 const classicButton = document.querySelector('.classic-button');
 const topButtonLogin = document.querySelector(".top-button-login");
@@ -137,7 +138,7 @@ classicButton.addEventListener('click', () => {
         console.log(data);
         localStorage.setItem("tableId", data.id);
         setTimeout(() => {
-            window.location.href = "game/play.html";
+            window.location.href = "../game/play.html";
         }, 250);
     }).catch(error => {
         console.log(error);
@@ -192,48 +193,20 @@ document.querySelector('.button-leave').addEventListener('click', () => {
         }
         return response;
     }).then(data => {
+        let elements = [];
+            elements = classicTableElements;
         console.log(data);
-        let classicTableResults = [];
-        let competitiveTableResults = [];
-        let blitzTableResults = [];
-        data.forEach(table => {
-            if(table.preferences.tableType == "classic"){
-                classicTableResults.push(table);
-            } else if(table.preferences.tableType == "competitive"){
-                competitiveTableResults.push(table);
-            } else if(table.preferences.tableType == "blitz"){
-                blitzTableResults.push(table);
+        document.querySelector('.floating-message').classList.add('floating-message-hidden');
+        document.querySelector('.main').classList.remove('no-pointer');
+        for (let i = 0; i < elements.length; i++) {
+            const table = elements[i];
+            if(table.querySelector('.table-button').getAttribute('table-id') == alreadyJoinedTable){
+                table.classList.add('table-item-hidden');
             }
-        });
-        const classicTablesToRemove = 3 - classicTableResults.length; 
-        for (let i = 1; i <= classicTablesToRemove; i++) {
-            const classicTables = classicTableElements[3 - i];
-            classicTables.classList.add('table-item-hidden');
-        }
-        //Classic tables
-        for (let i = 0; i < Math.min(classicTableResults.length, 3); i++) {
-            const table = classicTableResults[i];
-            console.log(i);
-            const element = classicTableElements[i];
-            const maxPlayers = table.preferences.numberOfPlayers;
-            const seatedPlayers = table.seatedPlayers.length;
-            const ownerId = table.ownerId;
-            let owner;
-            for (let k = 0; k < table.seatedPlayers.length; k++) {
-                owner = table.seatedPlayers[k].name;
-                
-            }
-            element.classList.remove('table-item-loading');
-            element.querySelector('.table-title').textContent = owner;
-            element.querySelector('.table-players').textContent = seatedPlayers + "/" + maxPlayers + " players";
-            element.querySelector('.table-button').textContent = "Join table";
-            element.querySelector('.table-button').setAttribute("table-id", table.id);
-            console.log(owner);
-            
         }
     }).catch(error => {
         console.log(error);
-        throw_floating_error(error, "500", "#c60025");
+        //throw_floating_error(error, '500', "#c60025");
     });
     
 });
