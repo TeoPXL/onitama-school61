@@ -71,7 +71,7 @@ if (user !== null) {
 function loadGames(compItems) {
     for (let i = 0; i < compItems.length; i++) {
         const game = compItems[i];
-        let string = game.warrior1 + " vs " + game.warrior2;
+        let string = game.players[0].name + " vs " + game.players[1].name;
         let code = game.tableid;
         compElements[i].querySelector(".comp-item-text").textContent = string;
         compElements[i].classList.remove("comp-item-loading");
