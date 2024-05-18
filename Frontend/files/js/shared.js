@@ -92,7 +92,11 @@ async function checkApis(){
             loadClassicTables();
         }
         if(window.loadOpenGames){
-            loadOpenGames();
+            if(user != null){
+                loadOpenGames();
+            } else {
+                hideCompGames();
+            }
         }
         if(window.showApi){
             showApi();
