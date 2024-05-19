@@ -269,7 +269,7 @@
 
 @media screen and (min-width: 1250px) {
 
-    .gamelist,
+    .gamelist, .gamelist-comp,
     .gamelist-right,
     .main-content {
         gap: 20px;

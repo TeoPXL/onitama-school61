@@ -77,7 +77,7 @@
     grid-template-columns: 1fr 1fr;
     gap: 10px;
 }
-.card-selection-card {
+.card-selection-card, .card-selection-card-alt {
     display: flex;
     flex-flow: column;
     align-items: center;  
@@ -87,7 +87,7 @@
     cursor: pointer;
     transition: 0.2s;
 }
-.card-selection-card:hover {
+.card-selection-card:hover, .card-selection-card-alt:hover {
     filter: brightness(1.25);
 }
 .card-selection-card-grid {
@@ -172,4 +172,9 @@
 .card-create {
     height: max-content;
     align-self: center;
+}
+.selected-card {
+    border-style: solid;
+    border-color: var(--color-main);
+    border-width: 2px;
 }
