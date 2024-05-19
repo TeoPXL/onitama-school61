@@ -178,3 +178,15 @@
     border-color: var(--color-main);
     border-width: 2px;
 }
+
+@media screen and (min-width: 900px) {
+    .card-selection-list {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@media screen and (min-width: 1250px) {
+    .card-selection-list {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+}
