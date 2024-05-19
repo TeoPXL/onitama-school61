@@ -365,60 +365,111 @@ original.forEach(el => {
     cards.push(card);
 });
 
-cards.forEach(card => {
-    console.log(card);
-    const parent = document.createElement('div');
-    parent.classList.add('card-selection-card');
+function updateCards(){
+    document.querySelector('.original-list').innerHTML = "";
+    document.querySelector('.senseispath-list').innerHTML = "";
+    document.querySelector('.custom-list').innerHTML = "";
+    const cardCreator = document.createElement('div');
+    cardCreator.classList.add('card-selection-card');
+    cardCreator.classList.add('card-create');
+    const cardCreatorButton = document.createElement('div');
+    cardCreatorButton.textContent = "Create a new card";
+    cardCreatorButton.classList.add('card-selection-card-button');
+    cardCreator.appendChild(cardCreatorButton);
+    document.querySelector('.custom-list').appendChild(cardCreator);
 
-    const container = document.createElement('div');
-    container.classList.add('card-selection-card-grid');
-
-    card.grid.forEach(row => {
-        row.split('').forEach(block => {
-            const cardBlock = document.createElement('div');
-            cardBlock.classList.add('card-selection-card-block');
-            if(block == '1'){
-                cardBlock.classList.add('card-selection-card-pawn');
-            } else if(block == '2'){
-                cardBlock.classList.add('card-selection-card-king');
-            }
-            container.appendChild(cardBlock);
+    cards.forEach(card => {
+        console.log(card);
+        const parent = document.createElement('div');
+        parent.classList.add('card-selection-card');
+    
+        const container = document.createElement('div');
+        container.classList.add('card-selection-card-grid');
+    
+        card.grid.forEach(row => {
+            row.split('').forEach(block => {
+                const cardBlock = document.createElement('div');
+                cardBlock.classList.add('card-selection-card-block');
+                if(block == '1'){
+                    cardBlock.classList.add('card-selection-card-pawn');
+                } else if(block == '2'){
+                    cardBlock.classList.add('card-selection-card-king');
+                }
+                container.appendChild(cardBlock);
+            });
         });
+    
+        const name = document.createElement('div');
+        name.classList.add('card-selection-card-name');
+        name.textContent = card.name;
+    
+        parent.appendChild(container);
+        parent.appendChild(name);
+    
+        if(card.type == 'original'){
+            document.querySelector('.original-list').appendChild(parent);
+        }
+    
+        if(card.type == 'senseispath'){
+            document.querySelector('.senseispath-list').appendChild(parent);
+        }
+
+        if(card.type == 'custom'){
+            document.querySelector('.custom-list').appendChild(parent);
+        }
     });
+}
+updateCards();
 
-    const name = document.createElement('div');
-    name.classList.add('card-selection-card-name');
-    name.textContent = card.name;
 
-    parent.appendChild(container);
-    parent.appendChild(name);
-
-    if(card.type == 'original'){
-        document.querySelector('.original-list').appendChild(parent);
-    }
-
-    if(card.type == 'senseispath'){
-        document.querySelector('.senseispath-list').appendChild(parent);
-    }
-});
+document.querySelectorAll('.card-creation-block').forEach(el => el.addEventListener('click', () => {
+    el.classList.toggle('card-creation-block-active');
+}));
 
 document.querySelector('.custom-deck-button').addEventListener('click', () => {
-    //Open card selection menu
     document.querySelector('.card-selection').classList.remove('card-selection-hidden');
 });
 
 document.querySelector('.card-selection-close-button').addEventListener('click', () => {
-    //Open card selection menu
     document.querySelector('.card-selection').classList.add('card-selection-hidden');
 });
 
 document.querySelector('.card-create').addEventListener('click', () => {
-    //Open card selection menu
     document.querySelector('.card-creation').classList.remove('card-creation-hidden');
 });
 
 document.querySelector('.card-creation-close-button').addEventListener('click', () => {
-    //Open card selection menu
+    document.querySelector('.card-creation').classList.add('card-creation-hidden');
+});
+
+document.querySelector('.card-creation-confirm-button').addEventListener('click', () => {
+    const cardBlocks = document.querySelectorAll('.card-creation-block-item');
+    let blockString = "";
+    cardBlocks.forEach(block => {
+        if(block.classList.contains('card-creation-block-active')){
+            blockString += "1";
+        } else if(block.classList.contains('card-creation-king')){
+            blockString += "2";
+        } else {
+            blockString += "0";
+        }
+    });
+    let gridSize = 5;
+    let blockGrid = [];
+
+    for (let i = 0; i < blockString.length; i += gridSize) {
+        blockGrid.push(blockString.slice(i, i + gridSize));
+    }
+
+    const cardName = document.querySelector('.card-creation-input').value;
+    if(cardName == ""){
+        throw_floating_error("You must provide a name for your card", "", "")
+        return;
+    }
+    let newCard = new Card(cardName, blockGrid, "custom");
+    cards.push(newCard);
+    console.log(newCard);
+    updateCards();
     document.querySelector('.card-creation').classList.add('card-creation-hidden');
 });
 
