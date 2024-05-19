@@ -118,14 +118,18 @@ namespace Onitama.Api.Controllers
             var dbContext = serviceProvider.GetRequiredService<OnitamaDbContext>();
             ICoordinate to = _coordinateFactory.Create(inputModel.To.Row, inputModel.To.Column);
             _gameService.MovePawn(id, UserId, inputModel.PawnId, inputModel.MoveCardName, to);
-            var players = _gameService.GetGame(id).Players;
-            if (dbContext != null)
+            var game = _gameService.GetGame(id);
+            var players = game.Players;
+            if(game.WinnerPlayerId != Guid.Empty)
             {
-                for (int i = 0; i < players.Length; i++)
+                if (dbContext != null)
                 {
-                    dbContext.Entry(players[i].User).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    for (int i = 0; i < players.Length; i++)
+                    {
+                        dbContext.Entry(players[i].User).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    }
+                    await dbContext.SaveChangesAsync();
                 }
-                await dbContext.SaveChangesAsync();
             }
             return Ok();
         }
