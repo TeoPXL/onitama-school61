@@ -2,10 +2,14 @@
 const topButtonLogin = document.querySelector(".top-button-login");
 const topButtonUser = document.querySelector(".top-button-user");
 let customCards = JSON.parse(localStorage.getItem("custom-cards"));
+let selectedCards = JSON.parse(localStorage.getItem("selected-cards"));
 if(customCards == null){
     customCards = [];
 }
-
+if(selectedCards == null){
+    selectedCards = [];
+}
+updateCardList();
 localStorage.removeItem("gameId");
 
 if(user === null ){
@@ -499,8 +503,22 @@ document.querySelector('.card-creation-confirm-button').addEventListener('click'
 
 function addEventListeners(){
     document.querySelectorAll('.card-selection-card').forEach(el => el.addEventListener('click', () => {
-        console.log(el.getAttribute('onitama-card-id'));
+        let id = el.getAttribute('onitama-card-id');
+        selectedCards.push(cards[id]);
+        localStorage.setItem('selected-cards', JSON.stringify(selectedCards));
+        updateCardList();
     }));
+}
+
+function updateCardList(){
+    document.querySelector('.custom-deck-list').innerHTML = "";
+    selectedCards.forEach(card => {
+        const element = document.createElement('div');
+        element.classList.add('custom-deck-card');
+        element.textContent = card.name;
+    
+        document.querySelector('.custom-deck-list').appendChild(element);
+    });
 }
 
 
