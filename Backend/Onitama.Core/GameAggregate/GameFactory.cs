@@ -30,7 +30,13 @@ internal class GameFactory : IGameFactory
         Color[] colors = table.SeatedPlayers.Select(p => p.Color).ToArray();
         
         IMoveCard[] moveCards;
-        moveCards = _moveCardRepository.LoadSet(table.Preferences.MoveCardSet, colors);
+        if(table.Preferences.MoveCardSet == MoveCardSet.Custom)
+        {
+            moveCards = _moveCardRepository.LoadSetCustom(table.Preferences.MoveCardSet, colors, table.Preferences.MoveCardString);
+        } else
+        {
+            moveCards = _moveCardRepository.LoadSet(table.Preferences.MoveCardSet, colors);
+        }
         moveCards = moveCards.OrderBy(card => _random.Next()).ToArray();
         //throw new Exception(table.Preferences.MoveCardSet.ToString());
         var playMat = new PlayMat(5);

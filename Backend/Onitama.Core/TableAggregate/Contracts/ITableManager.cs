@@ -27,6 +27,11 @@ namespace Onitama.Core.TableAggregate.Contracts
         ITable AddBlitzTableForUser(User user, BlitzTablePreferences preferences);
 
         /// <summary>
+        /// Creates a custom table for a user with the given preferences.
+        /// </summary>
+        ITable AddCustomTableForUser(User user, CustomTablePreferences preferences);
+
+        /// <summary>
         /// Joins a user to a table.
         /// </summary>
         void JoinTable(Guid tableId, User user);

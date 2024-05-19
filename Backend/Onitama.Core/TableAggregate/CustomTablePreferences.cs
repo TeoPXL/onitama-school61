@@ -4,7 +4,7 @@ using Onitama.Core.TableAggregate.Contracts;
 
 namespace Onitama.Core.TableAggregate;
 
-public class BlitzTablePreferences : ITablePreferences
+public class CustomTablePreferences : ITablePreferences
 {
     /// <summary>
     /// Number of players that can take part in the game.
@@ -24,15 +24,15 @@ public class BlitzTablePreferences : ITablePreferences
     /// Set of move cards to use.
     /// The default value is the original set of 16 cards.
     /// </summary>
-    [DefaultValue(MoveCardSet.Original)]
-    public MoveCardSet MoveCardSet { get; set; } = MoveCardSet.Original;
+    [DefaultValue(MoveCardSet.Custom)]
+    public MoveCardSet MoveCardSet { get; set; } = MoveCardSet.Custom;
 
     /// <summary>
     /// Game type
     /// The default value is classic.
     /// </summary>
-    [DefaultValue("blitz")]
-    public string TableType { get; set; } = "blitz";
+    [DefaultValue("classic")]
+    public string TableType { get; set; } = "classic";
 
     public string MoveCardString { get; set; }
 }

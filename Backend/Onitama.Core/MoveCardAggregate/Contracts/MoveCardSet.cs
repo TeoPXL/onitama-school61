@@ -4,4 +4,5 @@ public enum MoveCardSet
 {
     Original,
     SenseisPath,
+    Custom
 }

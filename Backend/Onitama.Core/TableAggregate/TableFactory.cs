@@ -26,4 +26,11 @@ internal class TableFactory : ITableFactory
         table.Join(user);
         return table;
     }
+
+    public ITable CreateCustomForUser(User user, CustomTablePreferences preferences)
+    {
+        var table = new Table(Guid.NewGuid(), preferences);
+        table.Join(user);
+        return table;
+    }
 }

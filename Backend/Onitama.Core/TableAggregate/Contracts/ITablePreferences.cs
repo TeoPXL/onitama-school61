@@ -14,5 +14,7 @@ namespace Onitama.Core.TableAggregate.Contracts
         MoveCardSet MoveCardSet { get; set; }
 
         string TableType { get; set; }
+
+        string MoveCardString { get; set; }
     }
 }

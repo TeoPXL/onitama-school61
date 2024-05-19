@@ -33,4 +33,6 @@ public class TablePreferences : ITablePreferences
     /// </summary>
     [DefaultValue("classic")]
     public string TableType { get; set; } = "classic";
+
+    public string MoveCardString { get; set; }
 }

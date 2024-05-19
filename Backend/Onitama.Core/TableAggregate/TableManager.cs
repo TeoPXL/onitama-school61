@@ -52,6 +52,13 @@ internal class TableManager : ITableManager
         return table;
     }
 
+    public ITable AddCustomTableForUser(User user, CustomTablePreferences preferences)
+    {
+        var table = _tableFactory.CreateCustomForUser(user, preferences);
+        _tableRepository.Add(table);
+        return table;
+    }
+
     public void JoinTable(Guid tableId, User user)
     {
         var table = _tableRepository.Get(tableId);

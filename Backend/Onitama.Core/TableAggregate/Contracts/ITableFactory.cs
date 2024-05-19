@@ -17,4 +17,5 @@ public interface ITableFactory
 
     ITable CreateCompForUser(User user, CompTablePreferences preferences);
     ITable CreateBlitzForUser(User user, BlitzTablePreferences preferences);
+    ITable CreateCustomForUser(User user, CustomTablePreferences preferences);
 }

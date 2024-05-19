@@ -33,4 +33,6 @@ public class CompTablePreferences : ITablePreferences
     /// </summary>
     [DefaultValue("competitive")]
     public string TableType { get; set; } = "competitive";
+
+    public string MoveCardString { get; set; }
 }
