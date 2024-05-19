@@ -5,7 +5,10 @@ const tableButtons = document.querySelectorAll('.table-button-small');
 const classicButton = document.querySelector('.classic-button');
 const topButtonLogin = document.querySelector(".top-button-login");
 const topButtonUser = document.querySelector(".top-button-user");
-localStorage.removeItem("gameId");
+
+setInterval(() => {
+    localStorage.removeItem("gameId");
+}, 250);
 
 if(user === null ){
     window.location.href = "login.html";

@@ -9,7 +9,9 @@ const blitzButton = document.querySelector('.blitz-button');
 const topButtonLogin = document.querySelector(".top-button-login");
 const topButtonUser = document.querySelector(".top-button-user");
 let alreadyJoinedTableType = "";
-localStorage.removeItem("gameId");
+setInterval(() => {
+    localStorage.removeItem("gameId");
+}, 250);
 
 if(user === null ){
     window.location.href = "login.html";
