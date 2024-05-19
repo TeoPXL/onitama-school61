@@ -119,7 +119,7 @@
     margin-bottom: 5px;
 }
 
-.card-selection-close-button, .card-creation-close-button {
+.card-selection-close-button, .card-creation-close-button, .card-creation-confirm-button {
     background-color: var(--color-main);
     color: var(--color-text-2);
     padding: 3px;
@@ -131,7 +131,7 @@
     cursor: pointer;
     transition: 0.2s;
 }
-.card-selection-close-button:hover, .card-creation-close-button:hover {
+.card-selection-close-button:hover, .card-creation-close-button:hover, .card-creation-confirm-button:hover {
     filter: brightness(0.5);
 }
 .card-creation-grid {
@@ -154,6 +154,9 @@
     cursor: pointer;
     filter: brightness(0.5);
 }
+.card-creation-block-active {
+    background: rgb(255, 239, 0);
+}
 .card-creation-name input {
     background: var(--color-background-fade);
     outline: none;
@@ -165,4 +168,8 @@
     padding: 5px;
     border-radius: 0.2em;
     margin-top: 15px;
+}
+.card-create {
+    height: max-content;
+    align-self: center;
 }
