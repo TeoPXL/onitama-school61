@@ -483,12 +483,21 @@ document.querySelector('.card-creation-close-button').addEventListener('click', 
     document.querySelector('.card-creation').classList.add('card-creation-hidden');
 });
 
+document.querySelector('.custom-create-button').addEventListener('click', () => {
+    if(selectedCards.length < 5){
+        throw_floating_error("You must select at least 5 cards", "", "");
+        return;
+    }
+});
+
 document.querySelector('.card-creation-confirm-button').addEventListener('click', () => {
     const cardBlocks = document.querySelectorAll('.card-creation-block-item');
     let blockString = "";
+    let pawnCount = 0;
     cardBlocks.forEach(block => {
         if(block.classList.contains('card-creation-block-active')){
             blockString += "1";
+            pawnCount++;
         } else if(block.classList.contains('card-creation-king')){
             blockString += "2";
         } else {
@@ -503,6 +512,10 @@ document.querySelector('.card-creation-confirm-button').addEventListener('click'
     }
 
     const cardName = document.querySelector('.card-creation-input').value;
+    if(pawnCount < 1){
+        throw_floating_error("You must select at least one possible field", "", "")
+        return;
+    }
     if(cardName == ""){
         throw_floating_error("You must provide a name for your card", "", "")
         return;
