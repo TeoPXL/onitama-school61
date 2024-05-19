@@ -9,7 +9,8 @@ if(customCards == null){
 if(selectedCards == null){
     selectedCards = [];
 }
-updateCardList();
+selectedCards = selectedCards.filter(element => element !== null);
+
 localStorage.removeItem("gameId");
 
 if(user === null ){
@@ -348,15 +349,15 @@ const original = [
 
 
 
-
-
 let cards = [];
 
+updateCardList();
 class Card {
     name;
     grid;
     type;
     id;
+    selected = false;
 
     constructor(name, grid, type, id){
         this.name = name;
@@ -387,6 +388,18 @@ customCards.forEach(el => {
     cards.push(card);
 });
 
+function updateSelectedCards(){
+    selectedCards.forEach(selectedCard => {
+        cards.forEach(card => {
+            if(card.name == selectedCard.name){
+                card.selected = true;
+                console.log('true');
+            }
+        });
+    });
+}
+updateSelectedCards();
+
 
 function updateCards(){
     document.querySelector('.original-list').innerHTML = "";
@@ -405,6 +418,9 @@ function updateCards(){
         console.log(card);
         const parent = document.createElement('div');
         parent.classList.add('card-selection-card');
+        if(card.selected == true){
+            parent.classList.add('selected-card');
+        }
         parent.setAttribute('onitama-card-id', card.id);
     
         const container = document.createElement('div');
@@ -491,6 +507,13 @@ document.querySelector('.card-creation-confirm-button').addEventListener('click'
         throw_floating_error("You must provide a name for your card", "", "")
         return;
     }
+    for (let i = 0; i < cards.length; i++) {
+        const card = cards[i];
+        if(card.name == cardName){
+            throw_floating_error("Your card's name must be unique", "", "")
+            return;
+        }
+    }
     let id = cards.length;
     let newCard = new Card(cardName, blockGrid, "custom", id);
     cards.push(newCard);
@@ -501,10 +524,24 @@ document.querySelector('.card-creation-confirm-button').addEventListener('click'
     document.querySelector('.card-creation').classList.add('card-creation-hidden');
 });
 
+function isEqual(obj1, obj2) {
+    return obj1.name == obj2.name;
+}
+
 function addEventListeners(){
     document.querySelectorAll('.card-selection-card').forEach(el => el.addEventListener('click', () => {
+        el.classList.toggle('selected-card');
         let id = el.getAttribute('onitama-card-id');
-        selectedCards.push(cards[id]);
+        if(selectedCards.some(element => isEqual(element, cards[id]))){
+            for (let i = 0; i < selectedCards.length; i++) {
+                const card = selectedCards[i];
+                if(card.name == cards[id].name){
+                    selectedCards.splice(i, 1);;
+                }
+            }
+        } else {
+            selectedCards.push(cards[id]);
+        }
         localStorage.setItem('selected-cards', JSON.stringify(selectedCards));
         updateCardList();
     }));
@@ -520,5 +557,7 @@ function updateCardList(){
         document.querySelector('.custom-deck-list').appendChild(element);
     });
 }
+
+
 
 
