@@ -9,17 +9,23 @@
     align-items: center;
     margin-top: 10px;
 }
-.custom-type-button, .custom-opponent-button {
-    background: var(--color-main);
-    color: var(--color-text-2);
+.custom-type-button, .custom-opponent-button, .custom-create-button {
     padding: 3px;
     padding-left: 12px;
     padding-right: 12px;
     border-radius: 2em;
     cursor: pointer;
     transition: 0.2s;
+    width: max-content;
+    background: var(--color-background-fade);
+    color: var(--color-text);
 }
-.custom-type-button:hover, .custom-opponent-button:hover {
+.custom-create-button {
+    margin-top: 25px;
+    background: var(--color-main);
+    color: var(--color-text-2);
+}
+.custom-type-button:hover, .custom-opponent-button:hover, .custom-create-button:hover {
     filter: brightness(0.5);
 }
 .custom-deck-list {
@@ -39,8 +45,8 @@
     border-radius: 2em;
 }
 .custom-deck-button {
-    background: var(--color-main);
-    color: var(--color-text-2);
+    background: var(--color-background-fade);
+    color: var(--color-text);
     width: max-content;
     margin: auto;
     padding: 3px;

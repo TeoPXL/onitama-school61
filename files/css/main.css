@@ -147,6 +147,9 @@ a {
 .no-pointer {
     pointer-events: none;
 }
+.spacer {
+    height: 600px;
+}
 @media screen and (min-width: 900px) {
     .main, .top {
         width: calc(100% - 100px);
