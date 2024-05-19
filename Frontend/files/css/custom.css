@@ -19,6 +19,9 @@
     cursor: pointer;
     transition: 0.2s;
 }
+.custom-type-button:hover, .custom-opponent-button:hover {
+    filter: brightness(0.5);
+}
 .custom-deck-list {
     display: flex;
     flex-flow: wrap;
@@ -48,10 +51,13 @@
     cursor: pointer;
     transition: 0.2s;
 }
+.custom-deck-button:hover {
+    filter: brightness(0.5);
+}
 .main {
     max-width: 600px;
 }
-.card-selection {
+.card-selection, .card-creation {
     position: fixed;
     top: 0;
     left: 0;
@@ -63,7 +69,7 @@
     overflow: scroll;
     transition: 0.5s;
 }
-.card-selection-hidden {
+.card-selection-hidden, .card-creation-hidden {
     transform: translateY(100%);
 }
 .card-selection-list {
@@ -78,6 +84,11 @@
     background: var(--color-background-gradient);
     padding: 10px;
     border-radius: 0.5em;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.card-selection-card:hover {
+    filter: brightness(1.25);
 }
 .card-selection-card-grid {
     display: grid;
@@ -96,4 +107,62 @@
 }
 .card-selection-card-king {
     background: white;
+}
+.card-selection-title {
+    margin-top: 15px;
+    font-size: 125%;
+    font-weight: 500;
+}
+.card-selection-subtitle {
+    font-size: 105%;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.card-selection-close-button, .card-creation-close-button {
+    background-color: var(--color-main);
+    color: var(--color-text-2);
+    padding: 3px;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 2em;
+    margin-top: 15px;
+    width: max-content;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.card-selection-close-button:hover, .card-creation-close-button:hover {
+    filter: brightness(0.5);
+}
+.card-creation-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    aspect-ratio: 1;
+    gap: 5px;
+    margin-top: 15px;
+}
+.card-creation-block, .card-creation-king {
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    transition: 0.2s;
+}
+.card-creation-king {
+    background: white;
+}
+.card-creation-block:hover {
+    cursor: pointer;
+    filter: brightness(0.5);
+}
+.card-creation-name input {
+    background: var(--color-background-fade);
+    outline: none;
+    border: none;
+    color: var(--color-text);
+    font-family: var(--font-main);
+    font-size: 115%;
+    width: calc(100% - 10px);
+    padding: 5px;
+    border-radius: 0.2em;
+    margin-top: 15px;
 }

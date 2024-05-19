@@ -407,3 +407,18 @@ document.querySelector('.custom-deck-button').addEventListener('click', () => {
     document.querySelector('.card-selection').classList.remove('card-selection-hidden');
 });
 
+document.querySelector('.card-selection-close-button').addEventListener('click', () => {
+    //Open card selection menu
+    document.querySelector('.card-selection').classList.add('card-selection-hidden');
+});
+
+document.querySelector('.card-create').addEventListener('click', () => {
+    //Open card selection menu
+    document.querySelector('.card-creation').classList.remove('card-creation-hidden');
+});
+
+document.querySelector('.card-creation-close-button').addEventListener('click', () => {
+    //Open card selection menu
+    document.querySelector('.card-creation').classList.add('card-creation-hidden');
+});
+
