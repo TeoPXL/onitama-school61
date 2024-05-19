@@ -1,6 +1,11 @@
 
 const topButtonLogin = document.querySelector(".top-button-login");
 const topButtonUser = document.querySelector(".top-button-user");
+let customCards = JSON.parse(localStorage.getItem("custom-cards"));
+if(customCards == null){
+    customCards = [];
+}
+
 localStorage.removeItem("gameId");
 
 if(user === null ){
@@ -339,31 +344,45 @@ const original = [
 
 
 
+
+
 let cards = [];
 
 class Card {
     name;
     grid;
     type;
+    id;
 
-    constructor(name, grid, type){
+    constructor(name, grid, type, id){
         this.name = name;
         this.grid = grid;
         this.type = type;
+        this.id = id;
     }
 }
 
 senseisPath.forEach(el => {
     console.log(el);
-    let card = new Card(el.Name, el.Grid, 'senseispath');
+    let id = cards.length;
+    let card = new Card(el.Name, el.Grid, 'senseispath', id);
     cards.push(card);
 });
 
 original.forEach(el => {
     console.log(el);
-    let card = new Card(el.Name, el.Grid, 'original');
+    let id = cards.length;
+    let card = new Card(el.Name, el.Grid, 'original', id);
     cards.push(card);
 });
+
+customCards.forEach(el => {
+    console.log(el);
+    let id = cards.length;
+    let card = new Card(el.name, el.grid, 'custom', id);
+    cards.push(card);
+});
+
 
 function updateCards(){
     document.querySelector('.original-list').innerHTML = "";
@@ -382,6 +401,7 @@ function updateCards(){
         console.log(card);
         const parent = document.createElement('div');
         parent.classList.add('card-selection-card');
+        parent.setAttribute('onitama-card-id', card.id);
     
         const container = document.createElement('div');
         container.classList.add('card-selection-card-grid');
@@ -418,6 +438,7 @@ function updateCards(){
             document.querySelector('.custom-list').appendChild(parent);
         }
     });
+    addEventListeners();
 }
 updateCards();
 
@@ -466,10 +487,20 @@ document.querySelector('.card-creation-confirm-button').addEventListener('click'
         throw_floating_error("You must provide a name for your card", "", "")
         return;
     }
-    let newCard = new Card(cardName, blockGrid, "custom");
+    let id = cards.length;
+    let newCard = new Card(cardName, blockGrid, "custom", id);
     cards.push(newCard);
+    customCards.push(newCard);
+    localStorage.setItem('custom-cards', JSON.stringify(customCards));
     console.log(newCard);
     updateCards();
     document.querySelector('.card-creation').classList.add('card-creation-hidden');
 });
+
+function addEventListeners(){
+    document.querySelectorAll('.card-selection-card').forEach(el => el.addEventListener('click', () => {
+        console.log(el.getAttribute('onitama-card-id'));
+    }));
+}
+
 
