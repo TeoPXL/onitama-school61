@@ -145,6 +145,8 @@
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     aspect-ratio: 1;
     gap: 5px;
+    max-width: 300px;
+    margin: auto;
     margin-top: 15px;
 }
 .card-creation-block, .card-creation-king {
@@ -163,6 +165,10 @@
 .card-creation-block-active {
     background: rgb(255, 239, 0);
 }
+.card-creation-name {
+    display: flex;
+    justify-content: center;
+}
 .card-creation-name input {
     background: var(--color-background-fade);
     outline: none;
@@ -173,6 +179,8 @@
     width: calc(100% - 10px);
     padding: 5px;
     border-radius: 0.2em;
+    max-width: 300px;
+    margin: auto;
     margin-top: 15px;
 }
 .card-create {
