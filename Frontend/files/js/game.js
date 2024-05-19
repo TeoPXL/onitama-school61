@@ -912,9 +912,12 @@ async function getGame(){
         return response.json();
     }).then(data => {
         game.gameType = data.gametype;
-        if(data.gameType != "blitz"){
+        if(data.gametype != "blitz"){
             document.querySelector('.player-time').classList.add('game-cards-time-hidden');
             document.querySelector('.enemy-time').classList.add('game-cards-time-hidden');
+        } else {
+            document.querySelector('.player-time').classList.remove('game-cards-time-hidden');
+            document.querySelector('.enemy-time').classList.remove('game-cards-time-hidden');
         }
         if(data.winnerPlayerId != "00000000-0000-0000-0000-000000000000" && data.winnerPlayerId != undefined){
             console.log("The game has been won!");
@@ -959,6 +962,7 @@ async function getGame(){
             const enemyCardElements = document.querySelectorAll('.enemy-card-blocks .block');
             const playerCardElements = document.querySelectorAll('.player-card-blocks .block');
             const extraCardElements = document.querySelectorAll('.extra-card-blocks .block');
+            console.log(data);
             data.players.forEach(player => {
                 if(player.id == data.playerToPlayId && user.id != data.playerToPlayId){
                     //Set enemy name
