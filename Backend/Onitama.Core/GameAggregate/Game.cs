@@ -359,6 +359,11 @@ internal class Game : IGame
             WinnerPlayerId = playerId;
             WinnerMethod = "Way of the stream";
             calculateElo();
+            player.MoveCards.Remove(moveCard);
+            player.MoveCards.Add(ExtraMoveCard);
+            ExtraMoveCard = moveCard;
+            PlayerToPlayId = this.GetNextOpponent(playerId).Id;
+            return;
 
         } else if (capturedPawn != null)
         {
@@ -377,6 +382,11 @@ internal class Game : IGame
                 WinnerPlayerId = playerId;
                 WinnerMethod = "Way of the stone";
                 calculateElo();
+                player.MoveCards.Remove(moveCard);
+                player.MoveCards.Add(ExtraMoveCard);
+                ExtraMoveCard = moveCard;
+                PlayerToPlayId = this.GetNextOpponent(playerId).Id;
+                return;
             }
             else if (capturedPawn.Type == PawnType.Student)
             {
@@ -584,9 +594,12 @@ internal class Game : IGame
             {
                 foreach(var pawn in player.School.AllPawns)
                 {
-                    if(_playMat.GetValidMoves(pawn, move, player.Direction).Count > 0)
+                    if(pawn.Position != null)
                     {
-                        validMoves++;
+                        if (_playMat.GetValidMoves(pawn, move, player.Direction).Count > 0)
+                        {
+                            validMoves++;
+                        }
                     }
                 }
             }

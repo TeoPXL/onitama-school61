@@ -90,6 +90,10 @@ namespace Onitama.Core.PlayMatAggregate
         public IReadOnlyList<IMove> GetValidMoves(IPawn pawn, IMoveCard card, Direction playerDirection)
         {
             List<IMove> moves = new List<IMove>();
+            if(pawn.Position == null)
+            {
+                return moves;
+            }
             var possibleMoves = card.GetPossibleTargetCoordinates(pawn.Position, playerDirection, _size);
             for (int i = 0; i < possibleMoves.Count; i++)
             {
