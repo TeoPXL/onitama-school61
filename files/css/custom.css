@@ -193,6 +193,10 @@
     border-width: 2px;
 }
 
+.active-button {
+    background: var(--color-main);
+    color: var(--color-text-2);
+}
 @media screen and (min-width: 900px) {
     .card-selection-list {
         grid-template-columns: 1fr 1fr 1fr;

@@ -66,7 +66,11 @@ function loadClassicTables (){
             }
             element.classList.remove('table-item-loading');
             element.querySelector('.table-title').textContent = owner;
-            element.querySelector('.table-players').textContent = seatedPlayers + "/" + maxPlayers + " players";
+            const tablePlayers = element.querySelector('.table-players');
+            tablePlayers.textContent = seatedPlayers + "/" + maxPlayers + " players";
+            if(table.preferences.moveCardSet == "2"){
+                tablePlayers.textContent = tablePlayers.textContent + " | Custom cards";
+            }
             element.querySelector('.table-button').textContent = "Join table";
             element.querySelector('.table-button').setAttribute("table-id", table.id);
             console.log(owner);
