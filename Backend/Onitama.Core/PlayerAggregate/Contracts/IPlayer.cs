@@ -47,6 +47,8 @@ public interface IPlayer
 
     User User { get; set; }
 
+    bool HasValidMoves { get; set; }
+
     /// <summary>
     /// The move cards that the player can use to play its next move (2 of the 5 available)
     /// </summary>

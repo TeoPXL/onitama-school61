@@ -400,6 +400,7 @@ internal class Game : IGame
         player.MoveCards.Add(ExtraMoveCard);
         ExtraMoveCard = moveCard;
         PlayerToPlayId = this.GetNextOpponent(playerId).Id;
+        checkValidMoves();
     }
 
     public void calculateElo()
@@ -537,6 +538,7 @@ internal class Game : IGame
         }
         ExtraMoveCard = player.MoveCards[0];
         PlayerToPlayId = this.GetNextOpponent(playerId).Id;
+        checkValidMoves();
     }
 
     public IPlayer GetNextOpponent(Guid playerId)
@@ -554,5 +556,31 @@ internal class Game : IGame
         int nextIndex = (index + 1) % _players.Length;
 
         return _players[nextIndex];
+    }
+
+
+    public void checkValidMoves()
+    {
+        foreach (var player in _players)
+        {
+            int validMoves = 0;
+            foreach(var move in player.MoveCards)
+            {
+                foreach(var pawn in player.School.AllPawns)
+                {
+                    if(_playMat.GetValidMoves(pawn, move, player.Direction).Count > 0)
+                    {
+                        validMoves++;
+                    }
+                }
+            }
+            if(validMoves == 0)
+            {
+                player.HasValidMoves = false;
+            } else
+            {
+                player.HasValidMoves = true;
+            }
+        }
     }
 }

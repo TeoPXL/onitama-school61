@@ -13,6 +13,8 @@ public class PlayerModel
 
     public int Time { get; set; }
 
+    public bool HasValidMoves { get; set; }
+
     public SchoolModel School { get; set; }
 
     public MoveCardModel[] MoveCards { get; set; }

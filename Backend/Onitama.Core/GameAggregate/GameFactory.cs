@@ -60,6 +60,8 @@ internal class GameFactory : IGameFactory
 
             game.PlayMat.PositionSchoolOfPlayer(player);
         }
+
+        game.checkValidMoves();
         
         return game;
     }

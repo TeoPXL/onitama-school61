@@ -92,5 +92,7 @@ namespace Onitama.Core.GameAggregate.Contracts
         /// </summary>
         /// <param name="playerId">Unique identifier of the player</param>
         IPlayer GetNextOpponent(Guid playerId);
+
+        void checkValidMoves();
     }
 }

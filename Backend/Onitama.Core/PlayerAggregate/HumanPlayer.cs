@@ -19,6 +19,7 @@ internal class HumanPlayer : PlayerBase
     private int _elo;
     private User _user;
     private int _time = 180;
+    private bool _hasValidMoves = false;
 
     public int Time
     {
@@ -31,7 +32,11 @@ internal class HumanPlayer : PlayerBase
         get { return _user; }
         set { _user = value; }
     }
-
+    public bool HasValidMoves
+    {
+        get { return _hasValidMoves; }
+        set { this._hasValidMoves = value; }
+    }
     public HumanPlayer(Guid userId, string name, Color color, Direction direction, int elo): base(userId, name, color, direction)
     {
         _id = userId;
