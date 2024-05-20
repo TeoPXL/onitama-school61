@@ -353,15 +353,15 @@ let cards = [];
 
 updateCardList();
 class Card {
-    name;
-    grid;
+    Name;
+    Grid;
     type;
     id;
     selected = false;
 
     constructor(name, grid, type, id){
-        this.name = name;
-        this.grid = grid;
+        this.Name = name;
+        this.Grid = grid;
         this.type = type;
         this.id = id;
     }
@@ -384,14 +384,14 @@ original.forEach(el => {
 customCards.forEach(el => {
     console.log(el);
     let id = cards.length;
-    let card = new Card(el.name, el.grid, 'custom', id);
+    let card = new Card(el.Name, el.Grid, 'custom', id);
     cards.push(card);
 });
 
 function updateSelectedCards(){
     selectedCards.forEach(selectedCard => {
         cards.forEach(card => {
-            if(card.name == selectedCard.name){
+            if(card.Name == selectedCard.Name){
                 card.selected = true;
                 console.log('true');
             }
@@ -406,7 +406,7 @@ function updateCards(){
     document.querySelector('.senseispath-list').innerHTML = "";
     document.querySelector('.custom-list').innerHTML = "";
     const cardCreator = document.createElement('div');
-    cardCreator.classList.add('card-selection-card');
+    cardCreator.classList.add('card-selection-card-alt');
     cardCreator.classList.add('card-create');
     const cardCreatorButton = document.createElement('div');
     cardCreatorButton.textContent = "Create a new card";
@@ -426,7 +426,7 @@ function updateCards(){
         const container = document.createElement('div');
         container.classList.add('card-selection-card-grid');
     
-        card.grid.forEach(row => {
+        card.Grid.forEach(row => {
             row.split('').forEach(block => {
                 const cardBlock = document.createElement('div');
                 cardBlock.classList.add('card-selection-card-block');
@@ -441,7 +441,7 @@ function updateCards(){
     
         const name = document.createElement('div');
         name.classList.add('card-selection-card-name');
-        name.textContent = card.name;
+        name.textContent = card.Name;
     
         parent.appendChild(container);
         parent.appendChild(name);
@@ -475,9 +475,7 @@ document.querySelector('.card-selection-close-button').addEventListener('click',
     document.querySelector('.card-selection').classList.add('card-selection-hidden');
 });
 
-document.querySelector('.card-create').addEventListener('click', () => {
-    document.querySelector('.card-creation').classList.remove('card-creation-hidden');
-});
+
 
 document.querySelector('.card-creation-close-button').addEventListener('click', () => {
     document.querySelector('.card-creation').classList.add('card-creation-hidden');
@@ -488,6 +486,31 @@ document.querySelector('.custom-create-button').addEventListener('click', () => 
         throw_floating_error("You must select at least 5 cards", "", "");
         return;
     }
+    const response = fetch(currentApi + "/api/Tables/custom", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ numberOfPlayers: 2, playMatSize: 5, moveCardSet: 2, moveCardString: JSON.stringify(selectedCards)})
+    }).then(response => {
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw_floating_error(errorData.message, '500', "#c60025");
+            });
+        }
+        return response.json();
+    }).then(data => {
+        console.log(data);
+        localStorage.setItem("tableId", data.id);
+        setTimeout(() => {
+            window.location.href = "../game/play.html";
+        }, 250);
+    }).catch(error => {
+        console.log(error);
+        throw_floating_error(error, '500', "#c60025");
+    });
 });
 
 document.querySelector('.card-creation-confirm-button').addEventListener('click', () => {
@@ -522,7 +545,7 @@ document.querySelector('.card-creation-confirm-button').addEventListener('click'
     }
     for (let i = 0; i < cards.length; i++) {
         const card = cards[i];
-        if(card.name == cardName){
+        if(card.Name == cardName){
             throw_floating_error("Your card's name must be unique", "", "")
             return;
         }
@@ -538,17 +561,20 @@ document.querySelector('.card-creation-confirm-button').addEventListener('click'
 });
 
 function isEqual(obj1, obj2) {
-    return obj1.name == obj2.name;
+    return obj1.Name == obj2.Name;
 }
 
 function addEventListeners(){
+    document.querySelector('.card-create').addEventListener('click', () => {
+        document.querySelector('.card-creation').classList.remove('card-creation-hidden');
+    });
     document.querySelectorAll('.card-selection-card').forEach(el => el.addEventListener('click', () => {
         el.classList.toggle('selected-card');
         let id = el.getAttribute('onitama-card-id');
         if(selectedCards.some(element => isEqual(element, cards[id]))){
             for (let i = 0; i < selectedCards.length; i++) {
                 const card = selectedCards[i];
-                if(card.name == cards[id].name){
+                if(card.Name == cards[id].Name){
                     selectedCards.splice(i, 1);;
                 }
             }
@@ -565,7 +591,7 @@ function updateCardList(){
     selectedCards.forEach(card => {
         const element = document.createElement('div');
         element.classList.add('custom-deck-card');
-        element.textContent = card.name;
+        element.textContent = card.Name;
     
         document.querySelector('.custom-deck-list').appendChild(element);
     });
