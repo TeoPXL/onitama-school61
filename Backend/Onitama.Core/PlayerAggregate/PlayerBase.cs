@@ -20,6 +20,12 @@ internal class PlayerBase : IPlayer
 
     private int _elo;
     private User _user;
+    private bool _hasValidMoves = false;
+    public bool HasValidMoves
+    {
+        get { return _hasValidMoves; }
+        set { this._hasValidMoves = value; }
+    }
 
     public virtual int Elo {
         get { return _elo; }

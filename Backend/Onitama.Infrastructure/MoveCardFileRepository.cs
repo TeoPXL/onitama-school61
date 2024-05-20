@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Onitama.Core.MoveCardAggregate.Contracts;
 
 namespace Onitama.Infrastructure;
