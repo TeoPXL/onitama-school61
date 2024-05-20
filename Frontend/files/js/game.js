@@ -476,36 +476,6 @@ const loadingDivElement = document.createElement('div');
 loadingDivElement.className = 'loading';
 container.appendChild(loadingDivElement);
 
-function giveAnimation(type) {
-    //This needs to be changed to individual models
-    const board = game.board;
-    for (let i = 0; i < board.currentBoard.length; i++) {
-        for (let k = 0; k < board.currentBoard.length; k++) {
-            const el = board.currentBoard[i][k][3];
-            if(board.currentBoard[i][k][0] == 0){
-
-            } else if (el != undefined) {
-                try {
-                    let mixer = board.currentBoard[i][k][3];
-                    let action;
-                    if (type == "jump"){
-                        action = mixer.clipAction( board.currentBoard[i][k][4].animations[1] );
-                    } else {
-                        action = mixer.clipAction( board.currentBoard[i][k][4].animations[3] );
-                    }
-                    
-                    mixer.stopAllAction();
-                    action.play(); 
-                } catch {
-                    
-                }
-                
-            }
-            
-        }
-    }
-}
-
 function animate() {
     requestAnimationFrame(animate);
     if(game == undefined){
@@ -585,171 +555,6 @@ function onPointerMove(event) {
     } else {
     }
 }
-
-function resetHighlightedObjects() {
-    // Reset opacity for all objects with the name "hover"
-    game.scene.traverse(function(child) {
-        if (child instanceof THREE.Mesh && child.name.includes("hover")) {
-            child.material.opacity = 0.3; // Reset opacity to default
-            child.material.needsUpdate = true; // Update material
-            document.body.style.cursor = 'default';
-            hoveredCube = undefined;
-        }
-    });
-    if(clickedCube != undefined){
-        if(game.playerToPlay != user.warriorName){
-            return;
-        }
-        clickedCube.material.opacity = 0.8;
-    }
-    hovering = false;
-}
-
-async function onClick(){
-    if(game.playerToPlay != user.warriorName){
-        return;
-    }
-    if(hovering == true){
-        console.log(hoveredCube.name); //Click detected!
-        clickedCube = hoveredCube;
-        if(clickedCube.onitamaType == "selectable"){
-            allCubes.forEach(cube => {
-                game.scene.remove(cube);
-            });
-            simulatePointerMove();
-
-            //Now we need to actually do the move
-            let pawnCube = selectedPawn;
-            let selectCube;
-            let selectedPosition;
-            allCubes.forEach(cube => {
-                if(cube == clickedCube){
-                    selectCube = cube;
-                    const column = 4 - ((4 - cube.position.x) / 2);
-                    const row = ((cube.position.z + 4) / 2);
-                    selectedPosition = [row, column];
-                }
-            });
-            selectionCoords = [selectedPosition[0], 4 - selectedPosition[1]];
-            console.log(pawnCoords);
-            console.log(selectionCoords);
-            let pawn = game.board.currentBoard[pawnCoords[0]][pawnCoords[1]][6];
-            console.log(pawn.id + " : " + pawn.ownerId);
-            let cardName = game.selectedCard;
-
-            console.log(selectionCoords);
-            game.movePawn(pawn.id, cardName, selectionCoords);
-            return;
-        }
-        //Check if a card has been selected. If not, pick the first card.
-        let cardSelected = false;
-        const playerCardElements = document.querySelectorAll('.player-card');
-        for (let i = 0; i < playerCardElements.length; i++) {
-            const element = playerCardElements[i];
-            if(element.classList.contains('player-card-selected')){
-                cardSelected = true;
-            }
-        }
-        if(cardSelected == false){
-            playerCardElements.forEach(card => {
-                card.classList.remove('player-card-selected');
-                card.querySelector('.card-name').textContent = card.querySelector('.card-name').textContent.replace(" (Active)", "");
-            });
-            playerCardElements[0].classList.add('player-card-selected');
-            game.selectedCard = playerCardElements[0].querySelector('.card-name').textContent;
-            playerCardElements[0].querySelector('.card-name').textContent += " (Active)";
-            cardSelected = true;
-        }
-        resetHighlightedObjects();
-        simulatePointerMove();
-        //We need to know possible moves. Luckily for us, we don't need to rotate anything here.
-        //When we send the move to the API though, we probably will have to rotate the data.
-        let startCoords;
-        let board = game.board.currentBoard;
-        for (let i = 0; i < board.length; i++) {
-            for (let j = 0; j < board[i].length; j++) {
-                const coord = [i, j];
-                const cube = board[i][j][5];
-                if(cube != undefined){
-                    if(clickedCube.name == cube.name){
-                        startCoords = [i, j];
-                    }
-                }
-            }
-        }
-        let selectedCard;
-        for (let i = 0; i < game.playerCards.length; i++) {
-            const card = game.playerCards[i];
-            if(card.name == game.selectedCard){
-                selectedCard = card;
-            }
-        }
-
-        if(hoveredCube.onitamaType == "pawn"){
-            console.log(startCoords[0]);
-            console.log(4 - startCoords[1]);
-            selectedPawn = hoveredCube;
-            pawnCoords = startCoords;
-        }
-
-        openCubes.forEach(cube => {
-            cube.onitamaType = "open";
-        });
-        if(startCoords != undefined && selectedCard != undefined){
-            const pawnId = board[startCoords[0]][startCoords[1]][6].id;
-            console.log(pawnId);
-            const coordinates = await game.getPossibleCoordinate(pawnId);
-            allCubes.forEach(cube => {
-                    game.scene.remove(cube);
-            });
-            if(coordinates != undefined){
-                coordinates.forEach(el => {
-                    let row = el.to.row;
-                    let column = el.to.column;
-                    console.log(row + " : " + column);
-                    console.log("Identity: 0")
-                    const material = new THREE.MeshBasicMaterial({
-                        color: hoveredCube.material.color, //White
-                        transparent: true, // Transparent
-                        opacity: 0.8, // Opacity to 0.1
-                    });
-    
-                    const cubeGeometry = new THREE.BoxGeometry(1.25, 0.05, 1.25);
-    
-                    // Create a mesh using the geometry and material
-                    const cube = new THREE.Mesh(cubeGeometry, material);
-                    cube.name = "selectable";
-                    cube.position.x = 4 - (column * 2);
-                    cube.position.z = row * 2 - 4;
-                    cube.scale.x = 1.05;
-                    cube.scale.z = 1.05;
-                    cube.scale.y = 1.05;
-                    game.scene.add(cube);
-                    cube.onitamaType = "selectable";
-                    allCubes.push(cube);
-                });
-            }
-        }
-    }
-}
-function simulatePointerMove() {
-    // Create a new MouseEvent object
-    let event = new MouseEvent('pointermove', {
-        bubbles: true,
-        cancelable: true,
-        clientX: lastPointerCoords.x,
-        clientY: lastPointerCoords.y
-    });
-
-    // Dispatch the event on the window object
-    window.dispatchEvent(event);
-}
-// Add event listeners for pointer and touch events
-window.addEventListener('pointermove', onPointerMove, false);
-window.addEventListener('touchmove', onPointerMove, false);
-window.addEventListener('touchstart', onPointerMove, false);
-window.addEventListener('touchend', resetHighlightedObjects, false);
-window.addEventListener('click', onClick, false);
 
 async function fetchTable(){
     if(currentApi == ""){
@@ -1333,3 +1138,244 @@ async function skipMove(){
     }
 }
 
+
+class ClickHandler {
+    constructor() {
+        this.clickStart = 0;
+        this.clickPosition = { x: 0, y: 0 };
+    }
+
+    startClick(event) {
+        if(game === undefined){
+            return;
+        }
+        // Record the start time
+        this.clickStart = performance.now();
+        this.hover(event);
+    }
+
+    hover(event){
+        this.clickPosition.x = event.clientX || event.touches[0].clientX;
+        this.clickPosition.y = event.clientY || event.touches[0].clientY;
+        lastPointerCoords = { x: this.clickPosition.x, y: this.clickPosition.y };
+        // Set the mouse coordinates in the game object
+        game.mouseX = this.clickPosition.x;
+        game.mouseY = this.clickPosition.y;
+        // Get the bounding rectangle of the renderer element
+        let rect = game.renderer.domElement.getBoundingClientRect();
+        // Calculate the mouse coordinates relative to the renderer element
+        let x = (game.mouseX - rect.left) / rect.width * 2 - 1;
+        let y = -(game.mouseY - rect.top) / rect.height * 2 + 1;
+        // Update the mouse vector
+        game.mouse.set(x, y);
+        // update the picking ray with the camera and mouse position
+        game.raycaster.setFromCamera(game.mouse, game.camera);
+        // Reset previously highlighted objects
+        resetHighlightedObjects();
+        // calculate objects intersecting the picking ray
+        let intersects = game.raycaster.intersectObjects(game.scene.children);
+        let cubes = 0;
+        if (intersects.length > 0) {
+            intersects.forEach(element => {
+                let object = element.object;
+                if(object.name.includes(game.currentPlayer+"hover") || object.onitamaType == "selectable"){
+                    document.body.style.cursor = 'pointer';
+                    if(game.playerToPlay != user.warriorName){
+                        return;
+                    }
+                    object.material.opacity = 0.8;
+                    cubes++;
+                    hovering = true;
+                    hoveredCube = object;
+                }
+            });
+        } else {
+        }
+    }
+
+    endClick() {
+        // Calculate the click duration
+        const clickEnd = performance.now();
+        const clickDuration = clickEnd - this.clickStart;
+
+        // Log the duration to the console
+        console.log(`Click duration: ${clickDuration} ms`);
+        if(clickDuration < 200){
+            //Click detected
+            console.log(`Click position: (${this.clickPosition.x}, ${this.clickPosition.y})`);
+            onClick();
+        }
+        // Reset the start time
+        this.clickStart = 0;
+    }
+}
+
+var clickHandler = new ClickHandler();
+
+function resetHighlightedObjects() {
+    // Reset opacity for all objects with the name "hover"
+    game.scene.traverse(function(child) {
+        if (child instanceof THREE.Mesh && child.name.includes("hover")) {
+            child.material.opacity = 0.3; // Reset opacity to default
+            child.material.needsUpdate = true; // Update material
+            document.body.style.cursor = 'default';
+            hoveredCube = undefined;
+        }
+    });
+    if(clickedCube != undefined){
+        if(game.playerToPlay != user.warriorName){
+            return;
+        }
+        clickedCube.material.opacity = 0.8;
+    }
+    hovering = false;
+}
+
+function simulatePointerMove() {
+    // Create a new MouseEvent object
+    let event = new MouseEvent('pointermove', {
+        bubbles: true,
+        cancelable: true,
+        clientX: lastPointerCoords.x,
+        clientY: lastPointerCoords.y
+    });
+
+    // Dispatch the event on the window object
+    window.dispatchEvent(event);
+}
+
+async function onClick(){
+    if(game.playerToPlay != user.warriorName){
+        return;
+    }
+    if(hovering == true){
+        console.log(hoveredCube.name); //Click detected!
+        clickedCube = hoveredCube;
+        if(clickedCube.onitamaType == "selectable"){
+            allCubes.forEach(cube => {
+                game.scene.remove(cube);
+            });
+            simulatePointerMove();
+
+            //Now we need to actually do the move
+            let pawnCube = selectedPawn;
+            let selectCube;
+            let selectedPosition;
+            allCubes.forEach(cube => {
+                if(cube == clickedCube){
+                    selectCube = cube;
+                    const column = 4 - ((4 - cube.position.x) / 2);
+                    const row = ((cube.position.z + 4) / 2);
+                    selectedPosition = [row, column];
+                }
+            });
+            selectionCoords = [selectedPosition[0], 4 - selectedPosition[1]];
+            console.log(pawnCoords);
+            console.log(selectionCoords);
+            let pawn = game.board.currentBoard[pawnCoords[0]][pawnCoords[1]][6];
+            console.log(pawn.id + " : " + pawn.ownerId);
+            let cardName = game.selectedCard;
+
+            console.log(selectionCoords);
+            game.movePawn(pawn.id, cardName, selectionCoords);
+            return;
+        }
+        //Check if a card has been selected. If not, pick the first card.
+        let cardSelected = false;
+        const playerCardElements = document.querySelectorAll('.player-card');
+        for (let i = 0; i < playerCardElements.length; i++) {
+            const element = playerCardElements[i];
+            if(element.classList.contains('player-card-selected')){
+                cardSelected = true;
+            }
+        }
+        if(cardSelected == false){
+            playerCardElements.forEach(card => {
+                card.classList.remove('player-card-selected');
+                card.querySelector('.card-name').textContent = card.querySelector('.card-name').textContent.replace(" (Active)", "");
+            });
+            playerCardElements[0].classList.add('player-card-selected');
+            game.selectedCard = playerCardElements[0].querySelector('.card-name').textContent;
+            playerCardElements[0].querySelector('.card-name').textContent += " (Active)";
+            cardSelected = true;
+        }
+        resetHighlightedObjects();
+        simulatePointerMove();
+        //We need to know possible moves. Luckily for us, we don't need to rotate anything here.
+        //When we send the move to the API though, we probably will have to rotate the data.
+        let startCoords;
+        let board = game.board.currentBoard;
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board[i].length; j++) {
+                const coord = [i, j];
+                const cube = board[i][j][5];
+                if(cube != undefined){
+                    if(clickedCube.name == cube.name){
+                        startCoords = [i, j];
+                    }
+                }
+            }
+        }
+        let selectedCard;
+        for (let i = 0; i < game.playerCards.length; i++) {
+            const card = game.playerCards[i];
+            if(card.name == game.selectedCard){
+                selectedCard = card;
+            }
+        }
+
+        if(hoveredCube.onitamaType == "pawn"){
+            console.log(startCoords[0]);
+            console.log(4 - startCoords[1]);
+            selectedPawn = hoveredCube;
+            pawnCoords = startCoords;
+        }
+
+        openCubes.forEach(cube => {
+            cube.onitamaType = "open";
+        });
+        if(startCoords != undefined && selectedCard != undefined){
+            const pawnId = board[startCoords[0]][startCoords[1]][6].id;
+            console.log(pawnId);
+            const coordinates = await game.getPossibleCoordinate(pawnId);
+            allCubes.forEach(cube => {
+                    game.scene.remove(cube);
+            });
+            if(coordinates != undefined){
+                coordinates.forEach(el => {
+                    let row = el.to.row;
+                    let column = el.to.column;
+                    console.log(row + " : " + column);
+                    console.log("Identity: 0")
+                    const material = new THREE.MeshBasicMaterial({
+                        color: hoveredCube.material.color, //White
+                        transparent: true, // Transparent
+                        opacity: 0.8, // Opacity to 0.1
+                    });
+    
+                    const cubeGeometry = new THREE.BoxGeometry(1.25, 0.05, 1.25);
+    
+                    // Create a mesh using the geometry and material
+                    const cube = new THREE.Mesh(cubeGeometry, material);
+                    cube.name = "selectable";
+                    cube.position.x = 4 - (column * 2);
+                    cube.position.z = row * 2 - 4;
+                    cube.scale.x = 1.05;
+                    cube.scale.z = 1.05;
+                    cube.scale.y = 1.05;
+                    game.scene.add(cube);
+                    cube.onitamaType = "selectable";
+                    allCubes.push(cube);
+                });
+            }
+        }
+    }
+}
+
+window.addEventListener('touchstart', (event) => clickHandler.startClick(event), false);
+window.addEventListener('touchend', () => clickHandler.endClick(), false);
+window.addEventListener('mousedown', (event) => clickHandler.startClick(event), false);
+window.addEventListener('mouseup', () => clickHandler.endClick(), false);
+
+window.addEventListener('pointermove', (event) => clickHandler.hover(event), false);
+window.addEventListener('touchmove', (event) => clickHandler.hover(event), false);
