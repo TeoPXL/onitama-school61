@@ -317,6 +317,49 @@ canvas {
 .loading-bar-hidden {
     opacity: 0;
 }
+.skip-move {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: calc(100% - 20px);
+    height: 30%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    background: #000000b2;
+    padding-left: 10px;
+    padding-right: 10px;
+    align-items: center;
+    transition: 0.2s;
+}
+.skip-move-hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+.skip-move-title {
+    font-weight: 500;
+}
+.skip-move-subtitle {
+    font-weight: 300;
+    font-size: 80%;
+    color: var(--color-text);
+    filter: brightness(0.8);
+}
+.skip-move-button {
+    width: max-content;
+    padding: 2px;
+    padding-left: 12px;
+    padding-right: 12px;
+    background: var(--color-main);
+    border-radius: 2em;
+    color: var(--color-text-2);
+    cursor: pointer;
+    transition: 0.2s;
+}
+.skip-move-button:hover {
+    filter: brightness(0.5);
+}
 @media screen and (min-width: 600px) {
     .main {
         flex-flow: row;

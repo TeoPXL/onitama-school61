@@ -805,6 +805,9 @@ async function fetchTable(){
                         if(totalPlayers.some(obj => obj.name != name)){
                             console.log(name + " HAS LEFT");
                             throw_floating_message(name + ' has left the table.', 'Notice!');
+                            setTimeout(() => {
+                                floatingError.classList.add('floating-error-hidden');
+                            }, 2000);
                         }
                     }
                 } else {
@@ -814,6 +817,9 @@ async function fetchTable(){
                         if(allUsers.some(obj => obj.name != name)){
                             console.log(name + " HAS JOINED");
                             throw_floating_message(name + ' has joined the table!', 'Notice!');
+                            setTimeout(() => {
+                                floatingError.classList.add('floating-error-hidden');
+                            }, 2000);
                         }
                     }
                 }
@@ -1074,8 +1080,22 @@ async function getGame(){
                 });
                 game.playerToPlay = user.warriorName;
                 document.querySelector('.toast').textContent = "Your turn";
+                data.players.forEach(player => {
+                    if(player.id == user.id){
+                        //This is us
+                        if(player.hasValidMoves == false){
+                            //Add message telling us to skip move
+                            document.querySelector('.skip-move').classList.remove('skip-move-hidden');
+                        } else {
+                            //Remove message telling us to skip move
+                            document.querySelector('.skip-move').classList.add('skip-move-hidden');
+                        }
+                    }
+                });
             } else {
                 //Someone else's turn
+                //Remove message telling us to skip move
+                document.querySelector('.skip-move').classList.add('skip-move-hidden');
                 for (let i = 0; i < data.players.length; i++) {
                     const player = data.players[i];
                     if(player.id == data.playerToPlayId){
@@ -1261,6 +1281,53 @@ async function getUser(){
         const data = await response.json();
         console.log(data);
         compareElo(data.user.elo)
+    } catch(error) {
+        //console.log(error);
+    }
+}
+
+document.querySelector('.skip-move-button').addEventListener('click', () => {
+    let cardSelected = false;
+        const playerCardElements = document.querySelectorAll('.player-card');
+        for (let i = 0; i < playerCardElements.length; i++) {
+            const element = playerCardElements[i];
+            if(element.classList.contains('player-card-selected')){
+                cardSelected = true;
+            }
+        }
+    if(cardSelected == false){
+        playerCardElements.forEach(card => {
+            card.classList.remove('player-card-selected');
+            card.querySelector('.card-name').textContent = card.querySelector('.card-name').textContent.replace(" (Active)", "");
+        });
+        playerCardElements[0].classList.add('player-card-selected');
+        game.selectedCard = playerCardElements[0].querySelector('.card-name').textContent;
+        playerCardElements[0].querySelector('.card-name').textContent += " (Active)";
+        cardSelected = true;
+    }
+    console.log(game.selectedCard);
+    skipMove();
+});
+
+async function skipMove(){
+    try {
+        const response = await fetch(currentApi + "/api/Games/" + game.id + "/skip-movement", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({"moveCardName": game.selectedCard})
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error("Your token has expired already!");
+        }
+        
+        const data = await response.json();
+        console.log(data);
     } catch(error) {
         //console.log(error);
     }
