@@ -20,7 +20,13 @@
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="../files/css/main.css">
-    <link rel="stylesheet" href="../files/css/custom.css">
+    <style>
+        .redirecting {
+            width: 100%;
+            text-align: center;
+            font-size: 120%;
+        }
+    </style>
 </head>
 
 <body>
@@ -71,27 +77,7 @@
     </header>
 
     <main class="main">
-        <div class="custom-title">Choose your game type!</div>
-        <div class="custom-type">
-            <div class="custom-type-button">Classic</div>
-            <div class="custom-type-button">Competitive</div>
-            <div class="custom-type-button">Blitz</div>
-        </div>
-        <div class="custom-title">Choose opponent:</div>
-        <div class="custom-opponent">
-            <div class="custom-opponent-button">Online friend</div>
-            <div class="custom-opponent-button">Machine (AI)</div>
-        </div>
-        <div class="custom-title">Create your deck!</div>
-        <div class="custom-deck-container">
-            <div class="custom-deck">
-                <div class="custom-deck-title">Selected cards:</div>
-                <div class="custom-deck-list">
-                </div>
-            </div>
-            <div class="custom-deck-button">Edit deck</div>
-        </div>
-        <div class="custom-create-button">Create table</div>
+        <div class="redirecting">Redirecting...</div>
     </main>
     <div class="floating-error floating-error-hidden">
         <div class="floating-error-title">Error: 401</div>
@@ -107,59 +93,16 @@
         </div>
     </div>
 
-    <div class="card-selection card-selection-hidden">
-        <div class="card-selection-close-button">Save and return</div>
-        <div class="card-selection-title">Select your cards</div>
-        <div class="card-selection-section">
-            <div class="card-selection-subtitle">Custom cards</div>
-            <div class="card-selection-list custom-list">
-                <div class="card-selection-card-alt card-create">
-                    <div class="card-selection-card-button">Create a new card</div>
-                </div>
-            </div>
-        </div>
-        <div class="card-selection-section">
-            <div class="card-selection-subtitle">Onitama Original</div>
-            <div class="card-selection-list original-list">
-                
-            </div>
-        </div>
-        <div class="card-selection-section">
-            <div class="card-selection-subtitle">Sensei's Path</div>
-            <div class="card-selection-list senseispath-list">
-                
-            </div>
-        </div>
-    </div>
-
-    <div class="card-creation card-creation-hidden">
-        <div class="card-creation-close-button">Discard changes</div>
-        <div class="card-selection-title">Create your card</div>
-        <div class="card-creation-grid">
-            <div class="card-creation-block card-creation-block-item"></div><div class="card-creation-block card-creation-block-item"></div>
-            <div class="card-creation-block card-creation-block-item"></div><div class="card-creation-block card-creation-block-item"></div>
-            <div class="card-creation-block card-creation-block-item"></div><div class="card-creation-block card-creation-block-item"></div>
-            <div class="card-creation-block card-creation-block-item"></div><div class="card-creation-block card-creation-block-item"></div>
-            <div class="card-creation-block card-creation-block-item"></div><div class="card-creation-block card-creation-block-item"></div>
-            <div class="card-creation-block card-creation-block-item"></div><div class="card-creation-block card-creation-block-item"></div>
-            <div class="card-creation-king card-creation-block-item"></div><div class="card-creation-block card-creation-block-item"></div>
-            <div class="card-creation-block card-creation-block-item"></div><div class="card-creation-block card-creation-block-item"></div>
-            <div class="card-creation-block card-creation-block-item"></div><div class="card-creation-block card-creation-block-item"></div>
-            <div class="card-creation-block card-creation-block-item"></div><div class="card-creation-block card-creation-block-item"></div>
-            <div class="card-creation-block card-creation-block-item"></div><div class="card-creation-block card-creation-block-item"></div>
-            <div class="card-creation-block card-creation-block-item"></div><div class="card-creation-block card-creation-block-item"></div>
-            <div class="card-creation-block card-creation-block-item"></div>
-        </div>
-
-        <div class="card-creation-name">
-            <input class="card-creation-input" placeholder="Your card name...">
-        </div>
-
-        <div class="card-creation-confirm-button">Save card</div>
-    </div>
-
     <script src="../files/js/shared.js"></script>
-    <script src="../files/js/lobby-custom.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const tableId = params.get("table");
+        localStorage.setItem("tableId", tableId);
+        setTimeout(() => {
+            window.location.href = "play.html";
+        }, 100);
+    </script>
+    <div class="spacer"></div>
     <div class="spacer"></div>
 </body>
 
