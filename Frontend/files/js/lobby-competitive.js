@@ -68,8 +68,18 @@ function loadClassicTables (){
             element.querySelector('.table-title').textContent = owner;
             const tablePlayers = element.querySelector('.table-players');
             tablePlayers.textContent = seatedPlayers + "/" + maxPlayers + " players";
-            if(table.preferences.moveCardSet == "2"){
-                tablePlayers.textContent = tablePlayers.textContent + " | Custom cards";
+            switch (table.preferences.moveCardSet) {
+                case "1":
+                    tablePlayers.textContent = tablePlayers.textContent + " | Sensei's Path";
+                    break;
+
+                case "2":
+                    tablePlayers.textContent = tablePlayers.textContent + " | Custom cards";
+                    break;
+            
+                default:
+                    tablePlayers.textContent = tablePlayers.textContent + " | Original";
+                    break;
             }
             element.querySelector('.table-button').textContent = "Join table";
             element.querySelector('.table-button').setAttribute("table-id", table.id);
