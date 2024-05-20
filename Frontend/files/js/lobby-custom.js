@@ -3,6 +3,7 @@ const topButtonLogin = document.querySelector(".top-button-login");
 const topButtonUser = document.querySelector(".top-button-user");
 let customCards = JSON.parse(localStorage.getItem("custom-cards"));
 let selectedCards = JSON.parse(localStorage.getItem("selected-cards"));
+let gameType = "classic";
 if(customCards == null){
     customCards = [];
 }
@@ -481,6 +482,16 @@ document.querySelector('.card-creation-close-button').addEventListener('click', 
     document.querySelector('.card-creation').classList.add('card-creation-hidden');
 });
 
+document.querySelectorAll('.custom-type-button').forEach(el => el.addEventListener('click', () => {
+    document.querySelectorAll('.custom-type-button').forEach(element => {
+        element.classList.remove('active-button');
+    });
+    gameType = el.getAttribute('onitama-game-type');
+    el.classList.add('active-button');
+    console.log(gameType);
+}));
+
+
 document.querySelector('.custom-create-button').addEventListener('click', () => {
     if(selectedCards.length < 5){
         throw_floating_error("You must select at least 5 cards", "", "");
@@ -493,7 +504,7 @@ document.querySelector('.custom-create-button').addEventListener('click', () => 
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token
         },
-        body: JSON.stringify({ numberOfPlayers: 2, playMatSize: 5, moveCardSet: 2, moveCardString: JSON.stringify(selectedCards)})
+        body: JSON.stringify({ numberOfPlayers: 2, playMatSize: 5, moveCardSet: 2, tableType: gameType, moveCardString: JSON.stringify(selectedCards)})
     }).then(response => {
         if (!response.ok) {
             return response.json().then(errorData => {
