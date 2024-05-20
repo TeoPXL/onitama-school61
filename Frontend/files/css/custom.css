@@ -197,6 +197,18 @@
     background: var(--color-main);
     color: var(--color-text-2);
 }
+.delete-button {
+    padding: 2px;
+    padding-left: 12px;
+    padding-right: 12px;
+    background: var(--color-red);
+    border-radius: 2em;
+    transition: 0.2s;
+    cursor: pointer;
+}
+.delete-button:hover {
+    filter: brightness(0.5);
+}
 @media screen and (min-width: 900px) {
     .card-selection-list {
         grid-template-columns: 1fr 1fr 1fr;
