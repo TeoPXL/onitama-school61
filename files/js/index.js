@@ -74,6 +74,7 @@ if (user !== null) {
 
 //Temporary artificial delay. This is to show the loading animation.
 function loadGames(compItems) {
+    document.querySelectorAll('.gamelist-text')[3].textContent = compItems.length + ' active matches';
     for (let i = 0; i < compItems.length; i++) {
         const game = compItems[i];
         let string = game.players[0].name + " vs " + game.players[1].name;

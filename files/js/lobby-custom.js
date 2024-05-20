@@ -357,35 +357,30 @@ class Card {
     Name;
     Grid;
     type;
-    id;
     selected = false;
 
-    constructor(name, grid, type, id){
+    constructor(name, grid, type){
         this.Name = name;
         this.Grid = grid;
         this.type = type;
-        this.id = id;
     }
 }
 
 senseisPath.forEach(el => {
     console.log(el);
-    let id = cards.length;
-    let card = new Card(el.Name, el.Grid, 'senseispath', id);
+    let card = new Card(el.Name, el.Grid, 'senseispath');
     cards.push(card);
 });
 
 original.forEach(el => {
     console.log(el);
-    let id = cards.length;
-    let card = new Card(el.Name, el.Grid, 'original', id);
+    let card = new Card(el.Name, el.Grid, 'original');
     cards.push(card);
 });
 
 customCards.forEach(el => {
     console.log(el);
-    let id = cards.length;
-    let card = new Card(el.Name, el.Grid, 'custom', id);
+    let card = new Card(el.Name, el.Grid, 'custom');
     cards.push(card);
 });
 
@@ -422,7 +417,7 @@ function updateCards(){
         if(card.selected == true){
             parent.classList.add('selected-card');
         }
-        parent.setAttribute('onitama-card-id', card.id);
+        parent.setAttribute('onitama-card-name', card.Name);
     
         const container = document.createElement('div');
         container.classList.add('card-selection-card-grid');
@@ -456,6 +451,11 @@ function updateCards(){
         }
 
         if(card.type == 'custom'){
+            const deleteButton = document.createElement('div');
+            deleteButton.classList.add('delete-button');
+            deleteButton.setAttribute('onitama-card-name', card.Name);
+            deleteButton.textContent = "Remove";
+            parent.appendChild(deleteButton);
             document.querySelector('.custom-list').appendChild(parent);
         }
     });
@@ -561,8 +561,7 @@ document.querySelector('.card-creation-confirm-button').addEventListener('click'
             return;
         }
     }
-    let id = cards.length;
-    let newCard = new Card(cardName, blockGrid, "custom", id);
+    let newCard = new Card(cardName, blockGrid, "custom");
     cards.push(newCard);
     customCards.push(newCard);
     localStorage.setItem('custom-cards', JSON.stringify(customCards));
@@ -581,19 +580,52 @@ function addEventListeners(){
     });
     document.querySelectorAll('.card-selection-card').forEach(el => el.addEventListener('click', () => {
         el.classList.toggle('selected-card');
-        let id = el.getAttribute('onitama-card-id');
-        if(selectedCards.some(element => isEqual(element, cards[id]))){
+        let name = el.getAttribute('onitama-card-name');
+        let card;
+        cards.forEach(element => {
+            if(element.Name == name){
+                card = element;
+            }
+        });
+        if(selectedCards.some(element => isEqual(element, card))){
             for (let i = 0; i < selectedCards.length; i++) {
-                const card = selectedCards[i];
-                if(card.Name == cards[id].Name){
+                const selectedCard = selectedCards[i];
+                if(selectedCard.Name == card.Name){
                     selectedCards.splice(i, 1);;
                 }
             }
         } else {
-            selectedCards.push(cards[id]);
+            selectedCards.push(card);
         }
         localStorage.setItem('selected-cards', JSON.stringify(selectedCards));
         updateCardList();
+    }));
+
+    document.querySelectorAll('.delete-button').forEach(el => el.addEventListener('click', () => {
+        const name = el.getAttribute('onitama-card-name');
+        for (let i = 0; i < selectedCards.length; i++) {
+            const card = selectedCards[i];
+            if(card.Name == name){
+                selectedCards.splice(i, 1);
+            }
+        }
+        for (let i = 0; i < customCards.length; i++) {
+            const card = customCards[i];
+            if(card.Name == name){
+                customCards.splice(i, 1);
+            }
+        }
+        for (let i = 0; i < cards.length; i++) {
+            const card = cards[i];
+            if(card.Name == name){
+                cards.splice(i, 1);
+            }
+        }
+        updateCardList();
+        updateSelectedCards();
+        updateCards();
+        localStorage.setItem('custom-cards', JSON.stringify(customCards));
+        localStorage.setItem('selected-cards', JSON.stringify(selectedCards));
     }));
 }
 
