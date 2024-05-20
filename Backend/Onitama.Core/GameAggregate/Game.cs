@@ -536,7 +536,23 @@ internal class Game : IGame
         {
             throw new ApplicationException("The player can still do a valid move");
         }
-        ExtraMoveCard = player.MoveCards[0];
+        IMoveCard moveCard = null;
+        for (int i = 0; i < player.MoveCards.Count; i++)
+        {
+            if (player.MoveCards[i].Name == moveCardName)
+            {
+                moveCard = player.MoveCards[i];
+            }
+        }
+        if(moveCard == null)
+        {
+            throw new InvalidOperationException("This move does not exist for this player");
+        }
+
+        player.MoveCards.Remove(moveCard);
+        player.MoveCards.Add(ExtraMoveCard);
+        ExtraMoveCard = moveCard;
+
         PlayerToPlayId = this.GetNextOpponent(playerId).Id;
         checkValidMoves();
     }
