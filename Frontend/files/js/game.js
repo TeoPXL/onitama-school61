@@ -505,57 +505,6 @@ function animate() {
     renderer.render(game.scene, game.camera);
 }
 
-function onPointerMove(event) {
-    if (game === undefined) {
-        return;
-    }
-    // Get the pointer coordinates in screen space
-    let pointerX, pointerY;
-    if (event.type.startsWith('touch')) {
-        // For touch events, get the coordinates of the first touch point
-        pointerX = event.touches[0].clientX;
-        pointerY = event.touches[0].clientY;
-    } else {
-        // For mouse events, use clientX and clientY directly
-        pointerX = event.clientX;
-        pointerY = event.clientY;
-    }
-    lastPointerCoords = { x: pointerX, y: pointerY };
-    // Set the mouse coordinates in the game object
-    game.mouseX = pointerX;
-    game.mouseY = pointerY;
-    // Get the bounding rectangle of the renderer element
-    let rect = game.renderer.domElement.getBoundingClientRect();
-    // Calculate the mouse coordinates relative to the renderer element
-    let x = (game.mouseX - rect.left) / rect.width * 2 - 1;
-    let y = -(game.mouseY - rect.top) / rect.height * 2 + 1;
-    // Update the mouse vector
-    game.mouse.set(x, y);
-    // update the picking ray with the camera and mouse position
-    game.raycaster.setFromCamera(game.mouse, game.camera);
-    // Reset previously highlighted objects
-    resetHighlightedObjects();
-    // calculate objects intersecting the picking ray
-    let intersects = game.raycaster.intersectObjects(game.scene.children);
-    let cubes = 0;
-    if (intersects.length > 0) {
-        intersects.forEach(element => {
-            let object = element.object;
-            if(object.name.includes(game.currentPlayer+"hover") || object.onitamaType == "selectable"){
-                document.body.style.cursor = 'pointer';
-                if(game.playerToPlay != user.warriorName){
-                    return;
-                }
-                object.material.opacity = 0.8;
-                cubes++;
-                hovering = true;
-                hoveredCube = object;
-            }
-        });
-    } else {
-    }
-}
-
 async function fetchTable(){
     if(currentApi == ""){
         return;
