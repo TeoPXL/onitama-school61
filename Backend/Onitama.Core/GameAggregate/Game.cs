@@ -177,13 +177,31 @@ internal class Game : IGame
     /// </remarks>
     public Game(IGame otherGame)
     {
-        this._id = otherGame.Id;
-        this._playMat = otherGame.PlayMat;
-        foreach(var element in otherGame.Players)
+        if (otherGame == null)
         {
-            this._players.Append(element);
+            throw new ArgumentNullException(nameof(otherGame));
         }
-        //Attention: the players should be copied, not just referenced
+
+        this._id = otherGame.Id;
+        this._playMat = otherGame.PlayMat; // Assuming PlayMat is immutable or copied internally
+
+        // Initialize the Players array
+        this.Players = new IPlayer[otherGame.Players.Length];
+
+        for (int i = 0; i < otherGame.Players.Length; i++)
+        {
+            var element = otherGame.Players[i];
+            if (element.Strategy == null)
+            {
+                Players[i] = new HumanPlayer(element.Id, element.Name, element.Color, element.Direction, element.Elo);
+                Players[i].SetSchool(element.School);
+            }
+            else
+            {
+                Players[i] = new ComputerPlayer(element.Color, element.Direction, Players[1].Strategy);
+                Players[i].SetSchool(element.School);
+            }
+        }
     }
 
     public IReadOnlyList<IMove> GetPossibleMovesForPawn(Guid playerId, Guid pawnId, string moveCardName)
@@ -439,6 +457,20 @@ internal class Game : IGame
         ExtraMoveCard = moveCard;
         PlayerToPlayId = this.GetNextOpponent(playerId).Id;
         checkValidMoves();
+
+        if(PlayerToPlayId == Players[1].Id)
+        {
+            //Make the AI do something here
+            if (Players[1].HasValidMoves == true)
+            {
+                var bestMove = Players[1].DetermineBestMove(new Game(this));
+                MovePawn(Guid.Parse("10000000000000000000000000000001"), bestMove.Pawn.Id, bestMove.Card.Name, bestMove.To);
+            }
+            else
+            {
+                SkipMovementAndExchangeCard(Players[1].Id, Players[1].MoveCards[0].Name);
+            }
+        }
     }
 
     public void calculateElo()

@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Onitama.Core.GameAggregate;
 using Onitama.Core.GameAggregate.Contracts;
 using Onitama.Core.MoveCardAggregate.Contracts;
 using Onitama.Core.PlayerAggregate.Contracts;
@@ -11,7 +12,7 @@ namespace Onitama.Core.PlayerAggregate;
 /// <inheritdoc cref="IPlayer"/>
 internal class ComputerPlayer : PlayerBase
 {
-    IGamePlayStrategy Strategy { get; set; }
+    public IGamePlayStrategy Strategy { get; set; }
 
     public Guid Id { get; set; }
 
@@ -53,9 +54,9 @@ internal class ComputerPlayer : PlayerBase
     /// Uses gameplay strategy to determine the best move to execute.
     /// </summary>
     /// <param name="game">The game (in its current state)</param>
-    public IMove DetermineBestMove(IGame game)
+    public override IMove DetermineBestMove(IGame game)
     {
-        return Strategy.GetBestMoveFor(Id, game);
+        return Strategy.GetBestMoveFor(Id, new Game(game));
     }
 
     public void SetSchool(ISchool school)

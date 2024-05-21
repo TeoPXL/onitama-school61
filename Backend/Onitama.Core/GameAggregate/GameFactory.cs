@@ -85,6 +85,20 @@ internal class GameFactory : IGameFactory
         }
 
         game.checkValidMoves();
+
+        if(game.PlayerToPlayId == Guid.Parse("10000000000000000000000000000001"))
+        {
+            //The AI starts
+            if (game.Players[1].HasValidMoves == true)
+            {
+                var move = game.Players[1].DetermineBestMove(game);
+                game.MovePawn(Guid.Parse("10000000000000000000000000000001"), move.Pawn.Id, move.Card.Name, move.To);
+            } else
+            {
+                game.SkipMovementAndExchangeCard(game.Players[1].Id, game.Players[1].MoveCards[0].Name);
+            }
+            
+        }
         
         return game;
     }

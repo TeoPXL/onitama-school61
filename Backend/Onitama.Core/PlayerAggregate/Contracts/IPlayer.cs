@@ -4,6 +4,7 @@ using Onitama.Core.SchoolAggregate;
 using Onitama.Core.UserAggregate;
 using Onitama.Core.SchoolAggregate.Contracts;
 using Onitama.Core.Util;
+using Onitama.Core.GameAggregate.Contracts;
 
 namespace Onitama.Core.PlayerAggregate.Contracts;
 
@@ -16,6 +17,8 @@ public interface IPlayer
     /// Unique identifier of the player
     /// </summary>
     Guid Id { get; }
+
+    IGamePlayStrategy Strategy { get; set; }
 
     /// <summary>
     /// (Display) name of the player
@@ -55,4 +58,7 @@ public interface IPlayer
     IList<IMoveCard> MoveCards { get; }
 
     public void SetSchool(SchoolAggregate.Contracts.ISchool school);
+
+    public abstract IMove DetermineBestMove(IGame game);
+
 }

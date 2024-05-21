@@ -6,6 +6,8 @@ using Onitama.Core.SchoolAggregate;
 using Onitama.Core.UserAggregate;
 using Onitama.Core.SchoolAggregate.Contracts;
 using Onitama.Core.Util;
+using Onitama.Core.GameAggregate.Contracts;
+using Onitama.Core.GameAggregate;
 
 namespace Onitama.Core.PlayerAggregate;
 
@@ -17,6 +19,9 @@ internal class PlayerBase : IPlayer
     public string Name { get; }
     public Color Color { get; }
     public Direction Direction { get; }
+
+    public IGamePlayStrategy Strategy { get; set; }
+
 
     private int _elo;
     private User _user;
@@ -72,11 +77,16 @@ internal class PlayerBase : IPlayer
         Name = otherPlayer.Name;
         Color = otherPlayer.Color;
         Direction = otherPlayer.Direction;
-        MoveCards = new List<IMoveCard>();
+        MoveCards = [.. otherPlayer.MoveCards];
     }
 
     public void SetSchool(ISchool school)
     {
         this._school = school;
+    }
+
+    public virtual IMove DetermineBestMove(IGame game)
+    {
+        return new Move(MoveCards[0]);
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System.Drawing;
+using Onitama.Core.GameAggregate;
+using Onitama.Core.GameAggregate.Contracts;
 using Onitama.Core.MoveCardAggregate.Contracts;
 using Onitama.Core.PlayerAggregate.Contracts;
 using Onitama.Core.SchoolAggregate.Contracts;
@@ -26,6 +28,8 @@ internal class HumanPlayer : PlayerBase
         get { return _time; }
         set { _time = value; }
     }
+
+    public IGamePlayStrategy Strategy { get; set; }
 
     public override User User
     {
@@ -102,5 +106,10 @@ internal class HumanPlayer : PlayerBase
     {
         get { return _elo; }
         set { _elo = value; }
+    }
+
+    public virtual IMove DetermineBestMove(IGame game)
+    {
+        return new Move(_moveCards[0]);
     }
 }
