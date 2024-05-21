@@ -50,7 +50,7 @@ function loadOpenGames (){
         }
         if (!response.ok) {
             return response.json().then(errorData => {
-                throw_floating_error(errorData.message, "500", "#c60025");
+                //throw_floating_error(errorData.message, "500", "#c60025");
             });
         }
         return response.json();
@@ -59,7 +59,9 @@ function loadOpenGames (){
         loadGames(games);
     }).catch(error => {
         console.log(error);
-        throw_floating_error(error, "500", "#c60025");
+        //throw_floating_error(error, "500", "#c60025");
+        const games = [];
+        loadGames(games);
     });
 
 }
