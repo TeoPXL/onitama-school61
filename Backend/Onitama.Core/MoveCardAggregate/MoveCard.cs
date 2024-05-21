@@ -193,6 +193,10 @@ internal class MoveCard : IMoveCard
     public IReadOnlyList<ICoordinate> GetPossibleAltTargetCoordinates(ICoordinate startCoordinate, Direction playDirection, int matSize)
     {
         var grid = _altGrid;
+        if(_altGrid == null)
+        {
+            return new List<ICoordinate>();
+        }
         switch (playDirection)
         {
             case var d when d == Direction.South:

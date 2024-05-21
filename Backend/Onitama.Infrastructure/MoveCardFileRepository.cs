@@ -68,6 +68,9 @@ internal class MoveCardFileRepository : IMoveCardRepository
             case MoveCardSet.SenseisPath:
                 json = File.ReadAllText("CardSets\\sensei-s-path.json");
                 break;
+            case MoveCardSet.WayOfTheWind:
+                json = File.ReadAllText("CardSets\\way-of-the-wind.json");
+                break;
             case MoveCardSet.Custom:
                 if (string.IsNullOrWhiteSpace(customJson))
                     throw new ArgumentException("Custom JSON string cannot be null or empty for custom set.", nameof(customJson));

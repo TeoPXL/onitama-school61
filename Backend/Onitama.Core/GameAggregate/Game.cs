@@ -6,6 +6,7 @@ using Onitama.Core.PlayerAggregate;
 using Onitama.Core.PlayerAggregate.Contracts;
 using Onitama.Core.PlayMatAggregate;
 using Onitama.Core.PlayMatAggregate.Contracts;
+using Onitama.Core.SchoolAggregate;
 using Onitama.Core.SchoolAggregate.Contracts;
 using Onitama.Core.UserAggregate;
 using Onitama.Core.Util;
@@ -261,6 +262,18 @@ internal class Game : IGame
                 }
             }
         }
+        if(_gameType == "wotw")
+        {
+            for (int j = 0; j < player.MoveCards.Count; j++)
+            {
+                var spiritList = _playMat.GetValidMoves(_playMat.Grid[2, 2], player.MoveCards[j], player.Direction);
+                for (int k = 0; k < spiritList.Count; k++)
+                {
+                    list.Add(spiritList[k]);
+                }
+            }
+        }
+        
         return list;
     }
 
@@ -293,6 +306,13 @@ internal class Game : IGame
             if (player.School.AllPawns[i] != null && player.School.AllPawns[i].Id == pawnId)
             {
                 pawn = player.School.AllPawns[i];
+            }
+        }
+        if(_gameType == "wotw")
+        {
+            if (_playMat.Grid[2, 2].Id == pawnId)
+            {
+                pawn = _playMat.Grid[2, 2];
             }
         }
 
@@ -602,6 +622,14 @@ internal class Game : IGame
                         }
                     }
                 }
+                if(_gameType == "wotw")
+                {
+                    if (_playMat.GetValidMoves(_playMat.Grid[2, 2], move, player.Direction).Count > 0)
+                    {
+                        validMoves++;
+                    }
+                }
+
             }
             if(validMoves == 0)
             {

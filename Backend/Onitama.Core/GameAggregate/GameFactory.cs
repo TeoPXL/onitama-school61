@@ -80,7 +80,7 @@ internal class GameFactory : IGameFactory
 
         if (table.Preferences.TableType == "wotw")
         {
-            var spirit = new Pawn(Guid.NewGuid(), Guid.Parse("00000000000000000000000000000001"), SchoolAggregate.Contracts.PawnType.Student);
+            var spirit = new Pawn(Guid.NewGuid(), Guid.Parse("00000000000000000000000000000001"), SchoolAggregate.Contracts.PawnType.Spirit);
             game.PlayMat.PositionSpirit(spirit);
         }
 
