@@ -656,6 +656,7 @@ async function getGame(){
             
             //Set gameCards with actual data
             let enemyName;
+            let playerName;
             let enemyCards;
             let enemyColor;
             let enemyTime;
@@ -670,41 +671,19 @@ async function getGame(){
             const extraCardElements = document.querySelectorAll('.extra-card-blocks .block');
             const extraAltCardElements = document.querySelectorAll('.extra-card-blocks-alt .block');
             //console.log(data);
-            data.players.forEach(player => {
-                if(player.id == data.playerToPlayId && user.id != data.playerToPlayId){
-                    //Set enemy name
-                    enemyName = player.name;
-                    enemyCards = player.moveCards;
-                    enemyColor = player.color;
-                    enemyTime = player.time;
-                } else {
-                    //Enemy is the one after us.
-                    for (let i = 0; i < data.players.length; i++) {
-                        const player = data.players[i];
-                        if(player.id == user.id){
-                            let num = i+1;
-                            if(i+1 >= data.players.length){
-                                num = 0;
-                            }
-                            enemyName = data.players[num].name;
-                            enemyTime = data.players[num].time;
-                            enemyCards = data.players[num].moveCards;
-                            enemyColor = data.players[num].color;
-                        }
-                    }
-                }
-                //console.log("Enemy time: " + enemyTime);
-                document.querySelector('.enemy-time').textContent = "(" + enemyTime +  "s)"
-                if(player.id == user.id){
-                    playerCards = player.moveCards;
-                    playerColor = player.color;
-                    game.playerCards = playerCards;
-                    playerTime = player.time;
-                    //console.log("Your time: " + playerTime);
-                    document.querySelector('.player-time').textContent = "(" + playerTime +  "s)"
-                }
-            });
+            enemyName = data.players[1].name;
+            enemyCards = data.players[1].moveCards;
+            enemyColor = data.players[1].color;
+            enemyTime = data.players[1].time;
+            playerName = data.players[0].name;
+            playerCards = data.players[0].moveCards;
+            playerColor = data.players[0].color;
+            playerTime = data.players[0].time;
+            //console.log("Enemy time: " + enemyTime);
+            document.querySelector('.enemy-time').textContent = "(" + enemyTime +  "s)";
+            document.querySelector('.player-time').textContent = "(" + playerTime +  "s)";
             document.querySelector('.enemy-name').textContent = enemyName;
+            document.querySelector('.player-name').textContent = playerName;
             document.querySelector('.enemy-name').style.background = enemyColor;
             document.querySelector('.player-name').style.background = playerColor;
             if(enemyCards != undefined){
