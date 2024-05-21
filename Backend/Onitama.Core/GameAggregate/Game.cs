@@ -195,11 +195,15 @@ internal class Game : IGame
             {
                 Players[i] = new HumanPlayer(element.Id, element.Name, element.Color, element.Direction, element.Elo);
                 Players[i].SetSchool(element.School);
+                Players[i].MoveCards.Add(element.MoveCards[0]);
+                Players[i].MoveCards.Add(element.MoveCards[1]);
             }
             else
             {
                 Players[i] = new ComputerPlayer(element.Color, element.Direction, Players[1].Strategy);
                 Players[i].SetSchool(element.School);
+                Players[i].MoveCards.Add(element.MoveCards[0]);
+                Players[i].MoveCards.Add(element.MoveCards[1]);
             }
         }
     }

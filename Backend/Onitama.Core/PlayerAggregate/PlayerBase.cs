@@ -72,7 +72,7 @@ internal class PlayerBase : IPlayer
     /// </remarks>
     public PlayerBase(IPlayer otherPlayer)
     {
-        _school = otherPlayer.School;
+        SetSchool(otherPlayer.School);
         Id = otherPlayer.Id;
         Name = otherPlayer.Name;
         Color = otherPlayer.Color;
@@ -87,6 +87,6 @@ internal class PlayerBase : IPlayer
 
     public virtual IMove DetermineBestMove(IGame game)
     {
-        return new Move(MoveCards[0]);
+        return Strategy.GetBestMoveFor(Id, new Game(game));
     }
 }

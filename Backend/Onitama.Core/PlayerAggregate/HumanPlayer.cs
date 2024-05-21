@@ -17,7 +17,6 @@ internal class HumanPlayer : PlayerBase
     private Color _color;
     private Direction _direction;
     private ISchool _school;
-    private IList<IMoveCard> _moveCards;
     private int _elo;
     private User _user;
     private int _time = 180;
@@ -96,12 +95,6 @@ internal class HumanPlayer : PlayerBase
         get { return _school; }
     }
 
-    public IList<IMoveCard> MoveCards
-    {
-        get { return _moveCards; }
-        set { this._moveCards = value; }
-    }
-
     public override int Elo
     {
         get { return _elo; }
@@ -110,6 +103,6 @@ internal class HumanPlayer : PlayerBase
 
     public virtual IMove DetermineBestMove(IGame game)
     {
-        return new Move(_moveCards[0]);
+        return new Move(MoveCards[0]);
     }
 }

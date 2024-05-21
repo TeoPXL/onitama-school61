@@ -30,13 +30,6 @@ internal class ComputerPlayer : PlayerBase
     public User User { get; set; }
     public bool HasValidMoves { get; set; }
 
-    private IList<IMoveCard> _moveCards;
-    public IList<IMoveCard> MoveCards
-    {
-        get { return _moveCards; }
-        set { this._moveCards = value; }
-    }
-
     public ComputerPlayer(Color color, Direction direction, IGamePlayStrategy strategy) : base(Guid.Parse("10000000000000000000000000000001"), "OnitamaBot", color, direction)
     {
         Strategy = strategy;
