@@ -9,7 +9,7 @@ using Onitama.Core.Util;
 namespace Onitama.Core.PlayerAggregate;
 
 /// <inheritdoc cref="IPlayer"/>
-internal class ComputerPlayer : IPlayer
+internal class ComputerPlayer : PlayerBase
 {
     IGamePlayStrategy Strategy { get; set; }
 
@@ -29,7 +29,14 @@ internal class ComputerPlayer : IPlayer
     public User User { get; set; }
     public bool HasValidMoves { get; set; }
 
-    public ComputerPlayer(Color color, Direction direction, IGamePlayStrategy strategy)
+    private IList<IMoveCard> _moveCards;
+    public IList<IMoveCard> MoveCards
+    {
+        get { return _moveCards; }
+        set { this._moveCards = value; }
+    }
+
+    public ComputerPlayer(Color color, Direction direction, IGamePlayStrategy strategy) : base(Guid.Parse("10000000000000000000000000000001"), "OnitamaBot", color, direction)
     {
         Strategy = strategy;
         Color = color;
@@ -41,7 +48,6 @@ internal class ComputerPlayer : IPlayer
         Id = Guid.Parse("10000000000000000000000000000001");
     }
 
-    public IList<IMoveCard> MoveCards => throw new NotImplementedException();
 
     /// <summary>
     /// Uses gameplay strategy to determine the best move to execute.

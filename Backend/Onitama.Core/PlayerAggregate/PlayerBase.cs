@@ -67,7 +67,12 @@ internal class PlayerBase : IPlayer
     /// </remarks>
     public PlayerBase(IPlayer otherPlayer)
     {
-        throw new NotImplementedException("TODO: copy properties of other player");
+        _school = otherPlayer.School;
+        Id = otherPlayer.Id;
+        Name = otherPlayer.Name;
+        Color = otherPlayer.Color;
+        Direction = otherPlayer.Direction;
+        MoveCards = new List<IMoveCard>();
     }
 
     public void SetSchool(ISchool school)
