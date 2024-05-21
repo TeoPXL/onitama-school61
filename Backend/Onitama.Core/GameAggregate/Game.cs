@@ -214,6 +214,14 @@ internal class Game : IGame
             }
         }
 
+        if (_gameType == "wotw")
+        {
+            if (_playMat.Grid[2, 2].Id == pawnId)
+            {
+                pawn = _playMat.Grid[2, 2];
+            }
+        }
+
         if (pawn == null)
         {
             throw new InvalidOperationException("There is no pawn with that ID");
