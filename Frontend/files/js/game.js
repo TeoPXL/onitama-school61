@@ -787,7 +787,7 @@ async function getGame(){
             const enemyCardElements = document.querySelectorAll('.enemy-card-blocks .block');
             const playerCardElements = document.querySelectorAll('.player-card-blocks .block');
             const extraCardElements = document.querySelectorAll('.extra-card-blocks .block');
-            console.log(data);
+            //console.log(data);
             data.players.forEach(player => {
                 if(player.id == data.playerToPlayId && user.id != data.playerToPlayId){
                     //Set enemy name
@@ -1098,7 +1098,7 @@ async function getUser(){
         }
         
         const data = await response.json();
-        console.log(data);
+        //console.log(data);
         compareElo(data.user.elo)
     } catch(error) {
         //console.log(error);
