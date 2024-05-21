@@ -1,6 +1,7 @@
 let classicTableElements = document.querySelectorAll(".classic-table");
 let compTableElements = document.querySelectorAll(".comp-table");
 let blitzTableElements = document.querySelectorAll(".blitz-table");
+let wotwTableElements = document.querySelectorAll(".wotw-table");
 let alreadyJoinedTable;
 const tableButtons = document.querySelectorAll('.table-button-small');
 const classicButton = document.querySelector('.classic-button');
@@ -46,6 +47,7 @@ function loadClassicTables (){
         let classicTableResults = [];
         let competitiveTableResults = [];
         let blitzTableResults = [];
+        let wotwTableResults = [];
         data.forEach(table => {
             if(table.preferences.tableType == "classic"){
                 classicTableResults.push(table);
@@ -53,6 +55,8 @@ function loadClassicTables (){
                 competitiveTableResults.push(table);
             } else if(table.preferences.tableType == "blitz"){
                 blitzTableResults.push(table);
+            } else if(table.preferences.tableType == "wotw"){
+                wotwTableResults.push(table);
             }
         });
         const classicTablesToRemove = 3 - classicTableResults.length; 
@@ -71,6 +75,12 @@ function loadClassicTables (){
         for (let i = 1; i <= blitzTablesToRemove; i++) {
             const blitzTables = blitzTableElements[3 - i];
             blitzTables.classList.add('table-item-hidden');
+        }
+
+        const wotwTablesToRemove = 4 - wotwTableResults.length; 
+        for (let i = 1; i <= wotwTablesToRemove; i++) {
+            const wotwTables = wotwTableElements[4 - i];
+            wotwTables.classList.add('table-item-hidden');
         }
         //Classic tables
         for (let i = 0; i < Math.min(classicTableResults.length, 3); i++) {
@@ -125,6 +135,39 @@ function loadClassicTables (){
             const table = blitzTableResults[i];
             console.log(i);
             const element = blitzTableElements[i];
+            const maxPlayers = table.preferences.numberOfPlayers;
+            const seatedPlayers = table.seatedPlayers.length;
+            const ownerId = table.ownerId;
+            let owner;
+            for (let k = 0; k < table.seatedPlayers.length; k++) {
+                owner = table.seatedPlayers[k].name;
+            }
+            element.classList.remove('table-item-loading');
+            element.querySelector('.table-title').textContent = owner;
+            const tablePlayers = element.querySelector('.table-players');
+            tablePlayers.textContent = seatedPlayers + "/" + maxPlayers + " players";
+            switch (table.preferences.moveCardSet) {
+                case "1":
+                    tablePlayers.textContent = tablePlayers.textContent + " | Sensei's Path";
+                    break;
+
+                case "2":
+                    tablePlayers.textContent = tablePlayers.textContent + " | Custom cards";
+                    break;
+            
+                default:
+                    tablePlayers.textContent = tablePlayers.textContent + " | Original";
+                    break;
+            }
+            element.querySelector('.table-button').textContent = "Join table";
+            element.querySelector('.table-button').setAttribute("table-id", table.id);
+            console.log(owner);
+        }
+
+        for (let i = 0; i < Math.min(wotwTableResults.length, 4); i++) {
+            const table = wotwTableResults[i];
+            console.log(i);
+            const element = wotwTableElements[i];
             const maxPlayers = table.preferences.numberOfPlayers;
             const seatedPlayers = table.seatedPlayers.length;
             const ownerId = table.ownerId;
