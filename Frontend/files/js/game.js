@@ -377,7 +377,11 @@ class Game {
             for (let j = 0; j < board[i].length; j++) {
                 const el = board[i][j];
                 if(el[6] != undefined){
-                    if(el[6].id == pawnId){
+                    let theId = el[6].id;
+                    if(el[6].id == undefined){
+                        theId = el[6].Id;
+                    }
+                    if(theId == pawnId){
                         console.log("Pawn found at " + i + ", " + j);
                         console.log(el[2].position);
                         let x = ((to[0]) - 2) * 2;
@@ -1002,9 +1006,11 @@ async function getGame(){
                         if(change.type == "moved"){
                             //Move the pawn
                             game.movePawn3D(change);
-                        } else if (change.type = "removed"){
+                        } else if (change.type == "removed"){
                             console.log("Pawn Removed!");
                             game.removePawn3D(change);
+                        } else if (change.type == "added"){
+                            console.log(added);
                         }
                     }
                 }
