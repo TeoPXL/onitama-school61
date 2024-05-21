@@ -1291,7 +1291,11 @@ async function onClick(){
             let cardName = game.selectedCard;
 
             console.log(selectionCoords);
-            game.movePawn(pawn.id, cardName, selectionCoords);
+            let pawnId = pawn.id;
+            if(pawn.id == undefined){
+                pawnId = pawn.Id;
+            }
+            game.movePawn(pawnId, cardName, selectionCoords);
             return;
         }
         //Check if a card has been selected. If not, pick the first card.
