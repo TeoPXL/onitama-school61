@@ -3,5 +3,6 @@
 public enum PawnType
 {
     Master,
-    Student
+    Student,
+    Spirit
 }

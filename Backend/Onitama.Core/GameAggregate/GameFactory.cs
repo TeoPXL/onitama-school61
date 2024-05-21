@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Drawing;
+using System.Numerics;
 using Microsoft.AspNetCore.Identity;
 using Onitama.Core.GameAggregate.Contracts;
 using Onitama.Core.MoveCardAggregate.Contracts;
@@ -30,20 +31,36 @@ internal class GameFactory : IGameFactory
         Color[] colors = table.SeatedPlayers.Select(p => p.Color).ToArray();
         
         IMoveCard[] moveCards;
-        if(table.Preferences.MoveCardSet == MoveCardSet.Custom)
+        IMoveCard[] wotwCards = [];
+        if (table.Preferences.MoveCardSet == MoveCardSet.Custom)
         {
             moveCards = _moveCardRepository.LoadSetCustom(table.Preferences.MoveCardSet, colors, table.Preferences.MoveCardString);
         } else
         {
             moveCards = _moveCardRepository.LoadSet(table.Preferences.MoveCardSet, colors);
         }
+        if (table.Preferences.TableType == "wotw")
+        {
+            wotwCards = _moveCardRepository.LoadSetCustom(MoveCardSet.WayOfTheWind, colors, table.Preferences.MoveCardString);
+        }
         moveCards = moveCards.OrderBy(card => _random.Next()).ToArray();
+        wotwCards = wotwCards.OrderBy(card => _random.Next()).ToArray();
         //throw new Exception(table.Preferences.MoveCardSet.ToString());
         var playMat = new PlayMat(5);
-        table.SeatedPlayers[0].MoveCards.Add(moveCards[0]);
-        table.SeatedPlayers[0].MoveCards.Add(moveCards[1]);
-        table.SeatedPlayers[1].MoveCards.Add(moveCards[2]);
-        table.SeatedPlayers[1].MoveCards.Add(moveCards[3]);
+        if (table.Preferences.TableType == "wotw")
+        {
+            table.SeatedPlayers[0].MoveCards.Add(wotwCards[0]);
+            table.SeatedPlayers[0].MoveCards.Add(moveCards[1]);
+            table.SeatedPlayers[1].MoveCards.Add(wotwCards[2]);
+            table.SeatedPlayers[1].MoveCards.Add(moveCards[3]);
+        } else
+        {
+            table.SeatedPlayers[0].MoveCards.Add(moveCards[0]);
+            table.SeatedPlayers[0].MoveCards.Add(moveCards[1]);
+            table.SeatedPlayers[1].MoveCards.Add(moveCards[2]);
+            table.SeatedPlayers[1].MoveCards.Add(moveCards[3]);
+        }
+        
         var players = new IPlayer[table.SeatedPlayers.Count];
         table.SeatedPlayers.CopyTo(players, 0);
         string gameType = table.Preferences.TableType;
@@ -59,6 +76,12 @@ internal class GameFactory : IGameFactory
             player.SetSchool(new School(pawns));
 
             game.PlayMat.PositionSchoolOfPlayer(player);
+        }
+
+        if (table.Preferences.TableType == "wotw")
+        {
+            var spirit = new Pawn(Guid.NewGuid(), Guid.Parse("00000000000000000000000000000001"), SchoolAggregate.Contracts.PawnType.Student);
+            game.PlayMat.PositionSpirit(spirit);
         }
 
         game.checkValidMoves();

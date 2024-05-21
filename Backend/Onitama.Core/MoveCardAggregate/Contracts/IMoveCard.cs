@@ -38,4 +38,7 @@ public interface IMoveCard
     /// The size of the play mat. This is important to determine if a target coordinate is out of bounds.
     /// </param>
     IReadOnlyList<ICoordinate> GetPossibleTargetCoordinates(ICoordinate startCoordinate, Direction playDirection, int matSize);
+
+
+    IReadOnlyList<ICoordinate> GetPossibleAltTargetCoordinates(ICoordinate startCoordinate, Direction playDirection, int matSize);
 }

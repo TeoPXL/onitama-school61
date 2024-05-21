@@ -4,5 +4,6 @@ public enum MoveCardSet
 {
     Original,
     SenseisPath,
+    WayOfTheWind,
     Custom
 }

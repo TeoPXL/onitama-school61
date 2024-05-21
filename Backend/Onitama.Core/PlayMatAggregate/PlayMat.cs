@@ -6,6 +6,7 @@ using Onitama.Core.PlayerAggregate.Contracts;
 using Onitama.Core.PlayMatAggregate.Contracts;
 using Onitama.Core.SchoolAggregate.Contracts;
 using Onitama.Core.Util;
+using Onitama.Core.Util.Contracts;
 using System.Collections.Generic;
 
 namespace Onitama.Core.PlayMatAggregate
@@ -87,6 +88,12 @@ namespace Onitama.Core.PlayMatAggregate
             }
         }
 
+        public void PositionSpirit(IPawn spirit)
+        {
+            spirit.Position = new Coordinate(2, 2);
+            _grid[2, 2] = spirit;
+        }
+
         public IReadOnlyList<IMove> GetValidMoves(IPawn pawn, IMoveCard card, Direction playerDirection)
         {
             List<IMove> moves = new List<IMove>();
@@ -95,6 +102,10 @@ namespace Onitama.Core.PlayMatAggregate
                 return moves;
             }
             var possibleMoves = card.GetPossibleTargetCoordinates(pawn.Position, playerDirection, _size);
+            if(pawn.Type == PawnType.Spirit)
+            {
+                possibleMoves = card.GetPossibleAltTargetCoordinates(pawn.Position, playerDirection, _size);
+            }
             for (int i = 0; i < possibleMoves.Count; i++)
             {
                 var x = possibleMoves[i].Column;

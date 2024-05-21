@@ -12,15 +12,25 @@ internal class MoveCard : IMoveCard
 {
     private Color _stampColor;
     private MoveCardGridCellType[,] _grid;
+    private MoveCardGridCellType[,] _altGrid;
     private MoveCardGridCellType[,] _gridSouth;
     private MoveCardGridCellType[,] _gridWest;
     private MoveCardGridCellType[,] _gridEast;
+    private MoveCardGridCellType[,] _altGridSouth;
+    private MoveCardGridCellType[,] _altGridWest;
+    private MoveCardGridCellType[,] _altGridEast;
     public string Name { get; }
 
     public MoveCardGridCellType[,] Grid
     {
         get { return _grid; }
         set { this._grid = value; }
+    }
+
+    public MoveCardGridCellType[,] AltGrid
+    {
+        get { return _altGrid; }
+        set { this._altGrid = value; }
     }
 
     public Color StampColor
@@ -35,6 +45,21 @@ internal class MoveCard : IMoveCard
         this._gridSouth = RotateGrid(2);
         this._gridWest = RotateGrid(3);
         this._gridEast = RotateGrid(1);
+        this._stampColor = stampColor;
+        this.Name = name;
+    }
+
+    public MoveCard(string name, MoveCardGridCellType[,] grid, MoveCardGridCellType[,] altGrid, Color stampColor)
+    {
+        this._grid = grid;
+        this._altGrid = altGrid;
+        this._gridSouth = RotateGrid(2);
+        this._gridWest = RotateGrid(3);
+        this._gridEast = RotateGrid(1);
+
+        this._altGridSouth = RotateAltGrid(2);
+        this._altGridWest = RotateAltGrid(3);
+        this._altGridEast = RotateAltGrid(1);
         this._stampColor = stampColor;
         this.Name = name;
     }
@@ -94,6 +119,43 @@ internal class MoveCard : IMoveCard
         return grid;
     }
 
+    private MoveCardGridCellType[,] RotateAltGrid(int number)
+    {
+        var grid = _altGrid;
+        for (int i = 0; i < number; i++)
+        {
+            int rows = grid.GetLength(0);
+            int cols = grid.GetLength(1);
+
+            // Create a new transposed array
+            MoveCardGridCellType[,] rotatedGrid = new MoveCardGridCellType[cols, rows];
+
+            // Perform transpose
+            for (int k = 0; k < rows; k++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    rotatedGrid[j, k] = grid[k, j];
+                }
+            }
+
+            // Reverse each row in the transposed array
+            for (int k = 0; k < cols; k++)
+            {
+                for (int j = 0; j < rows / 2; j++)
+                {
+                    MoveCardGridCellType temp = rotatedGrid[k, j];
+                    rotatedGrid[k, j] = rotatedGrid[k, rows - 1 - j];
+                    rotatedGrid[k, rows - 1 - j] = temp;
+                }
+            }
+            grid = rotatedGrid;
+
+        }
+        return grid;
+    }
+
+
     public IReadOnlyList<ICoordinate> GetPossibleTargetCoordinates(ICoordinate startCoordinate, Direction playDirection, int matSize)
     {
         var grid = _grid;
@@ -119,6 +181,40 @@ internal class MoveCard : IMoveCard
                     var endX = startCoordinate.Column - 2 + k;
                     var endY = startCoordinate.Row - 2 + i;
                     if(endX < 5 && endY < 5 && endX >= 0 && endY >= 0)
+                    {
+                        list.Add(new Coordinate(endY, endX));
+                    }
+                }
+            }
+        }
+        return list;
+    }
+
+    public IReadOnlyList<ICoordinate> GetPossibleAltTargetCoordinates(ICoordinate startCoordinate, Direction playDirection, int matSize)
+    {
+        var grid = _altGrid;
+        switch (playDirection)
+        {
+            case var d when d == Direction.South:
+                grid = _altGridSouth; break;
+            case var d when d == Direction.West:
+                grid = _altGridWest; break;
+            case var d when d == Direction.East:
+                grid = _altGridEast; break;
+            default:
+                break;
+        }
+        var list = new List<ICoordinate>();
+        for (int i = 0; i < Math.Sqrt(grid.Length); i++)
+        {
+            for (int k = 0; k < Math.Sqrt(grid.Length); k++)
+            {
+                var coord = grid[i, k];
+                if (coord == MoveCardGridCellType.Target)
+                {
+                    var endX = startCoordinate.Column - 2 + k;
+                    var endY = startCoordinate.Row - 2 + i;
+                    if (endX < 5 && endY < 5 && endX >= 0 && endY >= 0)
                     {
                         list.Add(new Coordinate(endY, endX));
                     }

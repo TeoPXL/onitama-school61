@@ -25,6 +25,9 @@ internal class MoveCardFileRepository : IMoveCardRepository
             case MoveCardSet.SenseisPath:
                 fileName = "sensei-s-path.json";
                 break;
+            case MoveCardSet.WayOfTheWind:
+                fileName = "way-of-the-wind.json";
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(set), set, "Error loading movecard set");
         }

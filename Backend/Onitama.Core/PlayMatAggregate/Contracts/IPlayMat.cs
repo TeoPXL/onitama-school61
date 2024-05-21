@@ -53,4 +53,6 @@ public interface IPlayMat
     void ExecuteMove(IMove move, out IPawn capturedPawn);
 
     void RemovePawn(IPawn pawn);
+
+    void PositionSpirit(IPawn spirit);
 }
