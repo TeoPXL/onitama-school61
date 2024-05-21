@@ -230,6 +230,68 @@ class Game {
         return rotatedArray;
     }
 
+    loadSpirit(){
+        let team;
+        if(game.currentPlayer == 1){
+            team = game.team1;
+        } else {
+            team = game.team2;
+        }
+        let coord = [2, 2];
+        let identity = 200;
+        let type = "s";
+            console.log("placing object")
+    
+            const colorMap = {
+                "Green": { boxColor: 0x13F287},
+                "Red": { boxColor: 0xff0000},
+                "Yellow": { boxColor: 0xfffb0c},
+                "Orange": { boxColor: 0xff5c0c},
+                "Blue": { boxColor: 0x0c82ff}
+            };
+            const { boxColor} = colorMap[team.color];
+            const asset = 'assets/spirit.gltf';
+    
+            const self = this;
+            this.loader.load(asset, function (gltf) {
+                const modelObject = gltf.scene;
+                const mixer = new THREE.AnimationMixer(modelObject);
+                //const action = mixer.clipAction( gltf.animations[0] );
+                gltf.scene.traverse(function (child) {
+                    if (child.isMesh) {
+                        child.castShadow = true;
+                        child.receiveShadow = true;
+                    }
+                });
+                self.scene.add(gltf.scene);
+                //modelObject.rotation.y = orient * 1.57 * 2;
+                modelObject.position.z = coord[0] * 2 - 4;
+                modelObject.position.x = coord[1] * 2 - 4;
+                //action.timeScale = tScale;
+                //action.play(); 
+    
+                const material = new THREE.MeshBasicMaterial({
+                    color: boxColor,
+                    transparent: true,
+                    opacity: 0.01,
+                });
+    
+                // Create selection (flat) cube
+                const cubeGeometry = new THREE.BoxGeometry(1.25, 0.05, 1.25);
+                const cube = new THREE.Mesh(cubeGeometry, material);
+                cube.name = team.number + "hover"+identity;
+                cube.onitamaType = "pawn";
+    
+                cube.scale.y = 1.01;
+                cube.scale.x = 1.01;
+                cube.scale.z = 1.01;
+                modelObject.add(cube);
+                self.board.currentBoard[coord[0]][coord[1]] = [identity, type, modelObject, mixer, gltf, cube];
+            }, undefined, function (error) {
+                console.error(error);
+            });
+    }
+
     movePawn3D(change){
         let from = [change.from.row, 4 - change.from.column]; //Starting coordinates
         console.log(from);
@@ -514,6 +576,9 @@ async function fetchTable(){
                 //fill the models based on team color
                 console.log("filling models");
                 game.fillModels();
+                if(data.preferences.tableType == "wotw"){
+                    game.loadSpirit();
+                }
                 //Make sure the current player can only control his own pawns, and only when it is his turn.
                 //Move this to its own function
             } else {
@@ -590,7 +655,6 @@ async function getGame(){
         } else {
             
             //Set gameCards with actual data
-            let playerName;
             let enemyName;
             let enemyCards;
             let enemyColor;
@@ -600,30 +664,56 @@ async function getGame(){
             let playerTime;
             let extraCard = data.extraMoveCard;
             const enemyCardElements = document.querySelectorAll('.enemy-card-blocks .block');
+            const enemyAltCardElements = document.querySelectorAll('.enemy-card-blocks-alt .block');
             const playerCardElements = document.querySelectorAll('.player-card-blocks .block');
+            const playerAltCardElements = document.querySelectorAll('.player-card-blocks-alt .block');
             const extraCardElements = document.querySelectorAll('.extra-card-blocks .block');
-            enemyName = data.players[1].name;
-            enemyCards = data.players[1].moveCards;
-            enemyColor = data.players[1].color;
-            enemyTime = data.players[1].time;
-            document.querySelector('.enemy-time').textContent = "(" + enemyTime +  "s)"
-
-            playerName = data.players[0].name;
-            playerCards = data.players[0].moveCards;
-            playerColor = data.players[0].color;
-            game.playerCards = playerCards;
-            playerTime = data.players[0].time;
-            document.querySelector('.player-time').textContent = "(" + playerTime +  "s)"
-
+            const extraAltCardElements = document.querySelectorAll('.extra-card-blocks-alt .block');
+            //console.log(data);
+            data.players.forEach(player => {
+                if(player.id == data.playerToPlayId && user.id != data.playerToPlayId){
+                    //Set enemy name
+                    enemyName = player.name;
+                    enemyCards = player.moveCards;
+                    enemyColor = player.color;
+                    enemyTime = player.time;
+                } else {
+                    //Enemy is the one after us.
+                    for (let i = 0; i < data.players.length; i++) {
+                        const player = data.players[i];
+                        if(player.id == user.id){
+                            let num = i+1;
+                            if(i+1 >= data.players.length){
+                                num = 0;
+                            }
+                            enemyName = data.players[num].name;
+                            enemyTime = data.players[num].time;
+                            enemyCards = data.players[num].moveCards;
+                            enemyColor = data.players[num].color;
+                        }
+                    }
+                }
+                //console.log("Enemy time: " + enemyTime);
+                document.querySelector('.enemy-time').textContent = "(" + enemyTime +  "s)"
+                if(player.id == user.id){
+                    playerCards = player.moveCards;
+                    playerColor = player.color;
+                    game.playerCards = playerCards;
+                    playerTime = player.time;
+                    //console.log("Your time: " + playerTime);
+                    document.querySelector('.player-time').textContent = "(" + playerTime +  "s)"
+                }
+            });
             document.querySelector('.enemy-name').textContent = enemyName;
-            document.querySelector('.player-name').textContent = playerName;
             document.querySelector('.enemy-name').style.background = enemyColor;
             document.querySelector('.player-name').style.background = playerColor;
             if(enemyCards != undefined){
                 let count = 0;
+                let count2 = 0;
                 for (let i = 0; i < enemyCards.length; i++) {
                     const card = enemyCards[i];
                     const grid = enemyCards[i].grid.reverse();
+                    const altGrid = enemyCards[i].altGrid.reverse(); //For normal cards, this is an empty array
                     document.querySelectorAll('.enemy-card-name')[i].textContent = card.name;
                     for (let j = 0; j < grid.length; j++) {
                         for (let k = 0; k < grid[j].length; k++) {
@@ -638,13 +728,34 @@ async function getGame(){
                             }
                         }
                     }
+                    if(altGrid.length > 0){
+                        document.querySelectorAll('.enemy-card-blocks-alt')[i].classList.remove('player-card-blocks-hidden');
+                        //console.log(altGrid);
+                        for (let j = 0; j < altGrid.length; j++) {
+                            for (let k = 0; k < altGrid[j].length; k++) {
+                                let block = enemyAltCardElements[i * 25 + count2];
+                                count2++;
+                                if(altGrid[j][k] == "0"){
+                                    block.style.background = "#363a3e";
+                                } else if(altGrid[j][k] == "1"){
+                                    block.style.background = enemyCards[i].stampColor;
+                                } else {
+                                    block.style.background = "lightblue";
+                                }
+                            }
+                        }
+                    } else {
+                        document.querySelectorAll('.enemy-card-blocks-alt')[i].classList.add('player-card-blocks-hidden');
+                    }
                 }
             }
             if(playerCards != undefined){
                 let count = 0;
+                let count2 = 0;
                 for (let i = 0; i < playerCards.length; i++) {
                     const card = playerCards[i];
                     const grid = playerCards[i].grid.reverse();
+                    const altGrid = playerCards[i].altGrid.reverse(); //For normal cards, this is an empty array
                     if(document.querySelectorAll('.player-card')[i].classList.contains('player-card-selected')){
                         document.querySelectorAll('.player-card-name')[i].textContent = card.name + " (Active)";
                     } else {
@@ -663,11 +774,33 @@ async function getGame(){
                             }
                         }
                     }
+
+                    if(altGrid.length > 0){
+                        document.querySelectorAll('.player-card-blocks-alt')[i].classList.remove('player-card-blocks-hidden');
+                        //console.log(altGrid);
+                        for (let j = 0; j < altGrid.length; j++) {
+                            for (let k = 0; k < altGrid[j].length; k++) {
+                                let block = playerAltCardElements[i * 25 + count2];
+                                count2++;
+                                if(altGrid[j][k] == "0"){
+                                    block.style.background = "#363a3e";
+                                } else if(altGrid[j][k] == "1"){
+                                    block.style.background = playerCards[i].stampColor;
+                                } else {
+                                    block.style.background = "lightblue";
+                                }
+                            }
+                        }
+                    } else {
+                        document.querySelectorAll('.player-card-blocks-alt')[i].classList.add('player-card-blocks-hidden');
+                    }
                 }
             }
             if(extraCard != undefined){
+                //return;
                 const card = extraCard;
                 const grid = extraCard.grid.reverse();
+                const altGrid = extraCard.altGrid.reverse();
                 document.querySelector('.extra-card-name').textContent = card.name;
                 let count = 0;
                 for (let j = 0; j < grid.length; j++) {
@@ -683,20 +816,43 @@ async function getGame(){
                         }
                     }
                 }
-            }
-            //The game has started. Check playerToPlay
-            
-            //Someone else's turn
-            for (let i = 0; i < data.players.length; i++) {
-                const player = data.players[i];
-                if(player.id == data.playerToPlayId){
-                    //console.log(player.name+"'s turn!");
-                    game.playerToPlay = player.name;
+                if(altGrid.length > 0){
+                    document.querySelector('.extra-card-blocks-alt').classList.remove('player-card-blocks-hidden');
+                    //console.log(altGrid);
+                    let count = 0;
+                    for (let j = 0; j < altGrid.length; j++) {
+                        for (let k = 0; k < altGrid[j].length; k++) {
+                            let block = extraAltCardElements[count];
+                            count++;
+                            if(altGrid[j][k] == "0"){
+                                block.style.background = "#363a3e";
+                            } else if(altGrid[j][k] == "1"){
+                                block.style.background = extraCard.stampColor;
+                            } else {
+                                block.style.background = "lightblue";
+                            }
+                        }
+                    }
+                } else {
+                    document.querySelector('.extra-card-blocks-alt').classList.add('player-card-blocks-hidden');
                 }
             }
-            document.querySelector('.toast').textContent = game.playerToPlay + "'s turn";
-            
-        }
+                //Someone else's turn
+                //Remove message telling us to skip move
+                for (let i = 0; i < data.players.length; i++) {
+                    const player = data.players[i];
+                    if(player.id == data.playerToPlayId){
+                        //console.log(player.name+"'s turn!");
+                        game.playerToPlay = player.name;
+                    }
+                }
+                document.querySelectorAll('.player-card').forEach(element => {
+                    element.classList.remove('player-card-pointer');
+                    element.classList.remove('player-card-selected');
+                    element.querySelector('.card-name').textContent = element.querySelector('.card-name').textContent.replace(" (Active)", "");
+                });
+                document.querySelector('.toast').textContent = game.playerToPlay + "'s turn";
+            }
         if(game.loaded == false){
 
 
