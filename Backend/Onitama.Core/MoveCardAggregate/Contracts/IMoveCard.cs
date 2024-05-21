@@ -18,6 +18,7 @@ public interface IMoveCard
     /// Row 0 and column 0 is the bottom left corner.
     /// </summary>
     MoveCardGridCellType[,] Grid { get; }
+    MoveCardGridCellType[,] AltGrid { get; }
 
     /// <summary>
     /// The color of the stamp on the card.

@@ -7,6 +7,7 @@ public class MoveCardModel
 {
     public string Name { get; set; }
     public MoveCardGridCellType[,] Grid { get; set; }
+    public MoveCardGridCellType[,] AltGrid { get; set; }
     public string StampColor { get; set; }
 
     private class MappingProfile : Profile
