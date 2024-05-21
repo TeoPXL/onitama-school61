@@ -368,7 +368,7 @@ canvas {
 .player-card-blocks-hidden {
     display: none;
 }
-.player-card-blocks-alt .block, .enemy-card-blocks-alt .block {
+.player-card-blocks-alt .block, .enemy-card-blocks-alt .block, .extra-card-blocks-alt .block {
     border-color: #7391ac33;
 } 
 @media screen and (min-width: 600px) {
