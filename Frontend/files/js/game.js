@@ -304,6 +304,68 @@ class Game {
         });
     }
 
+    loadSpirit(){
+        let team;
+        if(game.currentPlayer == 1){
+            team = game.team1;
+        } else {
+            team = game.team2;
+        }
+        let coord = [2, 2];
+        let identity = 200;
+        let type = "s";
+            console.log("placing object")
+    
+            const colorMap = {
+                "Green": { boxColor: 0x13F287},
+                "Red": { boxColor: 0xff0000},
+                "Yellow": { boxColor: 0xfffb0c},
+                "Orange": { boxColor: 0xff5c0c},
+                "Blue": { boxColor: 0x0c82ff}
+            };
+            const { boxColor} = colorMap[team.color];
+            const asset = 'assets/spirit.gltf';
+    
+            const self = this;
+            this.loader.load(asset, function (gltf) {
+                const modelObject = gltf.scene;
+                const mixer = new THREE.AnimationMixer(modelObject);
+                //const action = mixer.clipAction( gltf.animations[0] );
+                gltf.scene.traverse(function (child) {
+                    if (child.isMesh) {
+                        child.castShadow = true;
+                        child.receiveShadow = true;
+                    }
+                });
+                self.scene.add(gltf.scene);
+                //modelObject.rotation.y = orient * 1.57 * 2;
+                modelObject.position.z = coord[0] * 2 - 4;
+                modelObject.position.x = coord[1] * 2 - 4;
+                //action.timeScale = tScale;
+                //action.play(); 
+    
+                const material = new THREE.MeshBasicMaterial({
+                    color: boxColor,
+                    transparent: true,
+                    opacity: 0.01,
+                });
+    
+                // Create selection (flat) cube
+                const cubeGeometry = new THREE.BoxGeometry(1.25, 0.05, 1.25);
+                const cube = new THREE.Mesh(cubeGeometry, material);
+                cube.name = team.number + "hover"+identity;
+                cube.onitamaType = "pawn";
+    
+                cube.scale.y = 1.01;
+                cube.scale.x = 1.01;
+                cube.scale.z = 1.01;
+                modelObject.add(cube);
+                self.board.currentBoard[coord[0]][coord[1]] = [identity, type, modelObject, mixer, gltf, cube];
+            }, undefined, function (error) {
+                console.error(error);
+            });
+    }
+
     movePawn3D(change){
         let from = [change.from.row, 4 - change.from.column]; //Starting coordinates
         console.log(from);
@@ -626,6 +688,9 @@ async function fetchTable(){
                 //fill the models based on team color
                 console.log("filling models");
                 game.fillModels();
+                if(data.preferences.tableType == "wotw"){
+                    game.loadSpirit();
+                }
                 //Make sure the current player can only control his own pawns, and only when it is his turn.
                 //Move this to its own function
             } else {
@@ -922,7 +987,7 @@ async function getGame(){
                     game.board.currentBoard[coord[0]][4 - coord[1]][6] = pawn;
                 }
             }
-
+            game.board.currentBoard[2][2][6] = data.playMat.grid[2][2];
             game.loaded = true;
         } else {
             // The game has loaded. Let's compare boards
@@ -1257,12 +1322,16 @@ async function onClick(){
         for (let i = 0; i < board.length; i++) {
             for (let j = 0; j < board[i].length; j++) {
                 const coord = [i, j];
-                const cube = board[i][j][5];
-                if(cube != undefined){
-                    if(clickedCube.name == cube.name){
-                        startCoords = [i, j];
+                let cube;
+                if(board[i][j] != undefined){
+                    cube = board[i][j][5];
+                    if(cube != undefined){
+                        if(clickedCube.name == cube.name){
+                            startCoords = [i, j];
+                        }
                     }
                 }
+                
             }
         }
         let selectedCard;
@@ -1283,8 +1352,14 @@ async function onClick(){
         openCubes.forEach(cube => {
             cube.onitamaType = "open";
         });
-        if(startCoords != undefined && selectedCard != undefined){
-            const pawnId = board[startCoords[0]][startCoords[1]][6].id;
+        if(startCoords != undefined && selectedCard != undefined && board[startCoords[0]][startCoords[1]][6] != undefined){
+            let pawnId;
+            if(board[startCoords[0]][startCoords[1]][0] == 200){
+                pawnId = board[startCoords[0]][startCoords[1]][6].Id;
+            } else {
+                pawnId = board[startCoords[0]][startCoords[1]][6].id;
+            }
+
             console.log(pawnId);
             const coordinates = await game.getPossibleCoordinate(pawnId);
             allCubes.forEach(cube => {
