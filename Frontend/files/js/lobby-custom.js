@@ -504,7 +504,7 @@ document.querySelector('.custom-create-button').addEventListener('click', () => 
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token
         },
-        body: JSON.stringify({ numberOfPlayers: 2, playMatSize: 5, moveCardSet: 2, tableType: gameType, moveCardString: JSON.stringify(selectedCards)})
+        body: JSON.stringify({ numberOfPlayers: 2, playMatSize: 5, moveCardSet: 3, tableType: gameType, moveCardString: JSON.stringify(selectedCards)})
     }).then(response => {
         if (!response.ok) {
             return response.json().then(errorData => {
@@ -591,11 +591,13 @@ function addEventListeners(){
             for (let i = 0; i < selectedCards.length; i++) {
                 const selectedCard = selectedCards[i];
                 if(selectedCard.Name == card.Name){
+                    card.selected = false;
                     selectedCards.splice(i, 1);;
                 }
             }
         } else {
             selectedCards.push(card);
+            card.selected = true;
         }
         localStorage.setItem('selected-cards', JSON.stringify(selectedCards));
         updateCardList();
@@ -621,6 +623,7 @@ function addEventListeners(){
                 cards.splice(i, 1);
             }
         }
+
         updateCardList();
         updateSelectedCards();
         updateCards();
