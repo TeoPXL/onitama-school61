@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Onitama.Core.GameAggregate;
 using Onitama.Core.GameAggregate.Contracts;
+using Onitama.Core.PlayerAggregate;
 using Onitama.Core.PlayerAggregate.Contracts;
 using Onitama.Core.TableAggregate.Contracts;
 using Onitama.Core.UserAggregate;
@@ -81,7 +82,14 @@ internal class TableManager : ITableManager
 
     public void FillWithArtificialPlayers(Guid tableId, User user)
     {
-        throw new NotImplementedException();
+        var table = _tableRepository.Get(tableId);
+        if(table.OwnerPlayerId != user.Id)
+        {
+            throw new InvalidOperationException("You are not the owner of this table");
+        }
+        var evaluator = new GameEvaluator();
+        var strategy = new MiniMaxGamePlayStrategy(evaluator, 10);
+        table.FillWithArtificialPlayers(strategy);
     }
 
     public IGame StartGameForTable(Guid tableId, User user)

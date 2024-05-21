@@ -102,7 +102,20 @@ internal class Table : ITable
 
     public void FillWithArtificialPlayers(IGamePlayStrategy gamePlayStrategy)
     {
-        throw new NotImplementedException();
+        if(_hasAvailableSeat != true)
+        {
+            throw new InvalidOperationException("The table is already full!");
+        }
+        var number = _random.Next(0, _availableColors.Count);
+        var color = _availableColors[number];
+        var cpu = new ComputerPlayer(color, _availableDirections[0], gamePlayStrategy);
+        _availableDirections.RemoveAt(0);
+        _availableColors.RemoveAt(number);
+        this._seatedPlayers.Add(cpu);
+        if (_seatedPlayers.Count == _preferences.NumberOfPlayers)
+        {
+            _hasAvailableSeat = false;
+        }
     }
 
     public void Join(User user)
