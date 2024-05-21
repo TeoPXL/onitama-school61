@@ -13,4 +13,11 @@ internal class MoveCardFactory : IMoveCardFactory
         var color = possibleStampColors[number];
         return new MoveCard(name, grid, color);
     }
+
+    public IMoveCard CreateAlt(string name, MoveCardGridCellType[,] grid, MoveCardGridCellType[,] altGrid, Color[] possibleStampColors)
+    {
+        int number = _random.Next(0, possibleStampColors.Length);
+        var color = possibleStampColors[number];
+        return new MoveCard(name, grid, altGrid, color);
+    }
 }

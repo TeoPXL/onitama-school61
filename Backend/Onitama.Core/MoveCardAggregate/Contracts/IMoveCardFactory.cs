@@ -16,4 +16,5 @@ public interface IMoveCardFactory
     /// A list of the color of each player. The stamp of move card get a random color from the possible colors. 
     /// </param>
     IMoveCard Create(string name, MoveCardGridCellType[,] grid, Color[] possibleStampColors);
+    IMoveCard CreateAlt(string name, MoveCardGridCellType[,] grid, MoveCardGridCellType[,] altGrid, Color[] possibleStampColors);
 }
