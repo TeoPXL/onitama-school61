@@ -146,3 +146,68 @@ function showApi(){
     }
 }
 
+document.querySelector('.gamelist-item-ai').addEventListener('click', () => {
+    //First check if user is logged in
+    if(user === null) {
+        window.location.href = "login.html";
+        return;
+    }
+    //Now start a classic game
+    startClassicTableAi();
+});
+
+function startClassicTableAi(){
+    const response = fetch(currentApi + "/api/Tables", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ numberOfPlayers: 2, playMatSize: 5, moveCardSet: 0 })
+    }).then(response => {
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw_floating_error(errorData.message, '500', "#c60025");
+            });
+        }
+        return response.json();
+    }).then(data => {
+        console.log(data);
+        localStorage.setItem("tableId", data.id);
+        //Now immediately fill it with AI
+        fillTableWithAi(data.id);
+    }).catch(error => {
+        console.log(error);
+        throw_floating_error(error, '500', "#c60025");
+    });
+}
+
+function fillTableWithAi(tableId){
+    const response = fetch(currentApi + "/api/Tables/" + tableId + "/fill-with-ai", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({})
+    }).then(response => {
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw_floating_error(errorData.message, '500', "#c60025");
+            });
+        }
+        return response.json();
+    }).then(data => {
+        console.log(data);
+        //Now redirect the user to the game
+        setTimeout(() => {
+            //window.location.href = "game/play.html";
+        }, 250);
+    }).catch(error => {
+        console.log(error);
+        throw_floating_error(error, '500', "#c60025");
+    });
+}
+
