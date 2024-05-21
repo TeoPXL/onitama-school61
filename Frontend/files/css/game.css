@@ -360,6 +360,17 @@ canvas {
 .skip-move-button:hover {
     filter: brightness(0.5);
 }
+.game-card-blocks-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+.player-card-blocks-hidden {
+    display: none;
+}
+.player-card-blocks-alt .block, .enemy-card-blocks-alt .block {
+    border-color: #7391ac33;
+} 
 @media screen and (min-width: 600px) {
     .main {
         flex-flow: row;
