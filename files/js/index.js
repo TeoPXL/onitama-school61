@@ -76,6 +76,9 @@ if (user !== null) {
 function loadGames(compItems) {
     document.querySelectorAll('.gamelist-text')[3].textContent = compItems.length + ' active matches';
     for (let i = 0; i < compItems.length; i++) {
+        if(i >= compElements.length){
+            break;
+        }
         const game = compItems[i];
         let string = game.players[0].name + " vs " + game.players[1].name;
         let code = game.id;
