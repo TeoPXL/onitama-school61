@@ -78,6 +78,7 @@ internal class PlayerBase : IPlayer
         Color = otherPlayer.Color;
         Direction = otherPlayer.Direction;
         MoveCards = [.. otherPlayer.MoveCards];
+        Strategy = otherPlayer.Strategy;
     }
 
     public void SetSchool(ISchool school)

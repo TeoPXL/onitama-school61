@@ -109,6 +109,7 @@ internal class Table : ITable
         var number = _random.Next(0, _availableColors.Count);
         var color = _availableColors[number];
         var cpu = new ComputerPlayer(color, _availableDirections[0], gamePlayStrategy);
+        cpu.Strategy = gamePlayStrategy;
         _availableDirections.RemoveAt(0);
         _availableColors.RemoveAt(number);
         this._seatedPlayers.Add(cpu);

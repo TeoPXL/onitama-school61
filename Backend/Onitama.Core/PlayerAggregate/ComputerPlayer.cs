@@ -12,7 +12,6 @@ namespace Onitama.Core.PlayerAggregate;
 /// <inheritdoc cref="IPlayer"/>
 internal class ComputerPlayer : PlayerBase
 {
-    public IGamePlayStrategy Strategy { get; set; }
 
     public Guid Id { get; set; }
 

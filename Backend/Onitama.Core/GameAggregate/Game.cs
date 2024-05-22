@@ -182,8 +182,11 @@ internal class Game : IGame
             throw new ArgumentNullException(nameof(otherGame));
         }
 
-        this._id = otherGame.Id;
-        this._playMat = otherGame.PlayMat; // Assuming PlayMat is immutable or copied internally
+        this.Id = new Guid();
+        this.PlayMat = otherGame.PlayMat; // Assuming PlayMat is immutable or copied internally
+        this.WinnerMethod = otherGame.WinnerMethod;
+        this.PlayerToPlayId = otherGame.PlayerToPlayId;
+        this.ExtraMoveCard = otherGame.ExtraMoveCard;
 
         // Initialize the Players array
         this.Players = new IPlayer[otherGame.Players.Length];
@@ -200,7 +203,7 @@ internal class Game : IGame
             }
             else
             {
-                Players[i] = new ComputerPlayer(element.Color, element.Direction, Players[1].Strategy);
+                Players[i] = new ComputerPlayer(element.Color, element.Direction, element.Strategy);
                 Players[i].SetSchool(element.School);
                 Players[i].MoveCards.Add(element.MoveCards[0]);
                 Players[i].MoveCards.Add(element.MoveCards[1]);
