@@ -87,6 +87,24 @@ internal class TableManager : ITableManager
         {
             throw new InvalidOperationException("You are not the owner of this table");
         }
+
+        int depth = 0;
+
+        if (table.Preferences.TableType == "ai-medium")
+        {
+            depth = 2;
+        }
+
+        else if (table.Preferences.TableType == "ai-hard")
+        {
+            depth = 5;
+        }
+
+        else if (table.Preferences.TableType == "ai-extreme")
+        {
+            depth = 15;
+        }
+
         var evaluator = new GameEvaluator();
         var strategy = new MiniMaxGamePlayStrategy(evaluator, 2);
         table.FillWithArtificialPlayers(strategy);
