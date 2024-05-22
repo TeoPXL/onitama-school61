@@ -1,0 +1,28 @@
+version: '3.4'
+
+services:
+  onitama.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5050
+      - ASPNETCORE_HTTPS_PORTS=5051
+      - ConnectionStrings__OnitamaDbConnection=Data Source=sqldata;Database=OnitamaDockerDb;User Id=sa;Password=Pass@word;TrustServerCertificate=True;
+    ports:
+      - "5050:5050"
+      - "5051:5051"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  sqldata:
+    environment:
+      - SA_PASSWORD=Pass@word
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433" #make db server accessible for host system on port 1433(Server name: localhost)
+    volumes:
+      - onitama-sqldata:/var/opt/mssql
+
+volumes:
+  onitama-sqldata:
+    external: false

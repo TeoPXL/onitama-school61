@@ -59,5 +59,8 @@ public class TableFactoryTests
         Assert.That(table.Preferences, Is.EqualTo(preferences), "The provided preferences must be assigned to the table");
         Assert.That(table.SeatedPlayers.Count, Is.EqualTo(1), "A player should be seated for the user");
         Assert.That(table.SeatedPlayers[0].Id, Is.EqualTo(user.Id), "A player should be seated for the user");
+        Assert.That(table.OwnerPlayerId, Is.EqualTo(user.Id), "The player (user) that creates the table should be the owner");
+        Assert.That(table.Id, Is.Not.EqualTo(table.OwnerPlayerId),
+            "The id of the table must be unique. It can not be the same as the id of the owner");
     }
 }

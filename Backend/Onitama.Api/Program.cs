@@ -35,7 +35,7 @@ namespace Onitama.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddCors();
+            //builder.Services.AddCors();
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAnyOrigin",
@@ -153,8 +153,9 @@ namespace Onitama.Api
                 //app.UseSwagger();
                 //app.UseSwaggerUI();
             }
-            app.UseSwagger();
-            app.UseSwaggerUI();
+
+            app.UseCors(policyName: "AllowAll");
+
             app.UseHttpsRedirection();
 
             app.UseAuthorization();

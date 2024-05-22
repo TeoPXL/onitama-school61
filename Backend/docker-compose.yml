@@ -1,0 +1,11 @@
+version: '3.4'
+
+services:
+  onitama.api:
+    image: ${DOCKER_REGISTRY-}onitamaapi
+    build:
+      context: .
+      dockerfile: Onitama.Api/Dockerfile
+
+  sqldata:
+    image: mcr.microsoft.com/mssql/server:2019-latest
