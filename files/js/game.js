@@ -1450,7 +1450,7 @@ async function onClick(){
                     console.log(row + " : " + column);
                     console.log("Identity: 0")
                     const material = new THREE.MeshBasicMaterial({
-                        color: hoveredCube.material.color, //White
+                        color: selectedPawn.material.color, //White
                         transparent: true, // Transparent
                         opacity: 0.8, // Opacity to 0.1
                     });
