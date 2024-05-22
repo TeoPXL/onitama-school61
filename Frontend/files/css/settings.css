@@ -15,6 +15,25 @@
     border-radius: 1em;
     margin-bottom: 10px;
 }
+.setting-lightmode {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;  
+    background: var(--color-background-fade);
+    padding: 10px;
+    border-radius: 1em;
+    margin-bottom: 10px;
+}
+.setting-lightmode:hover {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;  
+    background: linear-gradient(121deg, rgb(220, 220, 220) 0%, rgb(178, 177, 177) 100%);
+    padding: 10px;
+    border-radius: 1em;
+    margin-bottom: 10px;
+    color: black;
+}
 .setting-title {
     font-size: 110%;
     font-weight: 500;
