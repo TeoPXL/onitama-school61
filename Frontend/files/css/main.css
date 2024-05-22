@@ -1,4 +1,4 @@
-html {
+html.dark {
     --color-background: rgb(30,31,36);
     --color-background-gradient: linear-gradient(121deg, rgba(30,31,36,1) 0%, rgba(15,16,18,1) 100%);
     --color-background-fade: linear-gradient(121deg, rgb(42, 43, 49) 0%, rgb(32, 33, 36) 100%);
@@ -8,6 +8,25 @@ html {
     --color-main-fade: #75FFBA;
     --color-secondary: #E6FF4B;
     --color-text: white;
+    --color-text-fade: #ffffff57;
+    --color-text-2: #0E0007;
+    --color-red: #c60025;
+    --color-gray: #1b1c20;
+    --color-green: #1ea24b;
+    --font-logo: "Outfit", sans-serif;
+    --font-main: "Poppins", sans-serif;
+}
+
+html.light {
+    --color-background: rgb(255, 255, 255);
+    --color-background-gradient: linear-gradient(121deg, rgb(255, 255, 255) 0%, rgb(255, 255, 255) 100%);
+    --color-background-fade: linear-gradient(121deg, rgb(220, 220, 220) 0%, rgb(178, 177, 177) 100%);
+    --color-background-loading: rgb(220, 220, 220);
+    --color-main: rgb(19,242,151);
+    --color-main-gradient: linear-gradient(121deg, rgba(19,242,151,1) 0%, rgba(11,171,106,1) 100%);
+    --color-main-fade: #75FFBA;
+    --color-secondary: #E6FF4B;
+    --color-text: rgb(0, 0, 0);
     --color-text-fade: #ffffff57;
     --color-text-2: #0E0007;
     --color-red: #c60025;
