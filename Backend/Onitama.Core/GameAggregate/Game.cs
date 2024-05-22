@@ -706,4 +706,10 @@ internal class Game : IGame
             }
         }
     }
+
+    public void UpdateWinner(Guid playerId)
+    {
+        _winnerPlayerId = playerId;
+        WinnerMethod = "forfeit";
+    }
 }

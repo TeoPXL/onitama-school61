@@ -96,5 +96,7 @@ namespace Onitama.Core.GameAggregate.Contracts
         void checkValidMoves();
 
         void MakeAIMove();
+
+        void UpdateWinner(Guid playerId);
     }
 }

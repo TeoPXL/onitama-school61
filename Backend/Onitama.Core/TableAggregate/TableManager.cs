@@ -122,6 +122,22 @@ internal class TableManager : ITableManager
             throw new InvalidOperationException("Only the owner can start the game at this table.");
         }
         var game = _gameFactory.CreateNewForTable(table);
+        foreach(var oldGame in _gameRepository.GetAll())
+        {
+            foreach(var player in oldGame.Players)
+            {
+                if (player.Id == user.Id)
+                {
+                    foreach (var otherPlayer in oldGame.Players)
+                    {
+                        if (otherPlayer.Id != user.Id)
+                        {
+                            oldGame.UpdateWinner(otherPlayer.Id);
+                        }
+                    }
+                }
+            }
+        }
         _gameRepository.Add(game);
         table.GameId = game.Id;
         return game;

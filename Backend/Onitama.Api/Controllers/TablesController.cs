@@ -223,6 +223,7 @@ public class TablesController : ApiControllerBase
     public async Task<IActionResult> StartGame(Guid id)
     {
         User currentUser = (await _userManager.GetUserAsync(User))!;
+        
         _tableManager.StartGameForTable(id, currentUser);
         TableModel alteredTableModel = _mapper.Map<TableModel>(_tableRepository.Get(id));
         return Ok(alteredTableModel);
