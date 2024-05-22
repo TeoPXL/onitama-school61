@@ -95,11 +95,11 @@ namespace Onitama.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
-        public IActionResult MovePawn(Guid id, [FromBody] MovePawnModel inputModel)
+        public async Task<IActionResult> MovePawn(Guid id, [FromBody] MovePawnModel inputModel)
         {
             ICoordinate to = _coordinateFactory.Create(inputModel.To.Row, inputModel.To.Column);
             _gameService.MovePawn(id, UserId, inputModel.PawnId, inputModel.MoveCardName, to);
-
+            await Task.Delay(2000);
             _gameService.MakeAIMove(id);
 
             return Ok();
