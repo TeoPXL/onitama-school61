@@ -213,6 +213,30 @@ class Game {
                     child.receiveShadow = true;
                 }
             });
+            if(userSettings["space-theme"] == 'true'){
+                //Load the space helmet!
+                self.loader.load('assets/space-helmet.gltf', function (helmetgltf) {
+                    console.log(gltf.scene);
+                    helmetgltf.scene.traverse((node) => {
+                        if (node.isMesh) {
+                            node.material.transparent = true;
+                            node.material.alphaTest = 0.3; // optional, adjust based on your needs
+                            // node.material.opacity = 0.5; // optional, use if you want to change overall opacity
+                            node.material.needsUpdate = true; // ensure the material updates
+                        }
+                    });
+                    helmetgltf.scene.scale.set(1.3, 1.3, 1.3);
+                    helmetgltf.scene.position.y -= 0.2;
+                    gltf.scene.traverse(function (child) {
+                        child.children.forEach(element => {
+                            if(element.name == "head"){
+                                element.add(helmetgltf.scene);
+                                console.log(element.name);
+                            }
+                        });
+                    });
+                });
+            }
             self.scene.add(gltf.scene);
             modelObject.rotation.y = orient * 1.57 * 2;
             modelObject.position.z = coord[0] * 2 - 4;

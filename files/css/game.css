@@ -375,8 +375,12 @@ canvas {
     .main {
         flex-flow: row;
     }
+    .game-controls {
+        max-width: 500px;
+    }
     #container {
         height: 100%;
+        max-width: unset;
     }
 }
 @media screen and (min-width: 750px) {
