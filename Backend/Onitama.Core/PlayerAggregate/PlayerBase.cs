@@ -88,6 +88,10 @@ internal class PlayerBase : IPlayer
 
     public virtual IMove DetermineBestMove(IGame game)
     {
+        if(Strategy == null)
+        {
+            return new Move(MoveCards[0]);
+        }
         return Strategy.GetBestMoveFor(Id, new Game(game));
     }
 }

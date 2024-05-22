@@ -31,7 +31,23 @@ public class TwoDimensionalArrayJsonConverter<T> : JsonConverter<T[,]>
         }
 
         int numberOfRows = rows.Count;
+
+        if (numberOfRows == 0)
+        {
+            return new T[0, 0];
+        }
+
         int numberOfColumns = rows[0].Length;
+
+        // Validate that all rows have the same number of columns
+        foreach (var row in rows)
+        {
+            if (row.Length != numberOfColumns)
+            {
+                throw new JsonException("All rows must have the same number of columns.");
+            }
+        }
+
         T[,] array = new T[numberOfRows, numberOfColumns];
 
         for (int i = 0; i < numberOfRows; i++)

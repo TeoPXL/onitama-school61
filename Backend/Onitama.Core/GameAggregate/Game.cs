@@ -183,7 +183,20 @@ internal class Game : IGame
         }
 
         this.Id = new Guid();
-        this.PlayMat = otherGame.PlayMat; // Assuming PlayMat is immutable or copied internally
+        this.PlayMat = new PlayMat(5);
+        for (int i = 0; i < otherGame.PlayMat.Grid.GetLength(0); i++)
+        {
+            for (int j = 0; j < otherGame.PlayMat.Grid.GetLength(1); j++)
+            {
+                var pawn = otherGame.PlayMat.Grid[i, j];
+                if(pawn != null)
+                {
+                    var newPawn = new Pawn(pawn.Id, pawn.OwnerId, pawn.Type);
+                    newPawn.Position = pawn.Position;
+                    this.PlayMat.Grid[i, j] = newPawn;
+                }
+            }
+        }
         this.WinnerMethod = otherGame.WinnerMethod;
         this.PlayerToPlayId = otherGame.PlayerToPlayId;
         this.ExtraMoveCard = otherGame.ExtraMoveCard;
@@ -315,7 +328,6 @@ internal class Game : IGame
         IPlayer player = null;
         IPawn pawn = null;
         IMoveCard moveCard = null;
-
         if (PlayerToPlayId != playerId)
         {
             throw new ApplicationException($"It is not this player's turn yet. {playerId} tried to play instead of {PlayerToPlayId}");
@@ -465,7 +477,7 @@ internal class Game : IGame
         PlayerToPlayId = this.GetNextOpponent(playerId).Id;
         checkValidMoves();
 
-        if(PlayerToPlayId == Players[1].Id)
+        if(PlayerToPlayId == Players[1].Id && Players[1].Strategy != null)
         {
             //Make the AI do something here
             if (Players[1].HasValidMoves == true)
