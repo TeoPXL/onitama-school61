@@ -14,4 +14,6 @@ public interface IGameService
 
     List<IGame> GetAllGames();
     void SkipMovementAndExchangeCard(Guid gameId, Guid playerId, string moveCardName);
+
+    void MakeAIMove(Guid gameId);
 }

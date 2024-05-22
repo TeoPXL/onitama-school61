@@ -94,5 +94,7 @@ namespace Onitama.Core.GameAggregate.Contracts
         IPlayer GetNextOpponent(Guid playerId);
 
         void checkValidMoves();
+
+        void MakeAIMove();
     }
 }

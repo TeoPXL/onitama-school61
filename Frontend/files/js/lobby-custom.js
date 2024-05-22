@@ -515,6 +515,10 @@ document.querySelector('.custom-create-button').addEventListener('click', () => 
     }).then(data => {
         console.log(data);
         localStorage.setItem("tableId", data.id);
+        if(gameType == "ai-easy" || gameType == "ai-medium" || gameType == "ai-hard" || gameType == "ai-extreme"){
+            fillTableWithAi(data.id);
+            return;
+        }
         setTimeout(() => {
             window.location.href = "../game/play.html";
         }, 250);
@@ -643,6 +647,34 @@ function updateCardList(){
     });
 }
 
+
+function fillTableWithAi(tableId){
+    const response = fetch(currentApi + "/api/Tables/" + tableId + "/fill-with-ai", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({})
+    }).then(response => {
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw_floating_error(errorData.message, '500', "#c60025");
+            });
+        }
+        return response.json();
+    }).then(data => {
+        console.log(data);
+        //Now redirect the user to the game
+        setTimeout(() => {
+            window.location.href = "../game/play.html";
+        }, 250);
+    }).catch(error => {
+        console.log(error);
+        throw_floating_error(error, '500', "#c60025");
+    });
+}
 
 
 

@@ -41,4 +41,9 @@ internal class GameService : IGameService
     {
         _gameRepository.GetById(gameId).SkipMovementAndExchangeCard(playerId, moveCardName);
     }
+
+    public void MakeAIMove(Guid gameId)
+    {
+        _gameRepository.GetById(gameId).MakeAIMove();
+    }
 }

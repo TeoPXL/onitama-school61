@@ -99,6 +99,9 @@ namespace Onitama.Api.Controllers
         {
             ICoordinate to = _coordinateFactory.Create(inputModel.To.Row, inputModel.To.Column);
             _gameService.MovePawn(id, UserId, inputModel.PawnId, inputModel.MoveCardName, to);
+
+            _gameService.MakeAIMove(id);
+
             return Ok();
         }
 
