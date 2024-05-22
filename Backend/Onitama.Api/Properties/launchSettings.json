@@ -1,5 +1,5 @@
 {
-  "profiles": { 
+  "profiles": {
     "Onitama.Api - Kestrel": {
       "commandName": "Project",
       "launchBrowser": true,
