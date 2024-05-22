@@ -148,11 +148,8 @@ namespace Onitama.Api
             //Middleware pipeline//
             ///////////////////////
 
-            if (app.Environment.IsDevelopment())
-            {
-                //app.UseSwagger();
-                //app.UseSwaggerUI();
-            }
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseCors(policyName: "AllowAll");
 
