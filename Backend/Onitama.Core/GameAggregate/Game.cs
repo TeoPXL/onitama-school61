@@ -480,7 +480,7 @@ internal class Game : IGame
 
     public void MakeAIMove()
     {
-        if (PlayerToPlayId == Players[1].Id && Players[1].Strategy != null)
+        if (PlayerToPlayId == Players[1].Id && Players[1].Strategy != null && WinnerPlayerId == Guid.Empty)
         {
             //Make the AI do something here
             if (Players[1].HasValidMoves == true)
