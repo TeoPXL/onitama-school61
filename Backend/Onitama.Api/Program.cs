@@ -46,9 +46,9 @@ namespace Onitama.Api
                                .AllowAnyMethod();
                     });
             });
-            ///////////////////////////////////
-            // Dependency injection container//
-            ///////////////////////////////////
+            ////////////////////////////////////
+            // Dependency injection container///
+            ////////////////////////////////////
             builder.Services.AddScoped<OnitamaDbHelper>();
             builder.Services.AddSingleton(provider =>
                 new OnitamaExceptionFilterAttribute(provider.GetRequiredService<ILogger<Program>>()));
