@@ -8,6 +8,7 @@ using Onitama.Core.SchoolAggregate.Contracts;
 using Onitama.Core.Util;
 using Onitama.Core.GameAggregate.Contracts;
 using Onitama.Core.GameAggregate;
+using System.Numerics;
 
 namespace Onitama.Core.PlayerAggregate;
 
@@ -83,7 +84,16 @@ internal class PlayerBase : IPlayer
 
     public void SetSchool(ISchool school)
     {
-        this._school = school;
+        var pawns = new IPawn[5];
+        for (int i = 0; i < school.AllPawns.Length; i++)
+        {
+            var pawn = school.AllPawns[i];
+            var newPawn = new Pawn(pawn.Id, pawn.OwnerId, pawn.Type);
+            newPawn.Position = pawn.Position;
+            pawns[i] = newPawn;
+        }
+        this._school = new School(pawns);
+        this._school.TempleArchPosition = school.TempleArchPosition;
     }
 
     public virtual IMove DetermineBestMove(IGame game)
