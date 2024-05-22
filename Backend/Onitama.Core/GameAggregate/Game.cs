@@ -476,8 +476,11 @@ internal class Game : IGame
         ExtraMoveCard = moveCard;
         PlayerToPlayId = this.GetNextOpponent(playerId).Id;
         checkValidMoves();
+    }
 
-        if(PlayerToPlayId == Players[1].Id && Players[1].Strategy != null)
+    public void MakeAIMove()
+    {
+        if (PlayerToPlayId == Players[1].Id && Players[1].Strategy != null)
         {
             //Make the AI do something here
             if (Players[1].HasValidMoves == true)
