@@ -267,4 +267,42 @@ public class GameTests
         Assert.That(() => _game.SkipMovementAndExchangeCard(playerToPlay.Id, card.Name),
             Throws.InstanceOf<ApplicationException>().With.Message.Contains("valid move").IgnoreCase);
     }
+
+    [MonitoredTest]
+    public void SkipMovementAndExchangeCard_NoValidMovePossible_ShouldExchangeCard()
+    {
+        Class_ShouldImplement_IGame();
+
+        //Arrange
+        IPlayer playerToPlay = _game.PlayerToPlayId == _playerNorthMock.Object.Id ? _playerNorthMock.Object : _playerSouthMock.Object;
+        IMoveCard card = Random.Shared.NextItem(playerToPlay.MoveCards);
+        IMoveCard extraCard = _game.ExtraMoveCard;
+        IPlayer opponent = (_game.Players[0].Id == playerToPlay.Id) ? _game.Players[1] : _game.Players[0];
+
+        _playMatMock.Setup(p => p.GetValidMoves(It.IsAny<IPawn>(), It.IsAny<IMoveCard>(), It.IsAny<Direction>()))
+            .Returns(new List<IMove>());
+
+        //Act
+        _game.SkipMovementAndExchangeCard(playerToPlay.Id, card.Name);
+
+        //Assert
+        _playMatMock.Verify(
+            mat => mat.GetValidMoves(It.IsAny<IPawn>(), It.IsAny<IMoveCard>(), playerToPlay.Direction),
+            Times.Exactly(5 * 2),
+            "The PlayMat should be used to verify if none of the pawns of the player to play can make a move. Every pawn and every card of the player to play should be checked.");
+
+        _playMatMock.Verify(
+            mat => mat.GetValidMoves(It.Is<IPawn>(p => p.OwnerId == opponent.Id), It.IsAny<IMoveCard>(),
+                playerToPlay.Direction), Times.Never,
+            "Only the moves of the pawns of the player to play should be checked");
+
+        Assert.That(_game.ExtraMoveCard, Is.EqualTo(card),
+            "The extra move card should be the card that was played by the player to play.");
+
+        Assert.That(playerToPlay.MoveCards, Has.One.Matches<IMoveCard>(c => c.Name == extraCard.Name),
+            "The former extra card should now be one of the player's move cards.");
+
+        Assert.That(_game.PlayerToPlayId, Is.EqualTo(opponent.Id),
+            "The player to play should be set to the opponent after exchanging the card.");
+    }
 }
