@@ -412,7 +412,7 @@ internal class Game : IGame
 
         for (int i = 0; i < Players.Length; i++)
         {
-            if (Players[i].School.TempleArchPosition.Row == move.To.Row && Players[i].School.TempleArchPosition.Column == move.To.Column)
+            if (Players[i].School.TempleArchPosition.Row == move.To.Row && Players[i].School.TempleArchPosition.Column == move.To.Column && Players[i].Id != playerId)
             {
                 wayOfStream = true;
             }
