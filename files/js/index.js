@@ -112,6 +112,8 @@ document.querySelectorAll('.comp-item-spectate').forEach((el) => el.addEventList
     const gameId = el.getAttribute('onitama-gameid');
     console.log(gameId);
     localStorage.setItem("gameId", gameId);
+
+    localStorage.removeItem("tableId");
     setTimeout(() => {
         window.location.href = "../game/spectate.html";
     }, 250);

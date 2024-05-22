@@ -499,7 +499,7 @@ async function fetchTable(){
         return;
     }
     tableFetchInterval = setInterval(async () => {
-    const response = await fetch(currentApi + "/api/Tables/" + game.tableId, {
+    const response = await fetch(currentApi + "/api/Games/" + localStorage.getItem('gameId'), {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -520,7 +520,7 @@ async function fetchTable(){
         const table = data;
         let usersThatLeft;
 
-        let totalPlayers = data.seatedPlayers;
+        let totalPlayers = data.players;
         if(allUsers != undefined){
             if(allUsers.length != totalPlayers.length){
                 //The list of players has changed. Let's check who
@@ -548,16 +548,15 @@ async function fetchTable(){
         allUsers = totalPlayers;
         if(game.currentPlayer == undefined){
             //console.log("Not undefined");
-            const className = "container-"+table.preferences.numberOfPlayers+"-"+table.seatedPlayers.length;
+            const className = "container-"+2+"-"+table.players.length;
             console.log(className);
             container.classList.add(className);
-            if(data.hasAvailableSeat != true){
                 //The table is full, do stuff
                 container.classList.remove('container-loading');
                 container.classList.add('container-waiting');
                 //Set team1, 2, (3 and 4) as players in order, or by direction.
-                for (let i = 0; i < data.seatedPlayers.length; i++) {
-                    const player = data.seatedPlayers[i];
+                for (let i = 0; i < data.players.length; i++) {
+                    const player = data.players[i];
                     if(player.direction == "North"){
                         player.facing = 1;
                         player.number = 1;
@@ -576,19 +575,16 @@ async function fetchTable(){
                 //fill the models based on team color
                 console.log("filling models");
                 game.fillModels();
-                if(data.preferences.tableType == "wotw"){
+                if(data.gameType == "wotw"){
                     game.loadSpirit();
                 }
                 //Make sure the current player can only control his own pawns, and only when it is his turn.
                 //Move this to its own function
-            } else {
-                container.classList.remove('container-waiting');
-                container.classList.add('container-loading');
-            }
+            
 
         setTimeout(fetchTable, 500);
         } else if(game.id == undefined || game.id == "00000000-0000-0000-0000-000000000000") {
-            game.id = table.gameId;
+            game.id = table.id;
             console.log(game.id);
             //setTimeout(fetchTable, 500);
         } else {
