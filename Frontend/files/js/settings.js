@@ -20,7 +20,19 @@ document.addEventListener('DOMContentLoaded', function() {
             case 'suppress-all-errors':
                 element.checked = storedSetting === 'true';
                 break;
-            case 'toggle-lightmode':
+            case 'toggle-dark':
+                element.checked = storedSetting === 'true';
+                applyTheme();
+                break;
+            case 'toggle-metal':
+                element.checked = storedSetting === 'true';
+                applyTheme();
+                break;
+            case 'toggle-sahara':
+                element.checked = storedSetting === 'true';
+                applyTheme();
+                break;
+            case 'toggle-aqua':
                 element.checked = storedSetting === 'true';
                 applyTheme();
                 break;
@@ -30,16 +42,30 @@ document.addEventListener('DOMContentLoaded', function() {
     settingInputs.forEach(element => element.addEventListener('click', () => {
         const setting = element.getAttribute("onitama-setting");
         localStorage.setItem(setting, element.checked.toString());
-
-        if (setting === 'toggle-lightmode') {
+        
+        if (setting.startsWith('toggle')) {  
+            settingInputs.forEach(input => {
+                if (input !== element && input.getAttribute("onitama-setting").startsWith("toggle")) {
+                    input.checked = false;
+                    localStorage.setItem(input.getAttribute("onitama-setting"), 'false');
+                }
+            });
             applyTheme();
         }
     }));
 });
 
 function applyTheme() {
-    const themeClass = localStorage.getItem('toggle-lightmode') === 'true' ? 'light' : 'dark';
+    let themeClass = 'dark'; 
+    if (localStorage.getItem('toggle-metal') === 'true') {
+        themeClass = 'metal';
+    } else if (localStorage.getItem('toggle-sahara') === 'true') {
+        themeClass = 'sahara';
+    } else if (localStorage.getItem('toggle-aqua') === 'true') {
+        themeClass = 'aqua';
+    }
     document.documentElement.className = themeClass;
+    console.log("Theme set to:", themeClass);
 }
 
 

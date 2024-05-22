@@ -2,6 +2,8 @@
     margin: 0;
     margin-right: 5px;
 }
+
+
 .settings {
     margin: auto;
     max-width: 600px;
@@ -15,7 +17,7 @@
     border-radius: 1em;
     margin-bottom: 10px;
 }
-.setting-lightmode {
+.setting-dark {
     display: flex;
     justify-content: space-between;
     align-items: center;  
@@ -24,11 +26,68 @@
     border-radius: 1em;
     margin-bottom: 10px;
 }
-.setting-lightmode:hover {
+.setting-dark:hover {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;  
+    background: linear-gradient(121deg, rgb(42, 43, 49) 0%, rgb(32, 33, 36) 100%);
+    padding: 10px;
+    border-radius: 1em;
+    margin-bottom: 10px;
+    color: white;
+}
+.setting-metal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;  
+    background: var(--color-background-fade);
+    padding: 10px;
+    border-radius: 1em;
+    margin-bottom: 10px;
+}
+.setting-metal:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;  
     background: linear-gradient(121deg, rgb(220, 220, 220) 0%, rgb(178, 177, 177) 100%);
+    padding: 10px;
+    border-radius: 1em;
+    margin-bottom: 10px;
+    color: black;
+}
+.setting-sahara {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;  
+    background: var(--color-background-fade);
+    padding: 10px;
+    border-radius: 1em;
+    margin-bottom: 10px;
+}
+.setting-sahara:hover {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;  
+    background: linear-gradient(121deg, rgb(190, 154, 78) 0%, rgb(170, 138, 69) 100%);
+    padding: 10px;
+    border-radius: 1em;
+    margin-bottom: 10px;
+    color: black;
+}
+.setting-aqua {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;  
+    background: var(--color-background-fade);
+    padding: 10px;
+    border-radius: 1em;
+    margin-bottom: 10px;
+}
+.setting-aqua:hover {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;  
+    background: linear-gradient(121deg, rgb(18, 46, 203) 0%, rgb(6, 31, 169) 100%);
     padding: 10px;
     border-radius: 1em;
     margin-bottom: 10px;

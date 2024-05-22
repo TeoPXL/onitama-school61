@@ -45,6 +45,13 @@
         <div class="settings">
             <div class="setting">
                 <div class="setting-left">
+                    <div class="setting-title"><strong>SETTINGS</strong></div>               
+                </div>   
+        </div>
+        
+        <div class="settings">
+            <div class="setting">
+                <div class="setting-left">
                     <div class="setting-title">Force remote API</div>
                     <div class="setting-subtitle">Always use the remote API, even when the local API is available.</div>
                 </div>
@@ -92,16 +99,53 @@
                     <input type="checkbox" class="setting-input" onitama-setting="suppress-all-errors" />
                 </div>
             </div>
-
-            <div class="setting-lightmode">
-                <div class="setting-left">
-                    <div class="setting-title">Light mode</div>
-                    <div class="setting-subtitle">Toggle light mode if you want your eyes burned.</div>
-                </div>
-                <div class="setting-right">
-                    <input type="checkbox" class="setting-input" onitama-setting="toggle-lightmode" />
+            
+            <div class="settings">
+                <div class="setting">
+                    <div class="setting-left">
+                        <div class="setting-title"><strong>THEMES</strong></div>               
+                    </div>   
                 </div>
             </div>
+            <div class="setting-dark">
+                <div class="setting-left">
+                    <div class="setting-title">Classic</div>
+                    <div class="setting-subtitle">Our classic theme. Dark & easy on the eyes.</div>
+                </div>
+                <div class="setting-right">
+                    <input type="checkbox" class="setting-input" onitama-setting="toggle-dark" checked/>
+                </div>
+            </div>
+
+            <div class="setting-metal">
+                <div class="setting-left">
+                    <div class="setting-title">Metal</div>
+                    <div class="setting-subtitle">Lighten the place up.</div>
+                </div>
+                <div class="setting-right">
+                    <input type="checkbox" class="setting-input" onitama-setting="toggle-metal" />
+                </div>
+            </div>
+
+            <div class="setting-sahara">
+                <div class="setting-left">
+                    <div class="setting-title">Sahara</div>
+                    <div class="setting-subtitle">Play like you're in the desert.</div>
+                </div>
+                <div class="setting-right">
+                    <input type="checkbox" class="setting-input" onitama-setting="toggle-sahara" />
+                </div>
+            </div>
+            <div class="setting-aqua">
+                <div class="setting-left">
+                    <div class="setting-title">Aqua</div>
+                    <div class="setting-subtitle">Dive into the underwater-Onitama experience.</div>
+                </div>
+                <div class="setting-right">
+                    <input type="checkbox" class="setting-input" onitama-setting="toggle-aqua" />
+                </div>
+            </div>
+
         </div>
     </main>
     <div class="floating-error floating-error-hidden">
