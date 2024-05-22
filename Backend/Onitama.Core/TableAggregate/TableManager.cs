@@ -88,7 +88,7 @@ internal class TableManager : ITableManager
             throw new InvalidOperationException("You are not the owner of this table");
         }
         var evaluator = new GameEvaluator();
-        var strategy = new MiniMaxGamePlayStrategy(evaluator, 10);
+        var strategy = new MiniMaxGamePlayStrategy(evaluator, 0);
         table.FillWithArtificialPlayers(strategy);
     }
 

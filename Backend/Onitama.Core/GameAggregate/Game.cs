@@ -494,6 +494,10 @@ internal class Game : IGame
 
     public void calculateElo()
     {
+        if (_gameType != "competitive")
+        {
+            return;
+        }
         int K = 64;
         int RA = 0;
         int RB = 0;
