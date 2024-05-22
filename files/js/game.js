@@ -57,8 +57,7 @@ class Game {
         this.raycaster.params.Line.threshold = 0.1; 
         this.clock = new THREE.Clock();
         this.mouse = new THREE.Vector2();
-        this.scene.background = new THREE.Color(0x87ceeb);
-        this.scene.fog = new THREE.Fog( 0xcccccc, 22, 32 );
+        //this.scene.fog = new THREE.Fog( 0xcccccc, 22, 32 );
         this.containerWidth = container.clientWidth;
         this.containerHeight = container.clientHeight;
         this.camera = new THREE.PerspectiveCamera(75, this.containerWidth / this.containerHeight, 0.1, 1000);
@@ -84,10 +83,32 @@ class Game {
         this.pixelRatio = window.devicePixelRatio || 1; // Get device pixel ratio
         this.renderer.setPixelRatio(this.pixelRatio);
         this.renderer.setSize(this.containerWidth, this.containerHeight, false);
-        this.ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+        this.boardAsset = "";
+        if(userSettings["space-theme"] == 'true'){
+            this.boardAsset = "assets/board-space.gltf";
+            const loader = new THREE.CubeTextureLoader();
+            const texture = loader.load([
+            'assets/textures/sky-space/bkg1_right.webp', // positive X
+            'assets/textures/sky-space/bkg1_left.webp', // negative X
+            'assets/textures/sky-space/bkg1_top.webp', // positive Y
+            'assets/textures/sky-space/bkg1_bot.webp', // negative Y
+            'assets/textures/sky-space/bkg1_front.webp', // positive Z
+            'assets/textures/sky-space/bkg1_back.webp'  // negative Z
+            ]);
+            this.scene.background = texture;
+            this.ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            this.sunColor = 0xB5ACE1; // A warm, yellowish-orange color (Like the sun)
+            this.sunLight = new THREE.DirectionalLight(this.sunColor, 3);
+        } else {
+            this.boardAsset = "assets/board.gltf";
+            this.scene.background = new THREE.Color(0x87ceeb);
+            this.ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+            this.sunColor = 0xF7EACD; // A warm, yellowish-orange color (Like the sun)
+            this.sunLight = new THREE.DirectionalLight(this.sunColor, 5);
+        }
+
         this.scene.add(this.ambientLight);
-        this.sunColor = 0xF7EACD; // A warm, yellowish-orange color (Like the sun)
-        this.sunLight = new THREE.DirectionalLight(this.sunColor, 5);
+        
         this.sunLight.position.set(14, 14, 0);
         this.sunLight.target.position.set(0, 0, 10);
         this.scene.add( this.sunLight.target ); 
@@ -123,7 +144,7 @@ class Game {
         //Load Gameboard, for now only 5x5
         this.loader = new GLTFLoader();
         const self = this;
-        this.loader.load('assets/board.gltf', function (gltf) {
+        this.loader.load(this.boardAsset, function (gltf) {
             self.boardObject = gltf.scene;
             self.boardObject.rotation.y = 1.5708;
             self.boardObject.position.y = -0.15;
