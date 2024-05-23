@@ -19,6 +19,7 @@ window.clickedCube = clickedCube;
 let allUsers;
 let ownerUser;
 let selectedPawn;
+window.selectedPawn = selectedPawn;
 let pawnCoords;
 let selectionCoords;
 let allCubes = [];
@@ -33,7 +34,7 @@ class Game {
     mouse;
     camera;
     renderer;
-    constrols;
+    controls;
     board;
     id;
     started = false;
@@ -46,6 +47,7 @@ class Game {
     currentPlayerObject;
     gameType;
     oldElo = user.elo;
+    lastClicked;
 
     constructor(playercount){
         this.board = new Board(playercount + 3);
@@ -392,7 +394,9 @@ class Game {
             return response.json();
         }).then(data => {
             console.log(data);
-            console.log("Available row " + data[0].to.row + " and col " + data[0].to.column);
+            if(data[0] != undefined){
+                console.log("Available row " + data[0].to.row + " and col " + data[0].to.column);
+            }
             coordinates = data;
         }).catch(error => {
             console.log(error);
@@ -1415,7 +1419,14 @@ class ClickHandler {
         if (intersects.length > 0) {
             intersects.forEach(element => {
                 let object = element.object;
-                if(object.name.includes(game.currentPlayer+"hover") || object.onitamaType == "selectable"){
+                if(game.lastClicked == undefined){
+                    //console.log("Undefined");
+                    game.lastClicked = "pawn";
+                }
+                //console.log(game.lastClicked);
+                if(object.onitamaType == "selectable" && object.name.includes("selectable")){
+                    console.log("We're returning: ")
+                    console.log(object);
                     document.body.style.cursor = 'pointer';
                     if(game.playerToPlay != user.warriorName){
                         return;
@@ -1423,6 +1434,25 @@ class ClickHandler {
                     object.material.opacity = 0.8;
                     cubes++;
                     hovering = true;
+                    console.log(object);
+                    hoveredCube = object;
+                    return;
+                }
+            });
+            if(game.lastClicked == "spirit"){
+                return;
+            }
+            intersects.forEach(element => {
+                let object = element.object;
+                if(object.name.includes(game.currentPlayer+"hover")){
+                    document.body.style.cursor = 'pointer';
+                    if(game.playerToPlay != user.warriorName){
+                        return;
+                    }
+                    object.material.opacity = 0.8;
+                    cubes++;
+                    hovering = true;
+                    console.log(object);
                     hoveredCube = object;
                 }
             });
@@ -1581,12 +1611,22 @@ async function onClick(){
         });
         if(startCoords != undefined && selectedCard != undefined && board[startCoords[0]][startCoords[1]][6] != undefined){
             let pawnId;
+            let pawnJson;
             if(board[startCoords[0]][startCoords[1]][0] == 200){
                 pawnId = board[startCoords[0]][startCoords[1]][6].Id;
+                pawnJson =board[startCoords[0]][startCoords[1]][6];
             } else {
                 pawnId = board[startCoords[0]][startCoords[1]][6].id;
+                pawnJson = board[startCoords[0]][startCoords[1]][6];
             }
-
+            if(pawnJson.Type === 2){
+                game.lastClicked = "spirit";
+                console.log("Spirit");
+            } else {
+                console.log(pawnJson);
+                game.lastClicked = "pawn";
+                console.log("Pawn");
+            }
             console.log(pawnId);
             const coordinates = await game.getPossibleCoordinate(pawnId);
             allCubes.forEach(cube => {
