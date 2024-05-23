@@ -15,6 +15,7 @@ const userSettings = {
     "suppress-all-errors": localStorage.getItem('suppress-all-errors'),
     "toggle-aqua": localStorage.getItem('toggle-aqua'),
     "toggle-metal": localStorage.getItem('toggle-metal'),
+    "toggle-sahara": localStorage.getItem('toggle-sahara'),
 };
 
 let currentApi = "";
