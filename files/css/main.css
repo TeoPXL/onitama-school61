@@ -37,13 +37,13 @@ html.metal {
 }
 
 html.sahara {
-    --color-background: rgb(230, 188, 96);
-    --color-background-gradient: linear-gradient(121deg, rgb(230, 188, 96) 0%, rgb(190, 154, 78) 100%);
-    --color-background-fade: linear-gradient(121deg, rgb(190, 154, 78) 0%, rgb(170, 138, 69) 100%);
+    --color-background: rgb(255, 242, 212);
+    --color-background-gradient: linear-gradient(121deg, rgb(255, 242, 212) 0%, rgb(225, 200, 146) 100%);
+    --color-background-fade: linear-gradient(121deg, rgb(253, 227, 166) 0%, rgb(225, 190, 114) 100%);
     --color-background-loading: rgb(230, 188, 96);
-    --color-main: rgb(160, 113, 13);
-    --color-main-gradient: linear-gradient(121deg, rgb(160, 113, 13) 0%, rgb(124, 87, 6) 100%);
-    --color-main-fade: rgb(160, 113, 13);
+    --color-main: rgb(255, 209, 112);
+    --color-main-gradient: linear-gradient(121deg, rgb(255, 218, 141) 0%, rgb(236, 184, 70) 100%);
+    --color-main-fade: rgb(247, 215, 149);
     --color-secondary: #E6FF4B;
     --color-text: rgb(0, 0, 0);
     --color-text-fade: #ffffff57;
@@ -56,13 +56,13 @@ html.sahara {
 }
 
 html.aqua {
-    --color-background: rgb(35,137,218);
-    --color-background-gradient: linear-gradient(121deg, rgb(35,137,218) 0%, rgb(18, 46, 203) 100%);
-    --color-background-fade: linear-gradient(121deg, rgb(18, 46, 203) 0%, rgb(6, 31, 169) 100%);
-    --color-background-loading: rgb(35,137,218);
-    --color-main: rgb(15, 36, 160);
-    --color-main-gradient: linear-gradient(121deg, rgb(28,163,236) 0%, rgb(0, 135, 208)100%);
-    --color-main-fade: rgb(15, 36, 160);
+    --color-background: rgb(14, 19, 34);
+    --color-background-gradient: linear-gradient(121deg, rgb(14, 19, 34) 0%, rgb(5, 12, 49) 100%);
+    --color-background-fade: linear-gradient(121deg, rgb(29, 40, 85) 0%, rgb(16, 19, 38) 100%);
+    --color-background-loading: rgb(14, 19, 34);
+    --color-main: rgb(56, 57, 159);
+    --color-main-gradient: linear-gradient(121deg, rgb(66, 92, 170) 0%, rgb(25, 42, 128) 100%);
+    --color-main-fade: rgb(48, 63, 108);
     --color-secondary: #E6FF4B;
     --color-text: rgb(255, 255, 255);
     --color-text-fade: #ffffff57;
