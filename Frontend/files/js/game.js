@@ -84,7 +84,8 @@ class Game {
         this.renderer.setPixelRatio(this.pixelRatio);
         this.renderer.setSize(this.containerWidth, this.containerHeight, false);
         this.boardAsset = "";
-        if(userSettings["space-theme"] == 'true'){
+
+        if(userSettings["toggle-metal"] === 'true'){
             this.boardAsset = "assets/board-space.gltf";
             const loader = new THREE.CubeTextureLoader();
             const texture = loader.load([
@@ -99,6 +100,21 @@ class Game {
             this.ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
             this.sunColor = 0xB5ACE1; // A warm, yellowish-orange color (Like the sun)
             this.sunLight = new THREE.DirectionalLight(this.sunColor, 3);
+        } else if(userSettings["toggle-aqua"] === "true"){
+            this.boardAsset = "assets/board-water.gltf";
+            const loader = new THREE.CubeTextureLoader();
+            const texture = loader.load([
+            'assets/textures/sky-water/px.webp', // positive X
+            'assets/textures/sky-water/nx.webp', // negative X
+            'assets/textures/sky-water/py.webp', // positive Y
+            'assets/textures/sky-water/ny.webp', // negative Y
+            'assets/textures/sky-water/pz.webp', // positive Z
+            'assets/textures/sky-water/nz.webp'  // negative Z
+            ]);
+            this.scene.background = texture;
+            this.ambientLight = new THREE.AmbientLight(0xffffff, 1.3);
+            this.sunColor = 0xF7EACD; // A warm, yellowish-orange color (Like the sun)
+            this.sunLight = new THREE.DirectionalLight(this.sunColor, 5);
         } else {
             this.boardAsset = "assets/board.gltf";
             this.scene.background = new THREE.Color(0x87ceeb);
@@ -154,6 +170,72 @@ class Game {
                 if (child.isMesh) {
                     child.castShadow = true;
                     child.receiveShadow = true;
+                    if(userSettings["toggle-aqua"] === "true"){
+                        const objectTexture = child.material.map;
+                        const boundingBox = new THREE.Box3().setFromObject(child);
+                        const size = new THREE.Vector3();
+                        boundingBox.getSize(size);
+                        const uvScale = new THREE.Vector2(0.3 * size.x, 0.3 * size.z);
+                        child.material = new THREE.ShaderMaterial({
+                            uniforms: {
+                                time: { value: 0.0 },
+                                resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+                                mouse: { value: new THREE.Vector2() },
+                                objectTexture: { value: objectTexture },
+                                uvScale: { value: uvScale } // Add UV scale uniform
+                            },
+                            vertexShader: `
+                                varying vec2 surfacePosition;
+                        
+                                void main() {
+                                    surfacePosition = uv;
+                                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                                }
+                            `,
+                            fragmentShader: `
+                                #ifdef GL_ES
+                                precision highp float;
+                                #endif
+                        
+                                uniform float time;
+                                uniform vec2 mouse;
+                                uniform vec2 resolution;
+                                uniform sampler2D objectTexture;
+                                uniform vec2 uvScale;
+                                varying vec2 surfacePosition;
+                        
+                                #define MAX_ITER 5 // water depth
+                        
+                                void main( void ) {
+                                    vec2 sp = surfacePosition.xy * uvScale; // Apply UV scaling
+                                    vec2 p = sp * 15.0 - vec2(27.0);
+                                    vec2 i = p;
+                                    float c = 1.2; // brightness; larger -> darker
+                                    float inten = 0.05; // brightness; larger -> brighter
+                                    float speed = 1.5; // larger -> slower
+                                    float speed2 = 3.0; // larger -> slower
+                                    float freq = 0.8; // ripples
+                                    float xflow = 1.5; // flow speed in x direction
+                                    float yflow = 0.0; // flow speed in y direction
+                        
+                                    for (int n = 0; n < MAX_ITER; n++) {
+                                        float t = time * (1.0 - (3.0 / (float(n) + speed)));
+                                        i = p + vec2(cos(t - i.x * freq) + sin(t + i.y * freq) + (time * xflow), sin(t - i.y * freq) + cos(t + i.x * freq) + (time * yflow));
+                                        c += 1.0 / length(vec2(p.x / (sin(i.x + t * speed2) / inten), p.y / (cos(i.y + t * speed2) / inten)));
+                                    }
+                        
+                                    c /= float(MAX_ITER);
+                                    c = 1.5 - sqrt(c);
+                                    vec4 causticsColor = vec4(vec3(c * c * c * c), 0.0) + vec4(0.0, 0.4, 0.55, 1.0);
+                        
+                                    vec4 objectColor = texture2D(objectTexture, surfacePosition);
+                        
+                                    // Blend caustics color with object texture
+                                    gl_FragColor = objectColor + causticsColor * 0.2; // Adjust blending factor as needed
+                                }
+                            `
+                        });
+                    }
                 }
             });
             self.scene.add(gltf.scene);  
@@ -213,7 +295,7 @@ class Game {
                     child.receiveShadow = true;
                 }
             });
-            if(userSettings["space-theme"] == 'true'){
+            if(userSettings["toggle-metal"] == 'true' || userSettings["toggle-aqua"]){
                 //Load the space helmet!
                 self.loader.load('assets/space-helmet.gltf', function (helmetgltf) {
                     console.log(gltf.scene);
@@ -592,6 +674,11 @@ function animate() {
     if(game == undefined){
         return;
     }
+    game.scene.traverse((child) => {
+        if (child.isMesh && child.material.uniforms) {
+            child.material.uniforms.time.value += 0.05;
+        }
+    });
     openCubes.forEach(cube => {
         if(cube.onitamaType == 'open'){
             cube.material.opacity = 0;

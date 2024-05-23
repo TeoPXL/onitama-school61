@@ -13,7 +13,8 @@ const userSettings = {
     "simulate-offline-mode": localStorage.getItem('simulate-offline-mode'),
     "suppress-api-errors": localStorage.getItem('suppress-api-errors'),
     "suppress-all-errors": localStorage.getItem('suppress-all-errors'),
-    "space-theme": localStorage.getItem('space-theme'),
+    "toggle-aqua": localStorage.getItem('toggle-aqua'),
+    "toggle-metal": localStorage.getItem('toggle-metal'),
 };
 
 let currentApi = "";
