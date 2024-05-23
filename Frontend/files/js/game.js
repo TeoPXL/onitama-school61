@@ -87,7 +87,7 @@ class Game {
         this.renderer.setSize(this.containerWidth, this.containerHeight, false);
         this.boardAsset = "";
 
-        if(userSettings["toggle-metal"] === 'true'){
+        if(userSettings["toggle-moon"] === 'true'){
             this.boardAsset = "assets/board-space.gltf";
             const loader = new THREE.CubeTextureLoader();
             const texture = loader.load([
@@ -314,7 +314,7 @@ class Game {
                     child.receiveShadow = true;
                 }
             });
-            if(userSettings["toggle-metal"] == 'true' || userSettings["toggle-aqua"] == "true"){
+            if(userSettings["toggle-moon"] == 'true' || userSettings["toggle-aqua"] == "true"){
                 //Load the space helmet!
                 self.loader.load('assets/space-helmet.gltf', function (helmetgltf) {
                     console.log(gltf.scene);
