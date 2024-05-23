@@ -210,8 +210,8 @@ class Game {
                                     vec2 sp = surfacePosition.xy * uvScale; // Apply UV scaling
                                     vec2 p = sp * 15.0 - vec2(27.0);
                                     vec2 i = p;
-                                    float c = 1.2; // brightness; larger -> darker
-                                    float inten = 0.05; // brightness; larger -> brighter
+                                    float c = 0.5; // brightness; larger -> darker
+                                    float inten = 0.06; // brightness; larger -> brighter
                                     float speed = 1.5; // larger -> slower
                                     float speed2 = 3.0; // larger -> slower
                                     float freq = 0.8; // ripples
