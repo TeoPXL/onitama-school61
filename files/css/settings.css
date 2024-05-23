@@ -68,7 +68,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;  
-    background: linear-gradient(121deg, rgb(190, 154, 78) 0%, rgb(170, 138, 69) 100%);
+    background: linear-gradient(121deg, rgb(255, 218, 141) 0%, rgb(236, 184, 70) 100%);
     padding: 10px;
     border-radius: 1em;
     margin-bottom: 10px;
@@ -87,7 +87,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;  
-    background: linear-gradient(121deg, rgb(18, 46, 203) 0%, rgb(6, 31, 169) 100%);
+    background: linear-gradient(121deg, rgb(66, 92, 170) 0%, rgb(25, 42, 128) 100%);
     padding: 10px;
     border-radius: 1em;
     margin-bottom: 10px;
