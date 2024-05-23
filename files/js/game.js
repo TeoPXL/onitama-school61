@@ -95,7 +95,7 @@ class Game {
             'assets/textures/sky-space/bkg1_bot.webp', // negative Y
             'assets/textures/sky-space/bkg1_front.webp', // positive Z
             'assets/textures/sky-space/bkg1_back.webp'  // negative Z
-            ]);
+            ]); //Skybox sourced from https://opengameart.org/content/space-skyboxes-0 with author's permission
             this.scene.background = texture;
             this.ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
             this.sunColor = 0xB5ACE1; // A warm, yellowish-orange color (Like the sun)
@@ -110,10 +110,10 @@ class Game {
             'assets/textures/sky-water/ny.webp', // negative Y
             'assets/textures/sky-water/pz.webp', // positive Z
             'assets/textures/sky-water/nz.webp'  // negative Z
-            ]);
+            ]); //Skybox sourced from https://www.deviantart.com/kuby64/art/My-second-underwater-HDRI-916960638 with Author's permission
             this.scene.background = texture;
             this.ambientLight = new THREE.AmbientLight(0xffffff, 1.3);
-            this.sunColor = 0xF7EACD; // A warm, yellowish-orange color (Like the sun)
+            this.sunColor = 0xF7EACD; // More blueish (underwater)
             this.sunLight = new THREE.DirectionalLight(this.sunColor, 5);
         } else if(userSettings["toggle-sahara"] === "true"){
             this.boardAsset = "assets/board-desert.gltf";
@@ -125,10 +125,10 @@ class Game {
             'assets/textures/sky-desert/ny.webp', // negative Y
             'assets/textures/sky-desert/pz.webp', // positive Z
             'assets/textures/sky-desert/nz.webp'  // negative Z
-            ]);
+            ]); //Skybox sourced from https://hdri-haven.com/hdri/desert-nature-reserve (CC0 license)
             this.scene.background = texture;
             this.ambientLight = new THREE.AmbientLight(0xffffff, 1.3);
-            this.sunColor = 0xFFDD9D; // A warm, yellowish-orange color (Like the sun)
+            this.sunColor = 0xFFDD9D; // Even warmer than the default (Desert feel)
             this.sunLight = new THREE.DirectionalLight(this.sunColor, 6);
         } else {
             this.boardAsset = "assets/board.gltf";
@@ -209,6 +209,7 @@ class Game {
                                 }
                             `,
                             fragmentShader: `
+                                //Base shader code sourced from https://glslsandbox.com/e#54421.0
                                 #ifdef GL_ES
                                 precision mediump float;
                                 #endif
