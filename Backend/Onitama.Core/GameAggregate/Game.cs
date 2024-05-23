@@ -407,12 +407,13 @@ internal class Game : IGame
 
         IPawn capturedPawn;
         IList<ICoordinate> coordinates = new List<ICoordinate>();
+        var previousPosition = new Coordinate(pawn.Position.Column, pawn.Position.Row);
         PlayMat.ExecuteMove(move, out capturedPawn);
         bool wayOfStream = false;
 
         for (int i = 0; i < Players.Length; i++)
         {
-            if (Players[i].School.TempleArchPosition.Row == move.To.Row && Players[i].School.TempleArchPosition.Column == move.To.Column && Players[i].Id != playerId)
+            if (Players[i].School.TempleArchPosition.Row == move.To.Row && Players[i].School.TempleArchPosition.Column == move.To.Column && Players[i].Id != playerId && pawn.Type != PawnType.Spirit)
             {
                 wayOfStream = true;
             }
@@ -432,7 +433,7 @@ internal class Game : IGame
 
         } else if (capturedPawn != null)
         {
-            if (capturedPawn.Type == PawnType.Master)
+            if (capturedPawn.Type == PawnType.Master && pawn.Type != PawnType.Spirit)
             {
                 //Also kill the master!
                 var capturedPlayerId = capturedPawn.OwnerId;
@@ -453,7 +454,7 @@ internal class Game : IGame
                 PlayerToPlayId = this.GetNextOpponent(playerId).Id;
                 return;
             }
-            else if (capturedPawn.Type == PawnType.Student)
+            else if (capturedPawn.Type == PawnType.Student && pawn.Type != PawnType.Spirit)
             {
                 //Remove pawn
                 var capturedPlayerId = capturedPawn.OwnerId;
@@ -465,6 +466,11 @@ internal class Game : IGame
                         PlayMat.RemovePawn(capturedPawn);
                     }
                 }
+            } else if(pawn.Type == PawnType.Spirit)
+            {
+                //The spirit made the move, so the pawns must switch positions.
+                //The spirit is already at the move.To position, now the capturedPawn must go to the Spirit's previous position
+                capturedPawn.Position = previousPosition;
             }
 
 
