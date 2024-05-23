@@ -971,6 +971,8 @@ async function getGame(){
                         }
                     }
                 }
+                //onsole.log("ENEMY CARDS");
+                //console.log(enemyCards);
                 //console.log("Enemy time: " + enemyTime);
                 document.querySelector('.enemy-time').textContent = "(" + enemyTime +  "s)"
                 if(player.id == user.id){
@@ -996,6 +998,9 @@ async function getGame(){
                     for (let j = 0; j < grid.length; j++) {
                         for (let k = 0; k < grid[j].length; k++) {
                             let block = enemyCardElements[count];
+                            if(block == undefined){
+                                return;
+                            }
                             count++;
                             if(grid[j][k] == "0"){
                                 block.style.background = "#37383c";
@@ -1007,11 +1012,14 @@ async function getGame(){
                         }
                     }
                     if(altGrid.length > 0){
+                        console.log(altGrid);
                         document.querySelectorAll('.enemy-card-blocks-alt')[i].classList.remove('player-card-blocks-hidden');
-                        //console.log(altGrid);
                         for (let j = 0; j < altGrid.length; j++) {
                             for (let k = 0; k < altGrid[j].length; k++) {
                                 let block = enemyAltCardElements[i * 25 + count2];
+                                if(block == undefined){
+                                    return;
+                                }
                                 count2++;
                                 if(altGrid[j][k] == "0"){
                                     block.style.background = "#363a3e";
@@ -1042,6 +1050,9 @@ async function getGame(){
                     for (let j = 0; j < grid.length; j++) {
                         for (let k = 0; k < grid[j].length; k++) {
                             let block = playerCardElements[count];
+                            if(block == undefined){
+                                return;
+                            }
                             count++;
                             if(grid[j][k] == "0"){
                                 block.style.background = "#37383c";
@@ -1055,10 +1066,13 @@ async function getGame(){
 
                     if(altGrid.length > 0){
                         document.querySelectorAll('.player-card-blocks-alt')[i].classList.remove('player-card-blocks-hidden');
-                        //console.log(altGrid);
+                        console.log(altGrid);
                         for (let j = 0; j < altGrid.length; j++) {
                             for (let k = 0; k < altGrid[j].length; k++) {
                                 let block = playerAltCardElements[i * 25 + count2];
+                                if(block == undefined){
+                                    return;
+                                }
                                 count2++;
                                 if(altGrid[j][k] == "0"){
                                     block.style.background = "#363a3e";
@@ -1084,6 +1098,9 @@ async function getGame(){
                 for (let j = 0; j < grid.length; j++) {
                     for (let k = 0; k < grid[j].length; k++) {
                         let block = extraCardElements[count];
+                        if(block == undefined){
+                            return;
+                        }
                         count++;
                         if(grid[j][k] == "0"){
                             block.style.background = "#37383c";
@@ -1101,6 +1118,9 @@ async function getGame(){
                     for (let j = 0; j < altGrid.length; j++) {
                         for (let k = 0; k < altGrid[j].length; k++) {
                             let block = extraAltCardElements[count];
+                            if(block == undefined){
+                                return;
+                            }
                             count++;
                             if(altGrid[j][k] == "0"){
                                 block.style.background = "#363a3e";
