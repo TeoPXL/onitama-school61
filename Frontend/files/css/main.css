@@ -17,7 +17,7 @@ html.dark {
     --font-main: "Poppins", sans-serif;
 }
 
-html.metal {
+html.moon {
     --color-background: rgb(255, 255, 255);
     --color-background-gradient: linear-gradient(121deg, rgb(255, 255, 255) 0%, rgb(220, 220, 220) 100%);
     --color-background-fade: linear-gradient(121deg, rgb(220, 220, 220) 0%, rgb(178, 177, 177) 100%);

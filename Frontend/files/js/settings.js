@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 element.checked = storedSetting === 'true';
                 applyTheme();
                 break;
-            case 'toggle-metal':
+            case 'toggle-moon':
                 element.checked = storedSetting === 'true';
                 applyTheme();
                 break;
@@ -57,8 +57,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function applyTheme() {
     let themeClass = 'dark'; 
-    if (localStorage.getItem('toggle-metal') === 'true') {
-        themeClass = 'metal';
+    if (localStorage.getItem('toggle-moon') === 'true') {
+        themeClass = 'moon';
     } else if (localStorage.getItem('toggle-sahara') === 'true') {
         themeClass = 'sahara';
     } else if (localStorage.getItem('toggle-aqua') === 'true') {

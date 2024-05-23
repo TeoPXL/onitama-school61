@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', applyTheme);
 
 function applyTheme() {
     let themeClass = 'dark'; // Default theme
-    if (localStorage.getItem('toggle-metal') === 'true') {
-        themeClass = 'metal';
+    if (localStorage.getItem('toggle-moon') === 'true') {
+        themeClass = 'moon';
     } else if (localStorage.getItem('toggle-sahara') === 'true') {
         themeClass = 'sahara';
     } else if (localStorage.getItem('toggle-aqua') === 'true') {
