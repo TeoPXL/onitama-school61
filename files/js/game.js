@@ -115,6 +115,21 @@ class Game {
             this.ambientLight = new THREE.AmbientLight(0xffffff, 1.3);
             this.sunColor = 0xF7EACD; // A warm, yellowish-orange color (Like the sun)
             this.sunLight = new THREE.DirectionalLight(this.sunColor, 5);
+        } else if(userSettings["toggle-sahara"] === "true"){
+            this.boardAsset = "assets/board-desert.gltf";
+            const loader = new THREE.CubeTextureLoader();
+            const texture = loader.load([
+            'assets/textures/sky-desert/px.webp', // positive X
+            'assets/textures/sky-desert/nx.webp', // negative X
+            'assets/textures/sky-desert/py.webp', // positive Y
+            'assets/textures/sky-desert/ny.webp', // negative Y
+            'assets/textures/sky-desert/pz.webp', // positive Z
+            'assets/textures/sky-desert/nz.webp'  // negative Z
+            ]);
+            this.scene.background = texture;
+            this.ambientLight = new THREE.AmbientLight(0xffffff, 1.3);
+            this.sunColor = 0xFFDD9D; // A warm, yellowish-orange color (Like the sun)
+            this.sunLight = new THREE.DirectionalLight(this.sunColor, 6);
         } else {
             this.boardAsset = "assets/board.gltf";
             this.scene.background = new THREE.Color(0x87ceeb);
@@ -295,7 +310,7 @@ class Game {
                     child.receiveShadow = true;
                 }
             });
-            if(userSettings["toggle-metal"] == 'true' || userSettings["toggle-aqua"]){
+            if(userSettings["toggle-metal"] == 'true' || userSettings["toggle-aqua"] == "true"){
                 //Load the space helmet!
                 self.loader.load('assets/space-helmet.gltf', function (helmetgltf) {
                     console.log(gltf.scene);
