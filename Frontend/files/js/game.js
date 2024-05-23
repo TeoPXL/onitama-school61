@@ -189,12 +189,13 @@ class Game {
                         const objectTexture = child.material.map;
                         const boundingBox = new THREE.Box3().setFromObject(child);
                         const size = new THREE.Vector3();
+                        const resolution = new THREE.Vector2(container.clientWidth, container.clientHeight);
                         boundingBox.getSize(size);
                         const uvScale = new THREE.Vector2(0.3 * size.x, 0.3 * size.z);
                         child.material = new THREE.ShaderMaterial({
                             uniforms: {
                                 time: { value: 0.0 },
-                                resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+                                resolution: { value: resolution },
                                 mouse: { value: new THREE.Vector2() },
                                 objectTexture: { value: objectTexture },
                                 uvScale: { value: uvScale } // Add UV scale uniform
@@ -209,7 +210,7 @@ class Game {
                             `,
                             fragmentShader: `
                                 #ifdef GL_ES
-                                precision highp float;
+                                precision mediump float;
                                 #endif
                         
                                 uniform float time;
