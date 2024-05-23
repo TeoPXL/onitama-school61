@@ -999,7 +999,7 @@ async function getGame(){
                         for (let k = 0; k < grid[j].length; k++) {
                             let block = enemyCardElements[count];
                             if(block == undefined){
-                                return;
+                                break;
                             }
                             count++;
                             if(grid[j][k] == "0"){
@@ -1018,7 +1018,7 @@ async function getGame(){
                             for (let k = 0; k < altGrid[j].length; k++) {
                                 let block = enemyAltCardElements[i * 25 + count2];
                                 if(block == undefined){
-                                    return;
+                                    break;
                                 }
                                 count2++;
                                 if(altGrid[j][k] == "0"){
@@ -1051,7 +1051,7 @@ async function getGame(){
                         for (let k = 0; k < grid[j].length; k++) {
                             let block = playerCardElements[count];
                             if(block == undefined){
-                                return;
+                                break;
                             }
                             count++;
                             if(grid[j][k] == "0"){
@@ -1071,7 +1071,7 @@ async function getGame(){
                             for (let k = 0; k < altGrid[j].length; k++) {
                                 let block = playerAltCardElements[i * 25 + count2];
                                 if(block == undefined){
-                                    return;
+                                    break;
                                 }
                                 count2++;
                                 if(altGrid[j][k] == "0"){
@@ -1099,7 +1099,7 @@ async function getGame(){
                     for (let k = 0; k < grid[j].length; k++) {
                         let block = extraCardElements[count];
                         if(block == undefined){
-                            return;
+                            break;
                         }
                         count++;
                         if(grid[j][k] == "0"){
@@ -1119,7 +1119,7 @@ async function getGame(){
                         for (let k = 0; k < altGrid[j].length; k++) {
                             let block = extraAltCardElements[count];
                             if(block == undefined){
-                                return;
+                                break;
                             }
                             count++;
                             if(altGrid[j][k] == "0"){
