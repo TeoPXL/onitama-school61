@@ -1417,6 +1417,7 @@ class ClickHandler {
         let intersects = game.raycaster.intersectObjects(game.scene.children);
         let cubes = 0;
         if (intersects.length > 0) {
+            let complete = false;
             intersects.forEach(element => {
                 let object = element.object;
                 if(game.lastClicked == undefined){
@@ -1436,10 +1437,10 @@ class ClickHandler {
                     hovering = true;
                     console.log(object);
                     hoveredCube = object;
-                    return;
+                    complete = true;
                 }
             });
-            if(game.lastClicked == "spirit"){
+            if(complete == true){
                 return;
             }
             intersects.forEach(element => {
