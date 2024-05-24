@@ -323,7 +323,7 @@ internal class Game : IGame
         return list;
     }
 
-    public void MovePawn(Guid playerId, Guid pawnId, string moveCardName, ICoordinate to)
+    public void MovePawn(Guid playerId, Guid pawnId, string moveCardName, ICoordinate to, string type = "default")
     {
         IPlayer player = null;
         IPawn pawn = null;
@@ -476,11 +476,13 @@ internal class Game : IGame
 
 
         }
-
-        player.MoveCards.Remove(moveCard);
-        player.MoveCards.Add(ExtraMoveCard);
-        ExtraMoveCard = moveCard;
-        PlayerToPlayId = this.GetNextOpponent(playerId).Id;
+        if(type == "default")
+        {
+            player.MoveCards.Remove(moveCard);
+            player.MoveCards.Add(ExtraMoveCard);
+            ExtraMoveCard = moveCard;
+            PlayerToPlayId = this.GetNextOpponent(playerId).Id;
+        }
         checkValidMoves();
     }
 

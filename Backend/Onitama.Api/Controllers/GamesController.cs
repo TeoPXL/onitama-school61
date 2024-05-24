@@ -105,6 +105,21 @@ namespace Onitama.Api.Controllers
             return Ok();
         }
 
+        [HttpPost("{id}/move-pawn-wotw")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> MovePawnWotw(Guid id, [FromBody] MovePawnModelWotw inputModel)
+        {
+            ICoordinate to = _coordinateFactory.Create(inputModel.To.Row, inputModel.To.Column);
+            ICoordinate spiritTo = _coordinateFactory.Create(inputModel.SpiritTo.Row, inputModel.SpiritTo.Column);
+            _gameService.MovePawn(id, UserId, inputModel.PawnId, inputModel.MoveCardName, to, "wotw");
+            await Task.Delay(1000);
+            _gameService.MovePawn(id, UserId, inputModel.SpiritId, inputModel.MoveCardName, spiritTo, "default");
+
+            return Ok();
+        }
+
         /// <summary>
         /// Moves a pawn for the player associated with the authenticated user.
         /// </summary>
