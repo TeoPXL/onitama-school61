@@ -27,6 +27,16 @@ window.allCubes = allCubes;
 let tableFetchInterval;
 let getGameInterval;
 
+async function fetchSpiritMoves() {
+    try {
+        const response = await fetch('../files/cardSets/way-of-the-wind.json');
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error('Error fetching JSON:', error);
+    }
+}
+
 class Game {
     scene;
     raycaster;
@@ -44,6 +54,9 @@ class Game {
     playerToPlay;
     playerCards;
     selectedCard;
+    selectedMove;
+    selectedMoveSpirit;
+    spiritMoves;
     currentPlayerObject;
     gameType;
     oldElo = user.elo;
@@ -452,6 +465,42 @@ class Game {
         });
     }
 
+    movePawnSpirit(){
+        const action = "/move-pawn-wotw";
+        const pawnId = game.selectedMove[0];
+        const cardName = game.selectedMove[1];
+        const x = game.selectedMove[2][0];
+        const y = game.selectedMove[2][1];
+        const spiritId = game.selectedMoveSpirit[0];
+        const xSpirit = game.selectedMoveSpirit[2][0];
+        const ySpirit = game.selectedMoveSpirit[2][1];
+
+        const response = fetch(currentApi + "/api/games/" + game.id + action, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }, 
+            body: JSON.stringify({ pawnId: pawnId, moveCardName: cardName, to: {row: x, column: y}, SpiritId: spiritId, spiritTo: {row: xSpirit, column: ySpirit} })
+        }).then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw_floating_error(errorData.message, '405', "#c60025");
+                });
+            }
+            //return response.json();
+        }).then(data => {
+            console.log(data);
+            //Clear the moves
+            game.selectedMove = undefined;
+            game.selectedMoveSpirit = undefined;
+        }).catch(error => {
+            console.log(error);
+            //throw_floating_error(error, '500', "#c60025");
+        });
+    }
+
     loadSpirit(){
         let team;
         if(game.currentPlayer == 1){
@@ -685,6 +734,10 @@ class Board {
 
 var game = new Game(2);
 window.game = game;
+
+(async () => {
+    game.spiritMoves = await fetchSpiritMoves();
+})();
 
 const loadingDivElement = document.createElement('div');
 loadingDivElement.className = 'loading';
@@ -1012,7 +1065,7 @@ async function getGame(){
                         }
                     }
                     if(altGrid.length > 0){
-                        console.log(altGrid);
+                        //console.log(altGrid);
                         document.querySelectorAll('.enemy-card-blocks-alt')[i].classList.remove('player-card-blocks-hidden');
                         for (let j = 0; j < altGrid.length; j++) {
                             for (let k = 0; k < altGrid[j].length; k++) {
@@ -1066,7 +1119,7 @@ async function getGame(){
 
                     if(altGrid.length > 0){
                         document.querySelectorAll('.player-card-blocks-alt')[i].classList.remove('player-card-blocks-hidden');
-                        console.log(altGrid);
+                        //console.log(altGrid);
                         for (let j = 0; j < altGrid.length; j++) {
                             for (let k = 0; k < altGrid[j].length; k++) {
                                 let block = playerAltCardElements[i * 25 + count2];
@@ -1446,8 +1499,8 @@ class ClickHandler {
                 }
                 //console.log(game.lastClicked);
                 if(object.onitamaType == "selectable" && object.name.includes("selectable")){
-                    console.log("We're returning: ")
-                    console.log(object);
+                    //console.log("We're returning: ")
+                    //console.log(object);
                     document.body.style.cursor = 'pointer';
                     if(game.playerToPlay != user.warriorName){
                         return;
@@ -1455,7 +1508,7 @@ class ClickHandler {
                     object.material.opacity = 0.8;
                     cubes++;
                     hovering = true;
-                    console.log(object);
+                    //console.log(object);
                     hoveredCube = object;
                     complete = true;
                 }
@@ -1473,7 +1526,7 @@ class ClickHandler {
                     object.material.opacity = 0.8;
                     cubes++;
                     hovering = true;
-                    console.log(object);
+                    //console.log(object);
                     hoveredCube = object;
                 }
             });
@@ -1569,6 +1622,44 @@ async function onClick(){
             if(pawn.id == undefined){
                 pawnId = pawn.Id;
             }
+            //First check if the card is a Spririt Card
+            //If it is, check if the first move has been selected. If not, check if pawn is spirit. If so, let the user know to pick a normal pawn
+            const isCardSpirit = game.spiritMoves.some(obj => {
+                    return obj.Name.includes(cardName);
+            });
+            if(isCardSpirit){
+                //The card is a spirit card. Check if first move has been selected
+                if(game.selectedMove == undefined){
+                    //The first move has not been selected. That means the pawn should be a regular pawn
+                    if(pawn.Type == 2){
+                        //The pawn is a Spirit. Do nothing (Let the  user know to pick a normal pawn)
+                        console.log("You must select a regular pawn first");
+                        throw_floating_error("Your must select a regular pawn/move first", "", "");
+                        return;
+                    }
+                    //The pawn is not a spirit. Continue
+                    game.selectedMove = [pawnId, cardName, selectionCoords];
+                    console.log("Selecting move: ", game.selectedMove);
+                    console.log(pawn);
+                    return;
+                } else {
+                    //The first move has already been selected. Now time for the spirit move
+                    if(pawn.Type != 2){
+                        //The pawn is a Spirit. Do nothing (Let the  user know to pick a normal pawn)
+                        console.log("You must select a Spirit pawn now");
+                        throw_floating_error("You must select a Spirit pawn/move now", "", "");
+                        return;
+                    }
+                    game.selectedMoveSpirit = [pawnId, cardName, selectionCoords];
+                    //Do a special movePawn method here that does the 2 moves
+                    console.log("Doing move: ", game.selectedMoveSpirit);
+                    game.movePawnSpirit();
+                    return;
+                }
+            }
+            //A normal move was selected. Void
+            game.selectedMove = undefined;
+            game.selectedMoveSpirit = undefined;
             game.movePawn(pawnId, cardName, selectionCoords);
             return;
         }
