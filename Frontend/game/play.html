@@ -204,7 +204,7 @@
 
     <script>
         document.querySelector('.game-button-start').addEventListener('click', async () => {
-            const response = await fetch(currentApi + "/api/Tables/" + game.tableId + "/start-game", {
+            const response = await fetch(currentApi + "/api/Tables/" + game.tableId + "/start-game-ai", {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',

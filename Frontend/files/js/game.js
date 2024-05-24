@@ -440,7 +440,7 @@ class Game {
         if(game.gameType == "competitive"){
             action = "/move-pawn-competitive";
         } else {
-            action = "/move-pawn";
+            action = "/move-pawn-ai";
         }
         const response = fetch(currentApi + "/api/games/" + game.id + action, {
             method: 'POST',
