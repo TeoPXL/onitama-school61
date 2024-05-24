@@ -148,9 +148,11 @@ namespace Onitama.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
-        public IActionResult SkipMovement(Guid id, [FromBody] SkipMovementModel inputModel)
+        public async Task<IActionResult> SkipMovement(Guid id, [FromBody] SkipMovementModel inputModel)
         {
             _gameService.SkipMovementAndExchangeCard(id, UserId, inputModel.MoveCardName);
+            await Task.Delay(2000);
+            _gameService.MakeAIMove(id);
             return Ok();
         }
     }
