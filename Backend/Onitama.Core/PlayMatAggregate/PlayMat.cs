@@ -119,7 +119,13 @@ namespace Onitama.Core.PlayMatAggregate
                         var item = _grid[j, k];
                         if(item is IPawn)
                         {
-                            if (item.Position.Row == y && item.Position.Column == x && item.OwnerId == pawn.OwnerId)
+                            //Not available if pawn is spirit and item is master. Spirit cannot swap with masters
+                            if (item.Position.Row == y && item.Position.Column == x && pawn.Type == PawnType.Spirit && item.Type == PawnType.Master)
+                            {
+                                isAvailable = false;
+                            }
+                            //Not available if resulting pawn is your own, or if it is a spirit
+                            if (item.Position.Row == y && item.Position.Column == x && (item.OwnerId == pawn.OwnerId || item.Type == PawnType.Spirit))
                             {
                                 isAvailable = false;
                             }

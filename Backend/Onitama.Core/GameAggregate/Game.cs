@@ -407,7 +407,7 @@ internal class Game : IGame
 
         IPawn capturedPawn;
         IList<ICoordinate> coordinates = new List<ICoordinate>();
-        var previousPosition = new Coordinate(pawn.Position.Column, pawn.Position.Row);
+        var previousPosition = new Coordinate(pawn.Position.Row, pawn.Position.Column);
         PlayMat.ExecuteMove(move, out capturedPawn);
         bool wayOfStream = false;
 
