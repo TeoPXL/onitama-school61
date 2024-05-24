@@ -833,7 +833,7 @@ async function fetchTable(){
                             throw_floating_message(name + ' has left the table.', 'Notice!');
                             setTimeout(() => {
                                 floatingError.classList.add('floating-error-hidden');
-                            }, 2000);
+                            }, 1250);
                         }
                     }
                 } else {
@@ -845,7 +845,7 @@ async function fetchTable(){
                             throw_floating_message(name + ' has joined the table!', 'Notice!');
                             setTimeout(() => {
                                 floatingError.classList.add('floating-error-hidden');
-                            }, 2000);
+                            }, 1250);
                         }
                     }
                 }
