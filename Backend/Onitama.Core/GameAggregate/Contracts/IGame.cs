@@ -75,7 +75,8 @@ namespace Onitama.Core.GameAggregate.Contracts
         /// <param name="pawnId">Unique identifier of the pawn</param>
         /// <param name="moveCardName">Name of the move card (e.g. "Mantis")</param>
         /// <param name="to">Target coordinate on the play mat</param>
-        void MovePawn(Guid playerId, Guid pawnId, string moveCardName, ICoordinate to, string type = "default");
+        void MovePawn(Guid playerId, Guid pawnId, string moveCardName, ICoordinate to);
+        void MovePawnAi(Guid playerId, Guid pawnId, string moveCardName, ICoordinate to, string type = "default");
 
         /// <summary>
         /// When a player cannot move any of his pawns, he can skip his movement,

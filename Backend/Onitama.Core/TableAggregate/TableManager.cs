@@ -122,9 +122,25 @@ internal class TableManager : ITableManager
             throw new InvalidOperationException("Only the owner can start the game at this table.");
         }
         var game = _gameFactory.CreateNewForTable(table);
-        foreach(var oldGame in _gameRepository.GetAll())
+        _gameRepository.Add(game);
+        table.GameId = game.Id;
+        return game;
+    }
+    public IGame StartGameForTableAi(Guid tableId, User user)
+    {
+        var table = _tableRepository.Get(tableId);
+        if (table.HasAvailableSeat)
         {
-            foreach(var player in oldGame.Players)
+            throw new InvalidOperationException("There are not enough players at this table to start the game.");
+        }
+        if (user.Id != table.OwnerPlayerId)
+        {
+            throw new InvalidOperationException("Only the owner can start the game at this table.");
+        }
+        var game = _gameFactory.CreateNewForTable(table);
+        foreach (var oldGame in _gameRepository.GetAll())
+        {
+            foreach (var player in oldGame.Players)
             {
                 if (player.Id == user.Id)
                 {

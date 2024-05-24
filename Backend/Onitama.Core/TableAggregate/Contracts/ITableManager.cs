@@ -51,5 +51,6 @@ namespace Onitama.Core.TableAggregate.Contracts
         /// Starts a game for a table.
         /// </summary>
         IGame StartGameForTable(Guid tableId, User user);
+        IGame StartGameForTableAi(Guid tableId, User user);
     }
 }

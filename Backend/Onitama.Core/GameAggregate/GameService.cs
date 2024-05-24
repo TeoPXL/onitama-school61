@@ -27,9 +27,14 @@ internal class GameService : IGameService
         return _gameRepository.GetById(gameId).GetPossibleMovesForPawn(playerId, pawnId, moveCardName);
     }
 
-    public void MovePawn(Guid gameId, Guid playerId, Guid pawnId, string moveCardName, ICoordinate to, string type = "default")
+    public void MovePawn(Guid gameId, Guid playerId, Guid pawnId, string moveCardName, ICoordinate to)
     {
-        _gameRepository.GetById(gameId).MovePawn(playerId, pawnId, moveCardName, to, type);
+        _gameRepository.GetById(gameId).MovePawn(playerId, pawnId, moveCardName, to);
+    }
+
+    public void MovePawnAi(Guid gameId, Guid playerId, Guid pawnId, string moveCardName, ICoordinate to, string type = "default")
+    {
+        _gameRepository.GetById(gameId).MovePawnAi(playerId, pawnId, moveCardName, to, type);
     }
 
     public List<IGame> GetAllGames()

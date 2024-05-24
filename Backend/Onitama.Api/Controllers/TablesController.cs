@@ -228,4 +228,17 @@ public class TablesController : ApiControllerBase
         TableModel alteredTableModel = _mapper.Map<TableModel>(_tableRepository.Get(id));
         return Ok(alteredTableModel);
     }
+
+    [HttpPost("{id}/start-game-ai")]
+    [ProducesResponseType(typeof(TableModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> StartGameAi(Guid id)
+    {
+        User currentUser = (await _userManager.GetUserAsync(User))!;
+
+        _tableManager.StartGameForTableAi(id, currentUser);
+        TableModel alteredTableModel = _mapper.Map<TableModel>(_tableRepository.Get(id));
+        return Ok(alteredTableModel);
+    }
 }

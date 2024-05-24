@@ -10,7 +10,8 @@ public interface IGameService
     IGame GetGame(Guid gameId);
 
     IReadOnlyList<IMove> GetPossibleMovesForPawn(Guid gameId, Guid playerId, Guid pawnId, string moveCardName);
-    void MovePawn(Guid gameId, Guid playerId, Guid pawnId, string moveCardName, ICoordinate to, string type = "default");
+    void MovePawn(Guid gameId, Guid playerId, Guid pawnId, string moveCardName, ICoordinate to);
+    void MovePawnAi(Guid gameId, Guid playerId, Guid pawnId, string moveCardName, ICoordinate to, string type = "default");
     List<IGame> GetAllGames();
     void SkipMovementAndExchangeCard(Guid gameId, Guid playerId, string moveCardName);
 

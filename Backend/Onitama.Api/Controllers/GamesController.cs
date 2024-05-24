@@ -95,10 +95,22 @@ namespace Onitama.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> MovePawn(Guid id, [FromBody] MovePawnModel inputModel)
+        public IActionResult MovePawn(Guid id, [FromBody] MovePawnModel inputModel)
         {
             ICoordinate to = _coordinateFactory.Create(inputModel.To.Row, inputModel.To.Column);
             _gameService.MovePawn(id, UserId, inputModel.PawnId, inputModel.MoveCardName, to);
+
+            return Ok();
+        }
+
+        [HttpPost("{id}/move-pawn-ai")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> MovePawnAi(Guid id, [FromBody] MovePawnModel inputModel)
+        {
+            ICoordinate to = _coordinateFactory.Create(inputModel.To.Row, inputModel.To.Column);
+            _gameService.MovePawnAi(id, UserId, inputModel.PawnId, inputModel.MoveCardName, to);
             await Task.Delay(2000);
             _gameService.MakeAIMove(id);
 
@@ -113,9 +125,9 @@ namespace Onitama.Api.Controllers
         {
             ICoordinate to = _coordinateFactory.Create(inputModel.To.Row, inputModel.To.Column);
             ICoordinate spiritTo = _coordinateFactory.Create(inputModel.SpiritTo.Row, inputModel.SpiritTo.Column);
-            _gameService.MovePawn(id, UserId, inputModel.PawnId, inputModel.MoveCardName, to, "wotw");
+            _gameService.MovePawnAi(id, UserId, inputModel.PawnId, inputModel.MoveCardName, to, "wotw");
             await Task.Delay(1000);
-            _gameService.MovePawn(id, UserId, inputModel.SpiritId, inputModel.MoveCardName, spiritTo, "default");
+            _gameService.MovePawnAi(id, UserId, inputModel.SpiritId, inputModel.MoveCardName, spiritTo, "default");
 
             return Ok();
         }
@@ -135,7 +147,7 @@ namespace Onitama.Api.Controllers
         {
             var dbContext = serviceProvider.GetRequiredService<OnitamaDbContext>();
             ICoordinate to = _coordinateFactory.Create(inputModel.To.Row, inputModel.To.Column);
-            _gameService.MovePawn(id, UserId, inputModel.PawnId, inputModel.MoveCardName, to);
+            _gameService.MovePawnAi(id, UserId, inputModel.PawnId, inputModel.MoveCardName, to);
             var game = _gameService.GetGame(id);
             var players = game.Players;
             if(game.WinnerPlayerId != Guid.Empty)
@@ -163,7 +175,17 @@ namespace Onitama.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> SkipMovement(Guid id, [FromBody] SkipMovementModel inputModel)
+        public IActionResult SkipMovement(Guid id, [FromBody] SkipMovementModel inputModel)
+        {
+            _gameService.SkipMovementAndExchangeCard(id, UserId, inputModel.MoveCardName);
+            return Ok();
+        }
+
+        [HttpPost("{id}/skip-movement-ai")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> SkipMovementAi(Guid id, [FromBody] SkipMovementModel inputModel)
         {
             _gameService.SkipMovementAndExchangeCard(id, UserId, inputModel.MoveCardName);
             await Task.Delay(2000);

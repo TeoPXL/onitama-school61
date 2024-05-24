@@ -323,8 +323,9 @@ internal class Game : IGame
         return list;
     }
 
-    public void MovePawn(Guid playerId, Guid pawnId, string moveCardName, ICoordinate to, string type = "default")
+    public void MovePawn(Guid playerId, Guid pawnId, string moveCardName, ICoordinate to)
     {
+        string type = "default";
         IPlayer player = null;
         IPawn pawn = null;
         IMoveCard moveCard = null;
@@ -407,7 +408,6 @@ internal class Game : IGame
 
         IPawn capturedPawn;
         IList<ICoordinate> coordinates = new List<ICoordinate>();
-        var previousPosition = new Coordinate(pawn.Position.Row, pawn.Position.Column);
         PlayMat.ExecuteMove(move, out capturedPawn);
         bool wayOfStream = false;
 
@@ -466,7 +466,173 @@ internal class Game : IGame
                         PlayMat.RemovePawn(capturedPawn);
                     }
                 }
-            } else if(pawn.Type == PawnType.Spirit)
+            }
+
+
+
+        }
+        if(type == "default")
+        {
+            player.MoveCards.Remove(moveCard);
+            player.MoveCards.Add(ExtraMoveCard);
+            ExtraMoveCard = moveCard;
+            PlayerToPlayId = this.GetNextOpponent(playerId).Id;
+        }
+        checkValidMoves();
+    }
+    public void MovePawnAi(Guid playerId, Guid pawnId, string moveCardName, ICoordinate to, string type = "default")
+    {
+        IPlayer player = null;
+        IPawn pawn = null;
+        IMoveCard moveCard = null;
+        if (PlayerToPlayId != playerId)
+        {
+            throw new ApplicationException($"It is not this player's turn yet. {playerId} tried to play instead of {PlayerToPlayId}");
+        }
+
+        for (int i = 0; i < Players.Length; i++)
+        {
+            if (Players[i].Id == playerId)
+            {
+                player = Players[i];
+            }
+        }
+
+        if (player == null)
+        {
+            throw new InvalidOperationException("There is no player with that ID");
+        }
+
+        for (int i = 0; i < player.School.AllPawns.Length; i++)
+        {
+            if (player.School.AllPawns[i] != null && player.School.AllPawns[i].Id == pawnId)
+            {
+                pawn = player.School.AllPawns[i];
+            }
+        }
+        if (_gameType == "wotw")
+        {
+            if (_playMat.Grid[2, 2].Id == pawnId)
+            {
+                pawn = _playMat.Grid[2, 2];
+            }
+        }
+
+        if (pawn == null)
+        {
+            throw new InvalidOperationException("There is no pawn with that ID");
+        }
+
+        for (int i = 0; i < player.MoveCards.Count; i++)
+        {
+            if (player.MoveCards[i].Name == moveCardName)
+            {
+                moveCard = player.MoveCards[i];
+            }
+        }
+
+        if (moveCard == null)
+        {
+            throw new InvalidOperationException("There is no moveCard with that name for this player");
+        }
+
+        var move = new Move(moveCard, pawn, player.Direction, to);
+
+        if (move == null)
+        {
+            throw new InvalidOperationException("Move is null");
+        }
+
+        var possibleMoves = PlayMat.GetValidMoves(pawn, moveCard, player.Direction);
+        bool moveExists = false;
+        if (possibleMoves != null)
+        {
+            for (int i = 0; i < possibleMoves.Count; i++)
+            {
+                if (possibleMoves[i].Equals(move))
+                {
+                    moveExists = true;
+                }
+            }
+            if (moveExists == false)
+            {
+                throw new InvalidOperationException("The move is invalid");
+            }
+        }
+
+
+
+        IPawn capturedPawn;
+        IList<ICoordinate> coordinates = new List<ICoordinate>();
+        ICoordinate previousPosition;
+        if(pawn.Type == PawnType.Spirit)
+        {
+            previousPosition = new Coordinate(pawn.Position.Row, pawn.Position.Column);
+        } else
+        {
+            previousPosition = null;
+        }
+        PlayMat.ExecuteMove(move, out capturedPawn);
+        bool wayOfStream = false;
+
+        for (int i = 0; i < Players.Length; i++)
+        {
+            if (Players[i].School.TempleArchPosition.Row == move.To.Row && Players[i].School.TempleArchPosition.Column == move.To.Column && Players[i].Id != playerId && pawn.Type != PawnType.Spirit)
+            {
+                wayOfStream = true;
+            }
+        }
+
+        if (wayOfStream == true) //There might be an issue here
+        {
+            //Won by way of the wind, but for some reason we need to say "stream"... This inconsistency is very confusing
+            WinnerPlayerId = playerId;
+            WinnerMethod = "Way of the stream";
+            calculateElo();
+            player.MoveCards.Remove(moveCard);
+            player.MoveCards.Add(ExtraMoveCard);
+            ExtraMoveCard = moveCard;
+            PlayerToPlayId = this.GetNextOpponent(playerId).Id;
+            return;
+
+        }
+        else if (capturedPawn != null)
+        {
+            if (capturedPawn.Type == PawnType.Master && pawn.Type != PawnType.Spirit)
+            {
+                //Also kill the master!
+                var capturedPlayerId = capturedPawn.OwnerId;
+                for (int i = 0; i < _players.Length; i++)
+                {
+                    if (_players[i].Id == capturedPlayerId)
+                    {
+                        _players[i].School.RemovePawn(capturedPawn);
+                        PlayMat.RemovePawn(capturedPawn);
+                    }
+                }
+                WinnerPlayerId = playerId;
+                WinnerMethod = "Way of the stone";
+                calculateElo();
+                player.MoveCards.Remove(moveCard);
+                player.MoveCards.Add(ExtraMoveCard);
+                ExtraMoveCard = moveCard;
+                PlayerToPlayId = this.GetNextOpponent(playerId).Id;
+                return;
+            }
+            else if (capturedPawn.Type == PawnType.Student && pawn.Type != PawnType.Spirit)
+            {
+                //Remove pawn
+                var capturedPlayerId = capturedPawn.OwnerId;
+                for (int i = 0; i < _players.Length; i++)
+                {
+                    if (_players[i].Id == capturedPlayerId)
+                    {
+                        _players[i].School.RemovePawn(capturedPawn);
+                        PlayMat.RemovePawn(capturedPawn);
+                    }
+                }
+            }
+            else if (pawn.Type == PawnType.Spirit)
             {
                 //The spirit made the move, so the pawns must switch positions.
                 //The spirit is already at the move.To position, now the capturedPawn must go to the Spirit's previous position
@@ -476,7 +642,7 @@ internal class Game : IGame
 
 
         }
-        if(type == "default")
+        if (type == "default")
         {
             player.MoveCards.Remove(moveCard);
             player.MoveCards.Add(ExtraMoveCard);
