@@ -203,28 +203,33 @@
         transform: translateX(100%);
     }
 }
-.settings {
+.extra-buttons {
+    display: flex;
+    flex-flow: column;
+    gap: 10px;
+    margin-bottom: 50px;
+}
+.settings, .lobby {
     background: var(--color-background-fade);
     border-radius: 1em;
     padding: 10px;
-    margin-bottom: 50px;
     max-width: 350px;
 }
-.settings-top {
+.settings-top, .lobby-top {
     font-size: 125%;
     font-weight: 500;
     display: flex;
     align-items: center;
 }
-.settings-bottom {
+.settings-bottom, .lobby-bottom {
     display: flex;
     align-items: end;
     justify-content: space-between;
 }
-.settings-subtitle {
+.settings-subtitle, .lobby-subtitle {
     margin-right: 10px;
 }
-.settings-button {
+.settings-button, .lobby-button {
     white-space: nowrap;
     background: var(--color-main);
     padding: 3px;
@@ -235,7 +240,7 @@
     cursor: pointer;
     transition: 0.2s;
 }
-.settings-button:hover {
+.settings-button:hover, .lobby-button:hover {
     filter: brightness(0.5);
 }
 @media screen and (min-width: 900px) {
@@ -266,7 +271,21 @@
         border-radius: 1em;
     }
 }
-
+@media screen and (min-width: 1250px) {
+    .extra-buttons {
+        flex-flow: row;
+    }
+    .lobby {
+        width: 40%;
+    }
+    .lobby-bottom {
+        flex-flow: column;
+        align-items: start;
+    }
+    .lobby-button {
+        margin-left: auto;
+    }
+}
 @media screen and (min-width: 1250px) {
 
     .gamelist, .gamelist-comp,
@@ -274,7 +293,7 @@
     .main-content {
         gap: 20px;
     }
-
+    
     .gamelist, .gamelist-comp {
         margin-bottom: 20px;
     }
