@@ -14,7 +14,7 @@ const userSettings = {
     "suppress-api-errors": localStorage.getItem('suppress-api-errors'),
     "suppress-all-errors": localStorage.getItem('suppress-all-errors'),
     "toggle-aqua": localStorage.getItem('toggle-aqua'),
-    "toggle-metal": localStorage.getItem('toggle-metal'),
+    "toggle-moon": localStorage.getItem('toggle-moon'),
     "toggle-sahara": localStorage.getItem('toggle-sahara'),
 };
 
