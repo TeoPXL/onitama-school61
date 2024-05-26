@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +25,11 @@ public static class ServiceCollectionExtensions
     services.AddDbContext<OnitamaDbContext>(options =>
     {
         string connectionString = configuration.GetConnectionString("OnitamaDbConnection")!;
+        if(Environment.GetEnvironmentVariable("WEBSITE_HOSTNAME")?.EndsWith(".azurewebsites.net")){
+            //App is running on Azure. Use PostgreSQL. This is a dirty hack and should be removed. 
+            //Only using it until I can talk to the team
+            connectionString = "User Id=postgres.fsilroyzlzftcupigwfq;Password=UU0PllDUtDD1LAz0;Server=aws-0-eu-central-1.pooler.supabase.com;Port=5432;Database=postgres;";
+        }
         
         if (IsPostgresConnectionString(connectionString))
         {
@@ -60,7 +66,7 @@ public static class ServiceCollectionExtensions
 
 private static bool IsPostgresConnectionString(string connectionString)
 {
-    return connectionString.Contains("Host=", StringComparison.OrdinalIgnoreCase);
+    return connectionString.Contains("Server=", StringComparison.OrdinalIgnoreCase);
 }
 
     public static void AddCore(this IServiceCollection services, IConfiguration configuration)
