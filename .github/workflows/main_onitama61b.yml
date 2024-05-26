@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    if: false
+    #if: false
     
     runs-on: windows-latest
 
@@ -32,7 +32,7 @@ jobs:
       - name: dotnet publish
         run: |
           cd .\backend
-          dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+          dotnet publish Onitama.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -41,7 +41,7 @@ jobs:
           path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
-    if: false
+    #if: false
     runs-on: windows-latest
     needs: build
     environment:
