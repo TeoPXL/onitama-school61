@@ -20,35 +20,48 @@ namespace Onitama.Bootstrapper;
 public static class ServiceCollectionExtensions
 {
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+{
+    services.AddDbContext<OnitamaDbContext>(options =>
     {
-        services.AddDbContext<OnitamaDbContext>(options =>
+        string connectionString = configuration.GetConnectionString("OnitamaDbConnection")!;
+        
+        if (IsPostgresConnectionString(connectionString))
         {
-            string connectionString = configuration.GetConnectionString("OnitamaDbConnection")!;
+            options.UseNpgsql(connectionString).EnableSensitiveDataLogging();
+        }
+        else
+        {
             options.UseSqlServer(connectionString).EnableSensitiveDataLogging();
-        });
+        }
+    });
 
-        services.AddIdentity<User, IdentityRole<Guid>>(options =>
-            {
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
-                options.Lockout.MaxFailedAccessAttempts = 8;
-                options.Lockout.AllowedForNewUsers = true;
+    services.AddIdentity<User, IdentityRole<Guid>>(options =>
+    {
+        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+        options.Lockout.MaxFailedAccessAttempts = 8;
+        options.Lockout.AllowedForNewUsers = true;
 
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireDigit = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequiredLength = 5;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireDigit = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequiredLength = 5;
 
-                options.SignIn.RequireConfirmedEmail = false;
-                options.SignIn.RequireConfirmedPhoneNumber = false;
-            })
-            .AddEntityFrameworkStores<OnitamaDbContext>()
-            .AddDefaultTokenProviders();
+        options.SignIn.RequireConfirmedEmail = false;
+        options.SignIn.RequireConfirmedPhoneNumber = false;
+    })
+    .AddEntityFrameworkStores<OnitamaDbContext>()
+    .AddDefaultTokenProviders();
 
-        services.AddSingleton<ITableRepository, InMemoryTableRepository>();
-        services.AddSingleton<IGameRepository, InMemoryGameRepository>();
-        services.AddScoped<IMoveCardRepository, MoveCardFileRepository>();
-    }
+    services.AddSingleton<ITableRepository, InMemoryTableRepository>();
+    services.AddSingleton<IGameRepository, InMemoryGameRepository>();
+    services.AddScoped<IMoveCardRepository, MoveCardFileRepository>();
+}
+
+private static bool IsPostgresConnectionString(string connectionString)
+{
+    return connectionString.Contains("Host=", StringComparison.OrdinalIgnoreCase);
+}
 
     public static void AddCore(this IServiceCollection services, IConfiguration configuration)
     {
