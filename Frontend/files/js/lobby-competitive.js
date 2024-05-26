@@ -161,7 +161,7 @@ classicButton.addEventListener('click', () => {
         console.log(data);
         localStorage.setItem("tableId", data.id);
         setTimeout(() => {
-            window.location.href = "../../game/play.html";
+            window.location.href = "../../game/play.html";  
         }, 250);
     }).catch(error => {
         console.log(error);
@@ -190,7 +190,7 @@ tableButtons.forEach(element => element.addEventListener('click', () => {
     }).then(data => {
         console.log(data);
         setTimeout(() => {
-            window.location.href = "game/play.html";
+            window.location.href = "../../game/play.html";
         }, 250);
     }).catch(error => {
         console.log(error);
@@ -240,6 +240,6 @@ document.querySelector('.button-join').addEventListener('click', () => {
     setTimeout(() => {
         document.querySelector('.floating-message').classList.add('floating-message-hidden');
         document.querySelector('.main').classList.remove('no-pointer');
-        window.location.href = "game/classic.html";
+        window.location.href = "../../game/play.html";
     }, 250);
 });

@@ -520,7 +520,7 @@ document.querySelector('.custom-create-button').addEventListener('click', () => 
             return;
         }
         setTimeout(() => {
-            window.location.href = "../game/play.html";
+            window.location.href = "../../game/play.html";
         }, 250);
     }).catch(error => {
         console.log(error);
