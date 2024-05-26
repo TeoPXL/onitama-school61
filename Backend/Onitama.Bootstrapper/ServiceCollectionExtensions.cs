@@ -21,53 +21,53 @@ namespace Onitama.Bootstrapper;
 public static class ServiceCollectionExtensions
 {
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
-{
-    services.AddDbContext<OnitamaDbContext>(options =>
     {
-        string connectionString = configuration.GetConnectionString("OnitamaDbConnection")!;
-        if(Environment.GetEnvironmentVariable("WEBSITE_HOSTNAME").EndsWith(".azurewebsites.net")){
-            //App is running on Azure. Use PostgreSQL. This is a dirty hack and should be removed. 
-            //Only using it until I can talk to the team
-            connectionString = "User Id=postgres.fsilroyzlzftcupigwfq;Password=UU0PllDUtDD1LAz0;Server=aws-0-eu-central-1.pooler.supabase.com;Port=5432;Database=postgres;";
-        }
-        
-        if (IsPostgresConnectionString(connectionString))
+        services.AddDbContext<OnitamaDbContext>(options =>
         {
-            options.UseNpgsql(connectionString).EnableSensitiveDataLogging();
-        }
-        else
-        {
-            options.UseSqlServer(connectionString).EnableSensitiveDataLogging();
-        }
-    });
+            string connectionString = configuration.GetConnectionString("OnitamaDbConnection")!;
+            if(Environment.GetEnvironmentVariable("WEBSITE_HOSTNAME").EndsWith(".azurewebsites.net")){
+                //App is running on Azure. Use PostgreSQL. This is a dirty hack and should be removed. 
+                //Only using it until I can talk to the team
+                connectionString = "User Id=postgres.fsilroyzlzftcupigwfq;Password=UU0PllDUtDD1LAz0;Server=aws-0-eu-central-1.pooler.supabase.com;Port=5432;Database=postgres;";
+            }
+            
+            if (IsPostgresConnectionString(connectionString))
+            {
+                options.UseNpgsql(connectionString).EnableSensitiveDataLogging();
+            }
+            else
+            {
+                options.UseSqlServer(connectionString).EnableSensitiveDataLogging();
+            }
+        });
 
-    services.AddIdentity<User, IdentityRole<Guid>>(options =>
+        services.AddIdentity<User, IdentityRole<Guid>>(options =>
+        {
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+            options.Lockout.MaxFailedAccessAttempts = 8;
+            options.Lockout.AllowedForNewUsers = true;
+
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireDigit = false;
+            options.Password.RequireUppercase = false;
+            options.Password.RequireLowercase = false;
+            options.Password.RequiredLength = 5;
+
+            options.SignIn.RequireConfirmedEmail = false;
+            options.SignIn.RequireConfirmedPhoneNumber = false;
+        })
+        .AddEntityFrameworkStores<OnitamaDbContext>()
+        .AddDefaultTokenProviders();
+
+        services.AddSingleton<ITableRepository, InMemoryTableRepository>();
+        services.AddSingleton<IGameRepository, InMemoryGameRepository>();
+        services.AddScoped<IMoveCardRepository, MoveCardFileRepository>();
+    }
+
+    private static bool IsPostgresConnectionString(string connectionString)
     {
-        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
-        options.Lockout.MaxFailedAccessAttempts = 8;
-        options.Lockout.AllowedForNewUsers = true;
-
-        options.Password.RequireNonAlphanumeric = false;
-        options.Password.RequireDigit = false;
-        options.Password.RequireUppercase = false;
-        options.Password.RequireLowercase = false;
-        options.Password.RequiredLength = 5;
-
-        options.SignIn.RequireConfirmedEmail = false;
-        options.SignIn.RequireConfirmedPhoneNumber = false;
-    })
-    .AddEntityFrameworkStores<OnitamaDbContext>()
-    .AddDefaultTokenProviders();
-
-    services.AddSingleton<ITableRepository, InMemoryTableRepository>();
-    services.AddSingleton<IGameRepository, InMemoryGameRepository>();
-    services.AddScoped<IMoveCardRepository, MoveCardFileRepository>();
-}
-
-private static bool IsPostgresConnectionString(string connectionString)
-{
-    return connectionString.Contains("Server=", StringComparison.OrdinalIgnoreCase);
-}
+        return connectionString.Contains("Server=", StringComparison.OrdinalIgnoreCase);
+    }
 
     public static void AddCore(this IServiceCollection services, IConfiguration configuration)
     {
