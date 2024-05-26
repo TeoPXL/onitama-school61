@@ -28,7 +28,7 @@ public static class ServiceCollectionExtensions
             if(Environment.GetEnvironmentVariable("WEBSITE_HOSTNAME").EndsWith(".azurewebsites.net")){
                 //App is running on Azure. Use PostgreSQL. This is a dirty hack and should be removed. 
                 //Only using it until I can talk to the team
-                connectionString = "User Id=postgres.fsilroyzlzftcupigwfq;Password=UU0PllDUtDD1LAz0;Server=aws-0-eu-central-1.pooler.supabase.com;Port=5432;Database=postgres;";
+                connectionString = "User Id=postgres;Password=UU0PllDUtDD1LAz0;Server=db.fsilroyzlzftcupigwfq.supabase.co;Port=5432;Database=postgres;";
             }
             
             if (IsPostgresConnectionString(connectionString))
