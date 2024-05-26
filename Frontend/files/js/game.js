@@ -38,29 +38,29 @@ async function fetchSpiritMoves() {
 }
 
 class Game {
-    scene;
-    raycaster;
+    scene; //The 3D scene for ThreeJS. All of our 3D models will go inside here
+    raycaster; //Used for mapping mouse click positions to 3D objects in the scene
     clock;
     mouse;
     camera;
-    renderer;
-    controls;
-    board;
-    id;
-    started = false;
-    loaded = false;
+    renderer; //WebGL renderer
+    controls; //Orbit Controls
+    board; //3D game board model
+    id; //Game ID
+    started = false; //Did the game start?
+    loaded = false; //Did the game load?
     tableId = localStorage.getItem('tableId');
-    currentPlayer;
-    playerToPlay;
-    playerCards;
-    selectedCard;
-    selectedMove;
-    selectedMoveSpirit;
-    spiritMoves;
-    currentPlayerObject;
-    gameType;
-    oldElo = user.elo;
-    lastClicked;
+    currentPlayer; //Integer value (1 or 2)
+    playerToPlay; //Whose turn it is
+    playerCards; //Cards of the current player
+    selectedCard; //Selected card name
+    selectedMove; //In case of WOTW, the "normal pawn" move selected
+    selectedMoveSpirit; //In case of WOTW, the "spirit" move selected
+    spiritMoves; //All the spirit moves loaded from a JSON
+    currentPlayerObject; //JS object with JSON data of the player
+    gameType; //Type of the game (classic, competitive, blitz, way of the wind, etc)
+    oldElo = user.elo; //The "Previous" ELO of the player. Used to check with updated value and compare
+    lastClicked; //The object which the user last clicked
 
     constructor(playercount){
         this.board = new Board(playercount + 3);
@@ -72,14 +72,13 @@ class Game {
         this.raycaster.params.Line.threshold = 0.1; 
         this.clock = new THREE.Clock();
         this.mouse = new THREE.Vector2();
-        //this.scene.fog = new THREE.Fog( 0xcccccc, 22, 32 );
         this.containerWidth = container.clientWidth;
         this.containerHeight = container.clientHeight;
         this.camera = new THREE.PerspectiveCamera(75, this.containerWidth / this.containerHeight, 0.1, 1000);
-        this.renderer = new THREE.WebGLRenderer({ antialias: true });
-        this.renderer.shadowMap.enabled = true;
-        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        const onWindowResize = () => {
+        this.renderer = new THREE.WebGLRenderer({ antialias: true }); //Uses antialiasing to make the game prettier
+        this.renderer.shadowMap.enabled = true; //Shadows!
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; //Soft shadows!
+        const onWindowResize = () => { //Fix aspect ratio when device screen resizes
             // Update container dimensions
             const containerWidth = container.clientWidth;
             const containerHeight = container.clientHeight;
@@ -100,7 +99,7 @@ class Game {
         this.renderer.setSize(this.containerWidth, this.containerHeight, false);
         this.boardAsset = "";
 
-        if(userSettings["toggle-moon"] === 'true'){
+        if(userSettings["toggle-moon"] === 'true'){ //Moon theme
             this.boardAsset = "assets/board-space.gltf";
             const loader = new THREE.CubeTextureLoader();
             const texture = loader.load([
@@ -115,7 +114,7 @@ class Game {
             this.ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
             this.sunColor = 0xB5ACE1; // A warm, yellowish-orange color (Like the sun)
             this.sunLight = new THREE.DirectionalLight(this.sunColor, 3);
-        } else if(userSettings["toggle-aqua"] === "true"){
+        } else if(userSettings["toggle-aqua"] === "true"){ //Aqua theme
             this.boardAsset = "assets/board-water.gltf";
             const loader = new THREE.CubeTextureLoader();
             const texture = loader.load([
@@ -130,7 +129,7 @@ class Game {
             this.ambientLight = new THREE.AmbientLight(0xffffff, 1.3);
             this.sunColor = 0xF7EACD; // More blueish (underwater)
             this.sunLight = new THREE.DirectionalLight(this.sunColor, 5);
-        } else if(userSettings["toggle-sahara"] === "true"){
+        } else if(userSettings["toggle-sahara"] === "true"){ //Sahara theme
             this.boardAsset = "assets/board-desert.gltf";
             const loader = new THREE.CubeTextureLoader();
             const texture = loader.load([
@@ -145,7 +144,7 @@ class Game {
             this.ambientLight = new THREE.AmbientLight(0xffffff, 1.3);
             this.sunColor = 0xFFDD9D; // Even warmer than the default (Desert feel)
             this.sunLight = new THREE.DirectionalLight(this.sunColor, 6);
-        } else {
+        } else { //Classic theme
             this.boardAsset = "assets/board.gltf";
             this.scene.background = new THREE.Color(0x87ceeb);
             this.ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
@@ -165,7 +164,7 @@ class Game {
         this.sunLight.shadow.camera.bottom = - 20;
         this.sunLight.shadow.camera.left = - 20;
         this.sunLight.shadow.camera.right = 20;
-        this.sunLight.shadow.bias = -0.005;
+        this.sunLight.shadow.bias = -0.005; //This fixes shadows looking weird
         this.sunLight.shadow.mapSize.width = 2048; // default
         this.sunLight.shadow.mapSize.height = 2048; // default
         this.sunLight.shadow.camera.near = 0.1; // default
@@ -200,7 +199,7 @@ class Game {
                 if (child.isMesh) {
                     child.castShadow = true;
                     child.receiveShadow = true;
-                    if(userSettings["toggle-aqua"] === "true"){
+                    if(userSettings["toggle-aqua"] === "true"){ //Aqua mode requires a special shader for caustics
                         const objectTexture = child.material.map;
                         const boundingBox = new THREE.Box3().setFromObject(child);
                         const size = new THREE.Vector3();
@@ -465,7 +464,7 @@ class Game {
         });
     }
 
-    movePawnSpirit(){
+    movePawnSpirit(){ //Does 2 pawn moves, in case the game is WOTW and the movecard is in the WOTW cardset
         const action = "/move-pawn-wotw";
         const pawnId = game.selectedMove[0];
         const cardName = game.selectedMove[1];
@@ -501,7 +500,7 @@ class Game {
         });
     }
 
-    loadSpirit(){
+    loadSpirit(){ //Load's the spirit (in case the game is WOTW)
         let team;
         if(game.currentPlayer == 1){
             team = game.team1;
@@ -563,7 +562,7 @@ class Game {
             });
     }
 
-    movePawn3D(change){
+    movePawn3D(change){ //The Visual change when a pawn moves
         let from = [change.from.row, 4 - change.from.column]; //Starting coordinates
         console.log(from);
         let to = [4 - change.to.column, change.to.row]; //Ending coordinates
@@ -603,6 +602,8 @@ class Game {
                             loopAction.play();
                         });
                         //After the attack, we can move the remaining space
+                        //Future dev (Teo) here: If we have time left, we can use attack animations here.
+                        //Otherwise they might stay unused.
                     }
                 }
                 
@@ -611,7 +612,7 @@ class Game {
 
     }
 
-    removePawn3D(change){
+    removePawn3D(change){ //Removing a pawn from the board (Miving them down).
         let from = [change.from.row, 4 - change.from.column]; //Starting coordinates
         console.log(from);
         let pawnId = change.object.Id;
@@ -629,17 +630,15 @@ class Game {
                         let mixer = el[3];
                         console.log(el[4]);
                         let action = mixer.clipAction(el[4].animations[0]);
-                        mixer.timeScale = 1.4; //Speed up the jump animation. It's a little slow
-                        action.setLoop(THREE.LoopOnce); //Only jump one time
+                        mixer.timeScale = 1.4;
+                        action.setLoop(THREE.LoopOnce);
                         action.clampWhenFinished = true;
                         action.setDuration(el[4].animations[0].duration);
                         action.play();
-                        //Maybe do it a bit short of the position if we need to attack
                         setTimeout(game.smoothTransition.bind(null, el[2], x, -3, z, 650), 420); //Transition to new position
                         // Listen for when the animation finishes
                         mixer.addEventListener('finished', function(){
-                            //If we need to do an attack, we should probably do it here.
-                            let loopAction = mixer.clipAction(el[4].animations[0]);
+                            let loopAction = mixer.clipAction(el[4].animations[0]); //Idle animation
                             // Set animation to loop
                             loopAction.setLoop(THREE.LoopRepeat);
                             // Start playing idle animation
@@ -656,7 +655,7 @@ class Game {
 
     }
 
-    smoothTransition(object, endX, endY, endZ, duration) {
+    smoothTransition(object, endX, endY, endZ, duration) { //Helps MovePawn3D in actually moving the pawns
         const startX = object.position.x;
         const startY = object.position.y;
         const startZ = object.position.z;
@@ -743,7 +742,7 @@ const loadingDivElement = document.createElement('div');
 loadingDivElement.className = 'loading';
 container.appendChild(loadingDivElement);
 
-function animate() {
+function animate() { //this function is called every frame by ThreeJS (by default)
     requestAnimationFrame(animate);
     if(game == undefined){
         return;
@@ -778,14 +777,14 @@ function animate() {
 }
 
 async function fetchTable(){
-    if(currentApi == ""){
+    if(currentApi == ""){ //Do nothing if the API has not been resolved yet
         return;
     }
     clearInterval(tableFetchInterval);
-    if(game.started == true){
+    if(game.started == true){ //Do nothing if the game has already started
         return;
     }
-    if(gameId != undefined && gameId != "null"){
+    if(gameId != undefined && gameId != "null"){ //"start" the game if the gameID exists and is set properly
         clearInterval(tableFetchInterval);
         game.id = gameId;
         console.log(game.id);
@@ -814,7 +813,7 @@ async function fetchTable(){
         const table = data;
         let usersThatLeft;
 
-        if(table.ownerPlayerId != user.id){
+        if(table.ownerPlayerId != user.id){ //Only show the "start game" button to the owner
             document.querySelector('.game-button-start').classList.add('game-button-hidden');
         } else {
             document.querySelector('.game-button-start').classList.remove('game-button-hidden');
