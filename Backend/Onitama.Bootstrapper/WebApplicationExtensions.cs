@@ -24,7 +24,7 @@ public static class WebApplicationExtensions
                     TimeSpan.FromSeconds(5),
                     TimeSpan.FromSeconds(8),
                 });
-            retry.Execute(() => context.Database.EnsureDeleted());
+            //retry.Execute(() => context.Database.EnsureDeleted());
             retry.Execute(() => context.Database.EnsureCreated());
 
             logger.LogInformation("Created database");
