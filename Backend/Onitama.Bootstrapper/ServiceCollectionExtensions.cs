@@ -25,12 +25,6 @@ public static class ServiceCollectionExtensions
         services.AddDbContext<OnitamaDbContext>(options =>
         {
             string connectionString = configuration.GetConnectionString("OnitamaDbConnection")!;
-            if(Environment.GetEnvironmentVariable("WEBSITE_HOSTNAME") != null){
-                if(Environment.GetEnvironmentVariable("WEBSITE_HOSTNAME").EndsWith(".azurewebsites.net")){
-                    //Only using it until I can talk to the team
-                    connectionString = "User Id=postgres.fsilroyzlzftcupigwfq;Password=UU0PllDUtDD1LAz0;Server=aws-0-eu-central-1.pooler.supabase.com;Port=5432;Database=postgres;";
-                }
-            }
             
             if (IsPostgresConnectionString(connectionString))
             {
