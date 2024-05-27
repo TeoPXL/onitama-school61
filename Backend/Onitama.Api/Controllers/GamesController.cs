@@ -126,8 +126,10 @@ namespace Onitama.Api.Controllers
             ICoordinate to = _coordinateFactory.Create(inputModel.To.Row, inputModel.To.Column);
             ICoordinate spiritTo = _coordinateFactory.Create(inputModel.SpiritTo.Row, inputModel.SpiritTo.Column);
             _gameService.MovePawnAi(id, UserId, inputModel.PawnId, inputModel.MoveCardName, to, "wotw");
-            await Task.Delay(1000);
-            _gameService.MovePawnAi(id, UserId, inputModel.SpiritId, inputModel.MoveCardName, spiritTo, "default");
+            if(_gameService.GetGame(id).WinnerPlayerId == Guid.Empty){
+                await Task.Delay(1000);
+                _gameService.MovePawnAi(id, UserId, inputModel.SpiritId, inputModel.MoveCardName, spiritTo, "default");
+            }
 
             return Ok();
         }
