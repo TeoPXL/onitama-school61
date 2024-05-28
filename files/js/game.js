@@ -281,6 +281,18 @@ class Game {
         animate();
     }
 
+    setCamera(){
+        if(this.currentPlayer == 1){
+            this.camera.position.z = -12;
+            this.camera.position.y = 4.5;
+            this.camera.rotation.x = -0.5;
+            this.camera.lookAt(0, 0, 0);
+        } else {
+            this.camera.position.set(0, 4.5, 12); // Move the camera along the negative z-axis
+            this.camera.lookAt(0, 0, 0); // Look back towards the origin
+        }
+    }
+
     showCoordinates(){
         console.log(this.board.currentBoard);
     }
@@ -878,8 +890,7 @@ async function fetchTable(){
                         if(user.id == player.id){
                             game.currentPlayer = 2;
                             game.currentPlayerObject = player;
-                            game.camera.position.set(0, 4.5, 12); // Move the camera along the negative z-axis
-                            game.camera.lookAt(0, 0, 0); // Look back towards the origin
+                            game.setCamera();
 
                             // Update OrbitControls to reflect changes
                             game.controls.update();
@@ -1781,3 +1792,13 @@ window.addEventListener('mouseup', () => clickHandler.endClick(), false);
 
 window.addEventListener('pointermove', (event) => clickHandler.hover(event), false);
 window.addEventListener('touchmove', (event) => clickHandler.hover(event), false);
+
+document.querySelector('.game-button-perspective').addEventListener('click', () => {
+    if(game == null){
+        return;
+    }
+    if(game.currentPlayer == null){
+        return;
+    }
+    game.setCamera();
+});
