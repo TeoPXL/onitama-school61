@@ -32,6 +32,8 @@ To run the project online, follow these steps:
 5. Ensure you update the remote API URL in `/frontend/js/shared.js` to point to your remote API server.
 6. On your remote server, add the following environment variable / connection string: "OnitamaDbConnection"="server=YOUR_DATABASE_URL;database=YOUR_DATABASE_NAME>;uid=YOUR_USERNAME;password=YOUR_PASSWORD;"
 
+Note that the backend currently supports both MS SQL Server and PostgreSQL databases.
+
 ## Usage
 
 Once the project is set up, users can:
