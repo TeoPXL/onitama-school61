@@ -192,7 +192,7 @@ tableButtons.forEach(element => element.addEventListener('click', () => {
     }).then(data => {
         console.log(data);
         setTimeout(() => {
-            window.location.href = "../../game/play.html";
+            window.location.href = "../game/play.html";
         }, 250);
     }).catch(error => {
         console.log(error);
