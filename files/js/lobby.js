@@ -22,7 +22,8 @@ if(user === null ){
     topButtonUser.classList.remove("hidden"); 
 }
 
-function loadClassicTables (){
+function loadClassicTables(){
+
     fetch(currentApi + "/api/Tables/with-available-seats", {
         method: 'GET',
         headers: {
@@ -59,24 +60,35 @@ function loadClassicTables (){
                 wotwTableResults.push(table);
             }
         });
+        classicTableElements.forEach(element => {
+            element.classList.remove('table-item-hidden');
+        });
         const classicTablesToRemove = 3 - classicTableResults.length; 
         for (let i = 1; i <= classicTablesToRemove; i++) {
             const classicTables = classicTableElements[3 - i];
             classicTables.classList.add('table-item-hidden');
         }
+        compTableElements.forEach(element => {
+            element.classList.remove('table-item-hidden');
+        });
         //Now do competitive tables
         const competitiveTablesToRemove = 3 - competitiveTableResults.length; 
         for (let i = 1; i <= competitiveTablesToRemove; i++) {
             const competitiveTables = compTableElements[3 - i];
             competitiveTables.classList.add('table-item-hidden');
         }
+        blitzTableElements.forEach(element => {
+            element.classList.remove('table-item-hidden');
+        });
         //Now do blitz tables
         const blitzTablesToRemove = 3 - blitzTableResults.length; 
         for (let i = 1; i <= blitzTablesToRemove; i++) {
             const blitzTables = blitzTableElements[3 - i];
             blitzTables.classList.add('table-item-hidden');
         }
-
+        wotwTableElements.forEach(element => {
+            element.classList.remove('table-item-hidden');
+        });
         const wotwTablesToRemove = 4 - wotwTableResults.length; 
         for (let i = 1; i <= wotwTablesToRemove; i++) {
             const wotwTables = wotwTableElements[4 - i];
@@ -203,6 +215,7 @@ function loadClassicTables (){
 
     //Tables loaded, but let's check if there are any tables that we are actually in.
     checkAllTables();
+
 
 }
 
