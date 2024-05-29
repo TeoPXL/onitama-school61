@@ -93,6 +93,7 @@ async function checkApis(){
         await refreshToken();
         if(window.loadClassicTables){
             loadClassicTables();
+            setInterval(loadClassicTables, 2000);
         }
         if(window.loadOpenGames){
             if(user != null){

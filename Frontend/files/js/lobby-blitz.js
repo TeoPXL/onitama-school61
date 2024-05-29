@@ -45,6 +45,9 @@ function loadClassicTables (){
                 classicTableResults.push(table);
             }
         });
+        classicTableElements.forEach(element => {
+            element.classList.remove('table-item-hidden');
+        });
         const classicTablesToRemove = 11 - classicTableResults.length; 
         for (let i = 1; i <= classicTablesToRemove; i++) {
             const classicTables = classicTableElements[11 - i];

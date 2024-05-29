@@ -131,19 +131,19 @@ linkElements.forEach((element) => {
 function showApi(){
     switch (currentApi) {
         case localApi:
-            logoElement.textContent = 'Onitama 61 (Local)';
+            logoElement.textContent = 'Onitama 61 (L)';
             break;
     
         case remoteApi:
-            logoElement.textContent = 'Onitama 61 (Remote)';
+            logoElement.textContent = 'Onitama 61 (R)';
             break;
     
         case devApi:
-            logoElement.textContent = 'Onitama 61 (Dev)';
+            logoElement.textContent = 'Onitama 61 (D)';
             break;
     
         default:
-            logoElement.textContent = 'Onitama 61 (None)';
+            logoElement.textContent = 'Onitama 61 (N)';
             break;
     }
 }
