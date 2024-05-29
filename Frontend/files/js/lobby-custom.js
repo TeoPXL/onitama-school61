@@ -520,7 +520,7 @@ document.querySelector('.custom-create-button').addEventListener('click', () => 
             return;
         }
         setTimeout(() => {
-            window.location.href = "../../game/play.html";
+            window.location.href = "../game/play.html";
         }, 250);
     }).catch(error => {
         console.log(error);
@@ -668,7 +668,7 @@ function fillTableWithAi(tableId){
         console.log(data);
         //Now redirect the user to the game
         setTimeout(() => {
-            window.location.href = "../../game/play.html";
+            window.location.href = "../game/play.html";
         }, 250);
     }).catch(error => {
         console.log(error);
