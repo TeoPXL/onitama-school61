@@ -115,7 +115,7 @@ document.querySelectorAll('.comp-item-spectate').forEach((el) => el.addEventList
 
     localStorage.removeItem("tableId");
     setTimeout(() => {
-        window.location.href = "../game/spectate.html";
+        window.location.href = "../frontend/game/spectate.html";
     }, 250);
 }));
 
