@@ -1,5 +1,5 @@
 const localApi = "https://localhost:5051";
-const remoteApi = "https://onitama61b.azurewebsites.net";
+const remoteApi = "https://onitama-hmfvcbd4h5axd9c0.francecentral-01.azurewebsites.net";
 const devApi = "https://172.30.202.134:5051";
 const chosenApi = JSON.parse(localStorage.getItem("api"));
 const user = JSON.parse(localStorage.getItem("user"));
